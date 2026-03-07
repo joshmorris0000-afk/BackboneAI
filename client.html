@@ -526,6 +526,35 @@
     .tm-event{font-size:11px;font-weight:600;}
     .tm-date{font-size:10px;color:var(--muted);}
 
+    /* ─── UPSELL ─── */
+    .upsell-section{margin-top:28px;}
+    .upsell-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px;}
+    .upsell-title{font-size:15px;font-weight:800;}
+    .upsell-sub{font-size:12px;color:var(--muted);}
+    .upsell-link{font-size:12px;color:var(--blue-bright);text-decoration:none;font-weight:600;}
+    .upsell-link:hover{text-decoration:underline;}
+    .upsell-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+    .upsell-card{
+      background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px;
+      display:flex;flex-direction:column;gap:8px;
+      transition:border-color 0.2s,transform 0.2s;cursor:default;
+    }
+    .upsell-card:hover{border-color:rgba(59,130,246,0.3);transform:translateY(-2px);}
+    .upsell-card-top{display:flex;align-items:center;gap:10px;margin-bottom:4px;}
+    .upsell-icon{font-size:18px;}
+    .upsell-name{font-size:13px;font-weight:800;}
+    .upsell-desc{font-size:12px;color:var(--muted2);line-height:1.5;flex:1;}
+    .upsell-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:5px;align-self:flex-start;}
+    .upsell-badge-new{background:rgba(59,130,246,0.12);color:var(--blue-bright);}
+    .upsell-badge-pop{background:rgba(34,197,94,0.12);color:#4ade80;}
+    .upsell-cta{
+      display:inline-block;font-size:11px;font-weight:700;color:var(--blue-bright);
+      background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.2);
+      border-radius:6px;padding:5px 10px;text-align:center;cursor:pointer;margin-top:4px;
+      transition:background 0.2s;
+    }
+    .upsell-cta:hover{background:rgba(59,130,246,0.15);}
+
     /* ─── MODAL ─── */
     .modal-overlay{
       position:fixed;inset:0;z-index:300;
@@ -1012,6 +1041,74 @@
             </div>
           </div>
         </div>
+      </div>
+
+      <!-- ══════ UPSELL: AVAILABLE SERVICES ══════ -->
+      <div class="upsell-section">
+        <div class="upsell-header">
+          <div>
+            <div class="upsell-title">Services Available to You</div>
+            <div class="upsell-sub">Add-ons that work with your existing data — active within 48 hours.</div>
+          </div>
+          <a href="mailto:sarah.chen@backboneai.co.uk" class="upsell-link">Talk to Sarah →</a>
+        </div>
+        <div class="upsell-grid">
+          <div class="upsell-card">
+            <div class="upsell-card-top">
+              <span class="upsell-icon">📊</span>
+              <span class="upsell-name">Supplier Scorecard</span>
+            </div>
+            <div class="upsell-desc">Monthly ranked report of all 14 suppliers by on-time %, invoice accuracy, and price drift. We already have the data — this takes 2 days to activate.</div>
+            <span class="upsell-badge upsell-badge-pop">Recommended</span>
+            <div class="upsell-cta" onclick="requestAddon('Supplier Scorecard')">Request this →</div>
+          </div>
+          <div class="upsell-card">
+            <div class="upsell-card-top">
+              <span class="upsell-icon">🌿</span>
+              <span class="upsell-name">Carbon Baseline Report</span>
+            </div>
+            <div class="upsell-desc">Scope 1 &amp; 2 emissions from your fleet and utility data. Ready for ESG reporting or large-customer contract requirements.</div>
+            <span class="upsell-badge upsell-badge-new">Increasingly required</span>
+            <div class="upsell-cta" onclick="requestAddon('Carbon Baseline Report')">Request this →</div>
+          </div>
+          <div class="upsell-card">
+            <div class="upsell-card-top">
+              <span class="upsell-icon">💷</span>
+              <span class="upsell-name">Cash Flow Visibility</span>
+            </div>
+            <div class="upsell-desc">AP/AR timing overlaid with your stock commitments. Shows real liquidity vs P&amp;L, with gaps flagged 6 weeks ahead.</div>
+            <span class="upsell-badge upsell-badge-new">New</span>
+            <div class="upsell-cta" onclick="requestAddon('Cash Flow Visibility')">Request this →</div>
+          </div>
+          <div class="upsell-card">
+            <div class="upsell-card-top">
+              <span class="upsell-icon">👷</span>
+              <span class="upsell-name">Labour Productivity Report</span>
+            </div>
+            <div class="upsell-desc">Output-per-shift, overtime patterns, and agency vs permanent cost breakdown. Updated weekly from your operational data.</div>
+            <span class="upsell-badge upsell-badge-pop">Popular</span>
+            <div class="upsell-cta" onclick="requestAddon('Labour Productivity Report')">Request this →</div>
+          </div>
+          <div class="upsell-card">
+            <div class="upsell-card-top">
+              <span class="upsell-icon">📋</span>
+              <span class="upsell-name">Board Reporting Pack</span>
+            </div>
+            <div class="upsell-desc">Auto-generated monthly report combining all KPIs, trends, and recommended actions. Delivered 3 days before your board meeting.</div>
+            <span class="upsell-badge upsell-badge-new">New</span>
+            <div class="upsell-cta" onclick="requestAddon('Board Reporting Pack')">Request this →</div>
+          </div>
+          <div class="upsell-card">
+            <div class="upsell-card-top">
+              <span class="upsell-icon">🔧</span>
+              <span class="upsell-name">Process Efficiency Audit</span>
+            </div>
+            <div class="upsell-desc">4-week project: map your operational flows against your data, identify the top 5 cost or time leaks, deliver a prioritised action plan.</div>
+            <span class="upsell-badge upsell-badge-pop">One-off project</span>
+            <div class="upsell-cta" onclick="requestAddon('Process Efficiency Audit')">Enquire →</div>
+          </div>
+        </div>
+        <div id="addonRequestMsg" style="display:none;margin-top:12px;padding:12px 16px;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:8px;font-size:13px;color:#4ade80;font-weight:600;"></div>
       </div>
 
       <!-- ══════ PAGE 2: DATA UPLOAD ══════ -->
@@ -1526,6 +1623,14 @@
     document.getElementById('loginVerifying').classList.remove('show');
     document.getElementById('loginError').classList.remove('show');
     digits[0].focus();
+  }
+
+  /* ═══ UPSELL / ADD-ONS ═══ */
+  function requestAddon(name) {
+    const msg = document.getElementById('addonRequestMsg');
+    msg.textContent = `Request sent to your account manager — Sarah will be in touch within 24 hours to discuss ${name}.`;
+    msg.style.display = 'block';
+    setTimeout(() => { msg.style.display = 'none'; }, 6000);
   }
 
   /* ═══ PAGE NAVIGATION ═══ */
