@@ -196,4 +196,28 @@ A fine-tuned language model trained on UK manufacturing and logistics data — c
 
 ---
 
-*Document version: 1.0 — March 2026*
+---
+
+## The 10 Core Systems
+
+These are the primary systems Backbone AI builds for manufacturing and logistics clients. Each targets a common, high-cost manual process. Each is built generically — once built for one client in a sector, it can be deployed for others in weeks rather than months.
+
+| # | System | Problem Solved | Salary/Cost Replaced |
+|---|---|---|---|
+| 1 | **3-Way PO Matching** | Supplier invoices paid at wrong price or quantity | AP team manually cross-referencing POs, delivery notes, invoices |
+| 2 | **Supplier Price Drift Detector** | Price creep above contracted rates goes unnoticed | Annual contract review catching drift too late |
+| 3 | **Supplier Statement Reconciliation** | Credits unclaimed, disputes unfiled, overpayments unrecovered | 2–4 hours per supplier per month of skilled AP time |
+| 4 | **Goods-In Discrepancy Auto-Logger** | Short/damaged deliveries absorbed as losses | Manual paper trail that gets lost before credit note is raised |
+| 5 | **Quote Normalisation Engine** | Procurement decisions made on incomparable, differently formatted quotes | Buyer manually copying figures into a comparison spreadsheet |
+| 6 | **Job & Customer Profitability Analyser** | No visibility on which jobs or customers actually make money | Nobody runs the analysis because it takes too long manually |
+| 7 | **Overtime & Agency Cost Monitor** | Overtime creep invisible until payroll bill arrives | Ops manager reviewing hours retrospectively with no time to act |
+| 8 | **Slow-Moving Stock Early Warning** | Write-offs discovered at year-end stocktake | Nobody monitors stock age until it's too late to recover value |
+| 9 | **Supplier Chaser Automation** | Procurement team spending hours every week on chase-up emails | 3–5 hrs/week of repetitive copy-paste email work |
+| 10 | **Compliance Document Generator** | NCRs, risk assessments, method statements take 2–3 hours each | Quality engineers writing the same document structure repeatedly |
+
+### Key Principle
+All 10 systems follow the same pattern: the input is **unstructured or fragmented** (PDFs, emails, spreadsheets, paper), the processing is **repetitive and rule-based**, and the output is **consistent in format**. This is exactly what AI handles well and what humans are most expensive at.
+
+---
+
+*Document version: 1.1 — March 2026*

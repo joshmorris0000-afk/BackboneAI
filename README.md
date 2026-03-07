@@ -26,15 +26,18 @@
 
 Backbone AI is a full-stack marketing and client platform built for a B2B operational intelligence business targeting UK manufacturers and logistics firms.
 
-The codebase contains three distinct applications:
+The codebase contains six distinct applications:
 
 | Application | File | Purpose |
 |---|---|---|
 | Marketing Site | `index.html` | Public-facing website for lead generation |
 | Client Portal | `client.html` | Authenticated dashboard for active clients |
 | Dashboard Demo | `dashboard.html` | Standalone demo of the client dashboard |
+| Admin Panel | `admin.html` | Internal Backbone AI team panel (amber theme) |
+| Service Guide | `services.html` | Full breakdown of all service tiers and add-ons |
+| Audit Landing | `audit.html` | Free 2-week operations audit application page |
 
-All three are built as self-contained HTML files with no external backend dependency — making them fast to deploy, easy to demonstrate, and simple to hand off.
+All are built as self-contained HTML files with no external backend dependency — making them fast to deploy, easy to demonstrate, and simple to hand off.
 
 ---
 
@@ -83,10 +86,14 @@ The public-facing website. Contains:
 - **Investment Case** — ROI calculator and six automation cards with before/after comparisons
 - **How It Works** — five-step engagement process with timelines
 - **Why Backbone AI** — comparison table vs. consultants and agencies
+- **Services** — three-category overview: core retainer, billable add-ons, project work
+- **Examples** — ten illustrative systems showing how manual work is automated (no fabricated stats)
 - **Pricing** — three transparent tiers (Pilot, Scale, Backbone)
 - **Industries** — current focus on manufacturing and logistics, roadmap for others
 - **Client Intake Form** — captures company info, software stack, admin hours, and file uploads
-- **CTA** — free 60-minute operational audit offer
+- **CTA** — free operational audit offer linking to `audit.html`
+
+Nav order matches scroll order: What We Do → How It Works → Services → Examples → Pricing → Client Login → Book a Call
 
 ### 2. Client Portal (`client.html`)
 
@@ -99,6 +106,7 @@ The authenticated client-facing platform. Three internal pages:
 - Module grid: one card per active automation, showing key metrics
 - Click-through modals: each module expands to show full KPIs, a monthly bar chart, and timestamped activity log
 - Operational insights: AI-surfaced patterns the client couldn't previously see
+- **Services upsell section** — six add-on cards (Supplier Scorecard, Carbon Baseline, Cash Flow Visibility, Labour Productivity, Board Reporting, Process Audit) with one-click request-to-AM functionality
 
 #### Data Upload
 - Data completeness score (percentage + progress bar)
@@ -167,6 +175,10 @@ backbone-ai/
 ├── index.html              # Public marketing website
 ├── client.html             # Client portal (login + 3-page app)
 ├── dashboard.html          # Standalone dashboard demo
+├── admin.html              # Internal admin panel (amber theme, team-only)
+├── services.html           # Full service guide — all tiers and add-ons
+├── audit.html              # Free operations audit application page
+├── favicon.svg             # Brand SVG favicon (blue→cyan gradient)
 │
 ├── docs/
 │   ├── ARCHITECTURE.md     # Full technical architecture reference
@@ -336,7 +348,8 @@ See [`docs/ROADMAP.md`](docs/ROADMAP.md) for the full product roadmap.
 - [ ] Backend API (FastAPI + PostgreSQL) to replace demo data
 - [ ] Real authentication (JWT + secure session management)
 - [ ] File upload connected to cloud storage (AWS S3 / UK region)
-- [ ] Admin panel for the Backbone AI team to manage clients
+- [x] Admin panel for the Backbone AI team to manage clients (`admin.html`)
+- [x] Services page and audit landing page
 
 ### Medium-term (Q3 2026)
 - [ ] Real-time data connections (ERP integrations: Sage, SAP, Xero)
@@ -364,4 +377,4 @@ This is a private commercial codebase. All contributions require prior approval 
 ---
 
 *Built by Backbone AI Ltd. Registered in England & Wales.*
-*Last updated: March 2026*
+*Last updated: March 2026 — v0.2.0*

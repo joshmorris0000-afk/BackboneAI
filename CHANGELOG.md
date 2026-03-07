@@ -9,6 +9,96 @@ This project follows [Semantic Versioning](https://semver.org/):
 
 ---
 
+## [0.2.0] — 2026-03-07
+
+### Added — Admin Panel (`admin.html`)
+
+- Internal team panel with amber accent theme (`--admin-accent: #f59e0b`) to visually distinguish from client portal
+- Four pages: Overview, Client Accounts, Upload Queue, System Requests
+- Overview: live MRR summary, revenue breakdown table (retainer + performance share per client), action-required list, activity feed
+- Client Accounts: filterable table by status/plan/account manager, completeness progress bars per client
+- Upload Queue: filterable by client/category/status, inline `setUploadStatus()` action buttons
+- System Requests: tabbed view (all / needs action / connected / custom builds), mark-connected and chase-client actions
+- `updateBadges()` function: updates sidebar badge counts on every state change
+- Demo data: 3 clients (Whitfield Logistics, Thornton Manufacturing, Northern Freight), 12 upload entries, 9 system request entries
+
+### Added — Services Page (`services.html`)
+
+- Full service guide covering all three retainer tiers (Pilot, Scale, Backbone) with detailed feature lists
+- Add-on module table: 7 modules with description, target audience, and availability status
+- Project work grid: Process Efficiency Audit, ERP & System Selection, Custom Integration Build, Data Quality Audit
+- "Three ways to start" entry-point section (Free Audit, Project First, Direct to Retainer)
+- Full SEO meta, Open Graph tags, non-blocking fonts, nav, footer
+
+### Added — Audit Landing Page (`audit.html`)
+
+- Free 2-week operations audit application page
+- Inline application form: name, email, company, sector, size, current systems, main operational problem
+- 5-step audit process breakdown with time expectations at each stage
+- Illustrative examples section showing categories of issues audits can surface (clearly labelled as illustrative — no fabricated case studies or invented savings figures)
+- Eligibility grid: good fit vs. not a good fit
+- Form success state on submission
+- SEO meta, OG tags, non-blocking fonts
+
+### Added — Marketing Site Enhancements (`index.html`)
+
+**Services Section**
+- Three-card services overview between Comparison and Pricing sections
+- Cards: Core Retainer (what's in every plan), Specialist Modules (billable add-ons), Project Work (one-offs)
+- Six-card add-on spotlight grid beneath the tier cards
+
+**Examples Section**
+- Ten illustrative systems showing common manufacturing/logistics pain points automated
+- Honest framing — no fabricated statistics or invented client outcomes
+- Two intro blocks: "Hours → Minutes" and "Built once. Runs forever."
+- Each system card numbered, colour-coded, with problem description and honest outcome label
+
+**Nav & Footer**
+- Nav reordered to match page scroll order: What We Do → How It Works → Services → Examples → Pricing → Client Login → Book a Call
+- Nav gap tightened from 36px to 28px
+- Footer links updated to include Services and Full Service Guide
+
+### Added — Client Portal Enhancements (`client.html`)
+
+**System Connections (Data Upload page)**
+- Dynamic system connections replacing static list
+- `SYSTEMS_LIBRARY`: 19 systems across 5 categories (Finance, Fleet & Transport, Manufacturing ERPs, Productivity, Custom)
+- `activeSystems` state array — only connected/pending systems shown
+- Add system via categorised picker modal, remove system with confirmation
+- "Request a system" form with success message
+- Demo state: Sage 200, Webfleet, BigChange (pending), Google Sheets
+
+**Services Upsell (Dashboard page)**
+- Six add-on cards at the bottom of the dashboard: Supplier Scorecard, Carbon Baseline Report, Cash Flow Visibility, Labour Productivity Report, Board Reporting Pack, Process Efficiency Audit
+- `requestAddon()` function triggers a 6-second confirmation message attributed to the account manager
+
+**Other**
+- Demo mode via `?demo` URL parameter — bypasses login and loads Whitfield Logistics directly
+- `noindex, nofollow` robots meta — prevents client portal from appearing in search results
+- Non-blocking Google Fonts loading
+- Chart.js loaded with `defer`
+
+### Fixed — Content Integrity
+
+- Removed all fabricated statistics from the marketing site and audit page
+- `audit.html` example findings relabelled "Illustrative · [pattern type]" — no fake company names or invented savings figures
+- Systems section intro stat blocks (£28k, 47hrs) removed and replaced with honest descriptive copy
+- Specific saving claims in system card descriptions softened to describe problem solved, not results achieved
+
+### Fixed — SEO & Performance (`index.html`)
+
+- Full SEO meta suite: title, description, robots, canonical, Open Graph, Twitter Card
+- JSON-LD `ProfessionalService` schema added
+- Google Fonts loaded non-blocking (preload + media swap + noscript fallback)
+- `will-change: transform` on animated hero orbs for GPU layer promotion
+- RAF-throttled scroll listener with `{ passive: true }`
+- Chart.js loaded with `defer`
+- All form labels given `for` attributes with matching input `id` and `autocomplete` hints
+- Six `<div onclick>` auto-cards converted to `<a href>` for SEO crawlability
+- SVG favicon added (`favicon.svg`) matching brand gradient
+
+---
+
 ## [0.1.0] — 2026-03-07
 
 ### Initial Release
