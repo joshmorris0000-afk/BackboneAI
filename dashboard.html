@@ -138,6 +138,195 @@
     }
     .back-link:hover { color: var(--text); }
 
+    /* ─── PAGE SWITCHING ─── */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    .page-header { margin-bottom: 28px; }
+    .page-title { font-size: 22px; font-weight: 900; letter-spacing: -0.5px; margin-bottom: 4px; }
+    .page-sub { font-size: 13px; color: var(--muted2); }
+
+    /* ─── INSIGHTS PAGE ─── */
+    .insight-filters {
+      display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap;
+    }
+    .ifilter {
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--muted2); font-size: 12px; font-weight: 600;
+      padding: 6px 14px; border-radius: 8px; cursor: pointer;
+      font-family: 'Inter', sans-serif; transition: all 0.2s;
+    }
+    .ifilter:hover { border-color: rgba(59,130,246,0.3); color: var(--text); }
+    .ifilter.active { background: var(--blue-dim); border-color: rgba(59,130,246,0.4); color: var(--blue-bright); }
+
+    .insights-full-list { display: flex; flex-direction: column; gap: 16px; }
+
+    .insight-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 16px; padding: 24px;
+      transition: border-color 0.2s;
+    }
+    .insight-card:hover { border-color: rgba(59,130,246,0.2); }
+    .insight-card.done { opacity: 0.4; }
+
+    .insight-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    .insight-severity {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.8px;
+      text-transform: uppercase; padding: 3px 10px; border-radius: 5px;
+    }
+    .sev-warning  { background: rgba(249,115,22,0.12); color: var(--orange); }
+    .sev-opportunity { background: rgba(59,130,246,0.12); color: var(--blue-bright); }
+    .sev-positive { background: rgba(34,197,94,0.12); color: #4ade80; }
+
+    .insight-date { font-size: 11px; color: var(--muted); }
+    .insight-card-icon { font-size: 24px; margin-bottom: 8px; }
+    .insight-card-title { font-size: 15px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.2px; }
+    .insight-card-body { font-size: 13px; color: var(--muted2); line-height: 1.7; margin-bottom: 16px; }
+    .insight-card-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .insight-action-tag { font-size: 11px; color: var(--muted); font-weight: 600; }
+    .insight-action-btn {
+      font-size: 12px; font-weight: 700; color: var(--blue-bright);
+      background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2);
+      border-radius: 6px; padding: 5px 12px; cursor: pointer;
+      font-family: 'Inter', sans-serif; transition: background 0.2s;
+    }
+    .insight-action-btn:hover { background: rgba(59,130,246,0.15); }
+
+    /* ─── REPORTS PAGE ─── */
+    .reports-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px;
+    }
+    .report-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 16px; padding: 24px;
+      display: flex; flex-direction: column; gap: 10px;
+      transition: border-color 0.2s;
+    }
+    .report-card:hover { border-color: rgba(59,130,246,0.2); }
+    .report-card.report-ready { border-color: rgba(59,130,246,0.2); }
+    .report-card.report-scheduled { opacity: 0.7; }
+
+    .report-card-top { display: flex; align-items: center; justify-content: space-between; }
+    .report-icon { font-size: 24px; }
+    .report-status-badge {
+      font-size: 11px; font-weight: 700; padding: 3px 10px;
+      border-radius: 5px; letter-spacing: 0.5px;
+    }
+    .rbadge-ready     { background: rgba(59,130,246,0.12); color: var(--blue-bright); }
+    .rbadge-sent      { background: rgba(34,197,94,0.1); color: #4ade80; }
+    .rbadge-scheduled { background: rgba(100,116,139,0.15); color: var(--muted2); }
+
+    .report-name { font-size: 14px; font-weight: 800; letter-spacing: -0.2px; }
+    .report-desc { font-size: 12px; color: var(--muted2); line-height: 1.6; flex: 1; }
+    .report-meta { display: flex; gap: 16px; font-size: 11px; color: var(--muted); }
+    .report-actions { display: flex; gap: 8px; }
+    .report-btn {
+      font-size: 12px; font-weight: 700; padding: 7px 14px;
+      border-radius: 7px; cursor: pointer; font-family: 'Inter', sans-serif;
+      transition: all 0.2s; border: none;
+    }
+    .report-btn-primary { background: var(--blue); color: #fff; }
+    .report-btn-primary:hover { box-shadow: 0 0 20px rgba(59,130,246,0.4); }
+    .report-btn-ghost {
+      background: transparent; color: var(--muted2);
+      border: 1px solid var(--border);
+    }
+    .report-btn-ghost:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
+
+    .report-preview-overlay {
+      position: fixed; inset: 0; z-index: 300;
+      background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.2s;
+    }
+    .report-preview-overlay.open { opacity: 1; pointer-events: all; }
+    .report-preview-modal {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 20px; width: 560px; max-width: 92vw;
+    }
+    .report-preview-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 24px; border-bottom: 1px solid var(--border);
+    }
+    .report-preview-title { font-size: 15px; font-weight: 800; }
+    .report-preview-body { padding: 24px; }
+    .rps-item { margin-bottom: 14px; }
+    .rps-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+
+    /* ─── SETTINGS PAGE ─── */
+    .settings-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px;
+    }
+    .settings-section {}
+    .settings-section-title {
+      font-size: 12px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .settings-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 14px; padding: 20px;
+    }
+    .settings-field { margin-bottom: 14px; }
+    .settings-label { display: block; font-size: 11px; font-weight: 700; color: var(--muted2); margin-bottom: 5px; }
+    .settings-input {
+      width: 100%; background: rgba(255,255,255,0.04); border: 1.5px solid var(--border);
+      border-radius: 8px; padding: 9px 12px; font-size: 13px; color: var(--text);
+      font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.2s;
+    }
+    .settings-input:focus { border-color: var(--blue); }
+    .settings-save-btn {
+      background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.25);
+      color: var(--blue-bright); font-size: 12px; font-weight: 700;
+      padding: 8px 16px; border-radius: 8px; cursor: pointer;
+      font-family: 'Inter', sans-serif; transition: all 0.2s; width: 100%;
+    }
+    .settings-save-btn:hover { background: rgba(59,130,246,0.18); }
+
+    .settings-plan-badge {
+      display: inline-block; background: var(--blue-dim); color: var(--blue-bright);
+      font-size: 12px; font-weight: 800; padding: 4px 12px; border-radius: 6px;
+      margin-bottom: 10px; letter-spacing: 0.3px;
+    }
+    .settings-plan-feature { font-size: 13px; color: var(--muted2); display: flex; align-items: center; gap: 8px; }
+    .settings-plan-feature::before { content: '✓'; color: #4ade80; font-weight: 700; flex-shrink: 0; }
+
+    .settings-toggle {
+      position: relative; display: inline-block; width: 40px; height: 22px; flex-shrink: 0;
+    }
+    .settings-toggle input { opacity: 0; width: 0; height: 0; }
+    .settings-toggle-slider {
+      position: absolute; inset: 0; cursor: pointer;
+      background: rgba(255,255,255,0.1); border-radius: 22px;
+      transition: 0.3s;
+    }
+    .settings-toggle-slider::before {
+      content: ''; position: absolute;
+      height: 16px; width: 16px; left: 3px; bottom: 3px;
+      background: var(--muted2); border-radius: 50%; transition: 0.3s;
+    }
+    .settings-toggle input:checked + .settings-toggle-slider { background: var(--blue); }
+    .settings-toggle input:checked + .settings-toggle-slider::before { background: #fff; transform: translateX(18px); }
+
+    .settings-toggle-item {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--border);
+    }
+    .settings-toggle-item:last-of-type { border-bottom: none; }
+
+    .settings-contact-btn {
+      display: block; background: var(--surface); border: 1px solid var(--border);
+      color: var(--muted2); font-size: 13px; padding: 9px 14px; border-radius: 9px;
+      text-decoration: none; transition: border-color 0.2s, color 0.2s;
+    }
+    .settings-contact-btn:hover { border-color: rgba(59,130,246,0.3); color: var(--text); }
+
+    /* nav-item as button */
+    .nav-item {
+      background: none; border: none; width: 100%; text-align: left;
+      font-family: 'Inter', sans-serif;
+    }
+
     /* ─── MAIN ─── */
     .main {
       margin-left: var(--sidebar);
@@ -507,37 +696,37 @@
 
     <nav class="sidebar-nav">
       <div class="nav-section-label">Overview</div>
-      <a class="nav-item active" href="#">
+      <button class="nav-item active" onclick="showPage('dashboard',this)">
         <span class="nav-item-icon">📊</span> Dashboard
-      </a>
-      <a class="nav-item" href="#">
+      </button>
+      <button class="nav-item" onclick="showPage('insights',this)">
         <span class="nav-item-icon">💡</span> Insights
-      </a>
-      <a class="nav-item" href="#">
+      </button>
+      <button class="nav-item" onclick="showPage('reports',this)">
         <span class="nav-item-icon">📈</span> Reports
-      </a>
+      </button>
 
       <div class="nav-section-label">Automations</div>
-      <a class="nav-item" href="#" onclick="openModal('invoices')">
+      <button class="nav-item" onclick="showPage('invoices',this)">
         <span class="nav-item-icon">🧾</span> Invoice Processing
-      </a>
-      <a class="nav-item" href="#" onclick="openModal('routes')">
+      </button>
+      <button class="nav-item" onclick="showPage('routes',this)">
         <span class="nav-item-icon">🚚</span> Route Optimisation
-      </a>
-      <a class="nav-item" href="#" onclick="openModal('compliance')">
+      </button>
+      <button class="nav-item" onclick="showPage('compliance',this)">
         <span class="nav-item-icon">🛡️</span> Compliance Docs
-      </a>
-      <a class="nav-item" href="#" onclick="openModal('suppliers')">
+      </button>
+      <button class="nav-item" onclick="showPage('suppliers',this)">
         <span class="nav-item-icon">📋</span> Supplier Intel
-      </a>
-      <a class="nav-item" href="#" onclick="openModal('inventory')">
+      </button>
+      <button class="nav-item" onclick="showPage('inventory',this)">
         <span class="nav-item-icon">📦</span> Inventory Forecast
-      </a>
+      </button>
 
       <div class="nav-section-label">Account</div>
-      <a class="nav-item" href="#">
+      <button class="nav-item" onclick="showPage('settings',this)">
         <span class="nav-item-icon">⚙️</span> Settings
-      </a>
+      </button>
     </nav>
 
     <div class="sidebar-footer">
@@ -569,6 +758,9 @@
 
     <!-- Content -->
     <div class="content">
+
+    <!-- ══════ PAGE: DASHBOARD ══════ -->
+    <div class="page active" id="page-dashboard">
 
       <!-- KPI Row -->
       <div class="kpi-row">
@@ -905,6 +1097,418 @@
         </div>
       </div>
 
+    </div><!-- /page-dashboard -->
+
+    <!-- ══════ PAGE: INSIGHTS ══════ -->
+    <div class="page" id="page-insights">
+      <div class="page-header">
+        <div class="page-title">Operational Insights</div>
+        <div class="page-sub">AI-surfaced patterns from your data. Updated continuously as new data comes in.</div>
+      </div>
+
+      <div class="insight-filters">
+        <button class="ifilter active" onclick="filterInsights('all',this)">All</button>
+        <button class="ifilter" onclick="filterInsights('warning',this)">Warnings</button>
+        <button class="ifilter" onclick="filterInsights('opportunity',this)">Opportunities</button>
+        <button class="ifilter" onclick="filterInsights('positive',this)">Positive</button>
+      </div>
+
+      <div class="insights-full-list" id="insightsList">
+
+        <div class="insight-card" data-type="warning">
+          <div class="insight-card-top">
+            <div class="insight-severity sev-warning">Warning</div>
+            <div class="insight-date">Surfaced today</div>
+          </div>
+          <div class="insight-card-icon">⚠️</div>
+          <div class="insight-card-title">Midlands Freight Co reliability has dropped to 72%</div>
+          <div class="insight-card-body">4 late deliveries in 30 days — their on-time rate has fallen from 91% last quarter. This is the 3rd consecutive month of decline. If this trend continues you are at risk of SLA breaches with your own customers.</div>
+          <div class="insight-card-actions">
+            <div class="insight-action-tag">📦 Supplier Intelligence</div>
+            <button class="insight-action-btn" onclick="markInsightDone(this)">Mark actioned →</button>
+          </div>
+        </div>
+
+        <div class="insight-card" data-type="opportunity">
+          <div class="insight-card-top">
+            <div class="insight-severity sev-opportunity">Opportunity</div>
+            <div class="insight-date">Surfaced yesterday</div>
+          </div>
+          <div class="insight-card-icon">💡</div>
+          <div class="insight-card-title">Tuesday afternoon deliveries have a 34% higher failed-drop rate</div>
+          <div class="insight-card-body">Across the last 12 weeks, Tuesday afternoon slots consistently show higher failed attempts than any other time window. Three specific postcodes account for 80% of failures. Shifting those postcodes to Wednesday morning would eliminate the majority of reattempt costs.</div>
+          <div class="insight-card-actions">
+            <div class="insight-action-tag">🚚 Route Optimisation</div>
+            <button class="insight-action-btn" onclick="markInsightDone(this)">Mark actioned →</button>
+          </div>
+        </div>
+
+        <div class="insight-card" data-type="opportunity">
+          <div class="insight-card-top">
+            <div class="insight-severity sev-opportunity">Opportunity</div>
+            <div class="insight-date">Surfaced 2 days ago</div>
+          </div>
+          <div class="insight-card-icon">🧾</div>
+          <div class="insight-card-title">86% of invoice discrepancies come from 2 suppliers</div>
+          <div class="insight-card-body">City Haulage and Evans Logistics account for 6 of the last 7 invoice errors — all related to PO reference formatting. A single supplier communication specifying the correct format would prevent most future discrepancies and reduce manual review time significantly.</div>
+          <div class="insight-card-actions">
+            <div class="insight-action-tag">🧾 Invoice Processing</div>
+            <button class="insight-action-btn" onclick="markInsightDone(this)">Mark actioned →</button>
+          </div>
+        </div>
+
+        <div class="insight-card" data-type="warning">
+          <div class="insight-card-top">
+            <div class="insight-severity sev-warning">Warning</div>
+            <div class="insight-date">Surfaced 3 days ago</div>
+          </div>
+          <div class="insight-card-icon">📦</div>
+          <div class="insight-card-title">Packing material stock below 3-week cover</div>
+          <div class="insight-card-body">Current stock level for primary packing material covers 17 days at current consumption rate. Standard lead time from supplier is 10–14 days. A reorder trigger has been raised automatically — please confirm to proceed.</div>
+          <div class="insight-card-actions">
+            <div class="insight-action-tag">📦 Inventory Forecast</div>
+            <button class="insight-action-btn" onclick="markInsightDone(this)">Confirm reorder →</button>
+          </div>
+        </div>
+
+        <div class="insight-card" data-type="opportunity">
+          <div class="insight-card-top">
+            <div class="insight-severity sev-opportunity">Opportunity</div>
+            <div class="insight-date">Surfaced this week</div>
+          </div>
+          <div class="insight-card-icon">🔁</div>
+          <div class="insight-card-title">Vehicle 12 is running 18% more miles than comparable vehicles</div>
+          <div class="insight-card-body">Over the last 6 weeks, Vehicle 12 consistently covers more distance per delivery than vehicles on similar routes. The likely cause is suboptimal zone assignment at the planning stage. Reassigning 2 postcodes would bring it in line with the fleet average.</div>
+          <div class="insight-card-actions">
+            <div class="insight-action-tag">🚚 Route Optimisation</div>
+            <button class="insight-action-btn" onclick="markInsightDone(this)">Mark actioned →</button>
+          </div>
+        </div>
+
+        <div class="insight-card" data-type="positive">
+          <div class="insight-card-top">
+            <div class="insight-severity sev-positive">Positive</div>
+            <div class="insight-date">This month</div>
+          </div>
+          <div class="insight-card-icon">✅</div>
+          <div class="insight-card-title">All compliance documentation is fully up to date</div>
+          <div class="insight-card-body">All required reports have been auto-generated and submitted on time this month. No gaps flagged. Next scheduled auto-draft is the 1st of next month — your team will be notified 48 hours before for a 2-minute review window.</div>
+          <div class="insight-card-actions">
+            <div class="insight-action-tag">🛡️ Compliance Docs</div>
+            <div style="font-size:12px;color:var(--green);font-weight:600;">No action needed</div>
+          </div>
+        </div>
+
+        <div class="insight-card" data-type="positive">
+          <div class="insight-card-top">
+            <div class="insight-severity sev-positive">Positive</div>
+            <div class="insight-date">This month</div>
+          </div>
+          <div class="insight-card-icon">📈</div>
+          <div class="insight-card-title">Invoice processing accuracy has improved to 98.7%</div>
+          <div class="insight-card-body">Since implementing the PO reference format guidance sent to suppliers last month, invoice error rates have dropped from 4.2% to 1.3%. The system is now processing 312 invoices per month with 7 errors caught — all before payment.</div>
+          <div class="insight-card-actions">
+            <div class="insight-action-tag">🧾 Invoice Processing</div>
+            <div style="font-size:12px;color:var(--green);font-weight:600;">No action needed</div>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /page-insights -->
+
+    <!-- ══════ PAGE: REPORTS ══════ -->
+    <div class="page" id="page-reports">
+      <div class="page-header">
+        <div class="page-title">Reports</div>
+        <div class="page-sub">Auto-generated reports from your operational data. Each one is ready to download, share, or review in under 2 minutes.</div>
+      </div>
+
+      <div class="reports-grid">
+
+        <div class="report-card report-ready">
+          <div class="report-card-top">
+            <div class="report-icon">📋</div>
+            <div class="report-status-badge rbadge-ready">Ready to review</div>
+          </div>
+          <div class="report-name">Monthly Operations Report — March 2026</div>
+          <div class="report-desc">Full operational summary: cost savings by automation, hours saved, anomalies flagged, supplier performance, and recommended actions for April.</div>
+          <div class="report-meta">
+            <span>Generated: today at 06:00</span>
+            <span>Est. review: 2 min</span>
+          </div>
+          <div class="report-actions">
+            <button class="report-btn report-btn-primary" onclick="previewReport(this,'Monthly Operations Report — March 2026')">Review →</button>
+            <button class="report-btn report-btn-ghost" onclick="downloadReport(this)">Download PDF</button>
+          </div>
+        </div>
+
+        <div class="report-card report-ready">
+          <div class="report-card-top">
+            <div class="report-icon">🛡️</div>
+            <div class="report-status-badge rbadge-ready">Ready to review</div>
+          </div>
+          <div class="report-name">Compliance Report — March 2026</div>
+          <div class="report-desc">Driver hours compliance, working time directive adherence, vehicle maintenance records, and regulatory submission pack — all auto-drafted from your operational data.</div>
+          <div class="report-meta">
+            <span>Generated: this morning</span>
+            <span>Est. review: 2 min</span>
+          </div>
+          <div class="report-actions">
+            <button class="report-btn report-btn-primary" onclick="previewReport(this,'Compliance Report — March 2026')">Review →</button>
+            <button class="report-btn report-btn-ghost" onclick="downloadReport(this)">Download PDF</button>
+          </div>
+        </div>
+
+        <div class="report-card">
+          <div class="report-card-top">
+            <div class="report-icon">📊</div>
+            <div class="report-status-badge rbadge-sent">Submitted</div>
+          </div>
+          <div class="report-name">Supplier Scorecard — February 2026</div>
+          <div class="report-desc">Ranked performance of all 14 suppliers by on-time delivery rate, invoice accuracy, and price consistency. Midlands Freight flagged as requiring action.</div>
+          <div class="report-meta">
+            <span>Generated: 1 Mar 2026</span>
+            <span>Reviewed &amp; approved</span>
+          </div>
+          <div class="report-actions">
+            <button class="report-btn report-btn-ghost" onclick="previewReport(this,'Supplier Scorecard — February 2026')">View →</button>
+            <button class="report-btn report-btn-ghost" onclick="downloadReport(this)">Download PDF</button>
+          </div>
+        </div>
+
+        <div class="report-card">
+          <div class="report-card-top">
+            <div class="report-icon">🚚</div>
+            <div class="report-status-badge rbadge-sent">Submitted</div>
+          </div>
+          <div class="report-name">Fleet Efficiency Report — February 2026</div>
+          <div class="report-desc">Miles per delivery, fuel cost per vehicle, idle time analysis, and on-time rate by driver. Identifies routes and drivers performing above and below average.</div>
+          <div class="report-meta">
+            <span>Generated: 1 Mar 2026</span>
+            <span>Reviewed &amp; approved</span>
+          </div>
+          <div class="report-actions">
+            <button class="report-btn report-btn-ghost" onclick="previewReport(this,'Fleet Efficiency Report — February 2026')">View →</button>
+            <button class="report-btn report-btn-ghost" onclick="downloadReport(this)">Download PDF</button>
+          </div>
+        </div>
+
+        <div class="report-card">
+          <div class="report-card-top">
+            <div class="report-icon">📋</div>
+            <div class="report-status-badge rbadge-sent">Submitted</div>
+          </div>
+          <div class="report-name">Monthly Operations Report — February 2026</div>
+          <div class="report-desc">February operational summary — cost savings £11,200, hours saved 168h, 1,612 items automated. 3 anomalies flagged, all actioned.</div>
+          <div class="report-meta">
+            <span>Generated: 1 Mar 2026</span>
+            <span>Reviewed &amp; approved</span>
+          </div>
+          <div class="report-actions">
+            <button class="report-btn report-btn-ghost" onclick="previewReport(this,'Monthly Operations Report — February 2026')">View →</button>
+            <button class="report-btn report-btn-ghost" onclick="downloadReport(this)">Download PDF</button>
+          </div>
+        </div>
+
+        <div class="report-card report-scheduled">
+          <div class="report-card-top">
+            <div class="report-icon">📅</div>
+            <div class="report-status-badge rbadge-scheduled">Scheduled</div>
+          </div>
+          <div class="report-name">Supplier Scorecard — March 2026</div>
+          <div class="report-desc">End-of-month supplier performance scorecard. Will be generated automatically on 1 April and sent to your portal for 2-minute review.</div>
+          <div class="report-meta">
+            <span>Scheduled: 1 Apr 2026 at 06:00</span>
+            <span>Auto-generated</span>
+          </div>
+          <div class="report-actions">
+            <div style="font-size:12px;color:var(--muted);padding:6px 0;">Will appear here when ready</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Report preview modal -->
+      <div class="report-preview-overlay" id="reportPreviewOverlay" onclick="closeReportPreview(event)">
+        <div class="report-preview-modal">
+          <div class="report-preview-header">
+            <div class="report-preview-title" id="reportPreviewTitle">Report</div>
+            <button class="modal-close" onclick="closeReportPreviewDirect()">×</button>
+          </div>
+          <div class="report-preview-body">
+            <div style="color:var(--muted2);font-size:13px;line-height:1.7;margin-bottom:20px;">This report has been auto-generated from your operational data. It is ready for your review. In production, this would display the full formatted report document.</div>
+            <div class="report-preview-sections">
+              <div class="rps-item"><div class="rps-label">Executive Summary</div><div class="rps-bar" style="width:100%;background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.2);border-radius:6px;padding:10px 14px;font-size:13px;color:var(--muted2);">Cost saved this period: <strong style="color:var(--text);">£13,100</strong> · Hours saved: <strong style="color:var(--text);">192h</strong> · Items automated: <strong style="color:var(--text);">1,847</strong></div></div>
+              <div class="rps-item"><div class="rps-label">Key Findings</div><div class="rps-bar" style="width:100%;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:6px;padding:10px 14px;font-size:13px;color:var(--muted2);">3 anomalies detected and actioned · 1 supplier flagged for performance review · 0 compliance gaps</div></div>
+              <div class="rps-item"><div class="rps-label">Recommended Actions</div><div class="rps-bar" style="width:100%;background:rgba(249,115,22,0.06);border:1px solid rgba(249,115,22,0.15);border-radius:6px;padding:10px 14px;font-size:13px;color:var(--muted2);">Review Midlands Freight Co contract · Confirm packing material reorder · Shift 3 Tuesday postcodes to Wednesday morning</div></div>
+            </div>
+            <div style="margin-top:20px;display:flex;gap:12px;">
+              <button class="report-btn report-btn-primary" onclick="downloadReport(this)">Download PDF</button>
+              <button class="report-btn report-btn-ghost" onclick="closeReportPreviewDirect()">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /page-reports -->
+
+    <!-- ══════ PAGE: AUTOMATION DETAIL (shared template) ══════ -->
+    <div class="page" id="page-automation">
+      <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between;gap:20px;">
+        <div>
+          <div class="page-title" id="autoPageTitle">—</div>
+          <div class="page-sub" id="autoPageSub">—</div>
+        </div>
+        <div class="module-status status-live" style="flex-shrink:0;margin-top:4px;">Live</div>
+      </div>
+
+      <div class="kpi-row" id="autoKpiRow"></div>
+
+      <div class="dashboard-grid" style="margin-bottom:24px;">
+        <div class="card">
+          <div class="card-header">
+            <div><div class="card-title">Monthly Savings Trend</div><div class="card-subtitle">Last 6 months</div></div>
+            <span class="card-tag" id="autoChartTag">—</span>
+          </div>
+          <div class="card-body"><div class="chart-wrap"><canvas id="autoPageChart"></canvas></div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div><div class="card-title">Recent Activity</div><div class="card-subtitle">Latest actions by this automation</div></div></div>
+          <div class="card-body" style="padding:8px 16px;" id="autoActivityLog"></div>
+        </div>
+      </div>
+    </div><!-- /page-automation -->
+
+    <!-- ══════ PAGE: SETTINGS ══════ -->
+    <div class="page" id="page-settings">
+      <div class="page-header">
+        <div class="page-title">Settings</div>
+        <div class="page-sub">Manage your account, notification preferences, and portal access.</div>
+      </div>
+
+      <div class="settings-grid">
+
+        <div class="settings-section">
+          <div class="settings-section-title">Account Details</div>
+          <div class="settings-card">
+            <div class="settings-field">
+              <label class="settings-label" for="s-company">Company name</label>
+              <input class="settings-input" id="s-company" value="Whitfield Logistics Ltd" />
+            </div>
+            <div class="settings-field">
+              <label class="settings-label" for="s-contact">Primary contact</label>
+              <input class="settings-input" id="s-contact" value="David Whitfield" />
+            </div>
+            <div class="settings-field">
+              <label class="settings-label" for="s-email">Contact email</label>
+              <input class="settings-input" id="s-email" value="d.whitfield@whitfieldlogistics.co.uk" />
+            </div>
+            <div class="settings-field">
+              <label class="settings-label" for="s-phone">Phone</label>
+              <input class="settings-input" id="s-phone" value="+44 7700 900123" />
+            </div>
+            <button class="settings-save-btn" onclick="saveSettings(this)">Save changes</button>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-section-title">Your Plan</div>
+          <div class="settings-card">
+            <div class="settings-plan-badge">Scale Plan</div>
+            <div style="font-size:13px;color:var(--muted2);line-height:1.6;margin-bottom:16px;">Retainer: £3,500/month + 15% performance share · Setup completed January 2026 · Account Manager: Sarah Chen</div>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;">
+              <div class="settings-plan-feature">✓ Three AI workflows active</div>
+              <div class="settings-plan-feature">✓ Full data structuring &amp; cleaning</div>
+              <div class="settings-plan-feature">✓ Weekly performance reviews</div>
+              <div class="settings-plan-feature">✓ Staff training included</div>
+              <div class="settings-plan-feature">✓ Continuous iteration &amp; scaling</div>
+            </div>
+            <a href="index.html#pricing" class="settings-save-btn" style="text-decoration:none;display:inline-block;text-align:center;">View all plan options →</a>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-section-title">Notifications</div>
+          <div class="settings-card">
+            <div class="settings-toggle-item">
+              <div>
+                <div style="font-size:14px;font-weight:600;">Anomaly alerts</div>
+                <div style="font-size:12px;color:var(--muted);">Immediate email when an anomaly is flagged</div>
+              </div>
+              <label class="settings-toggle"><input type="checkbox" checked onchange="toggleNotif(this,'anomaly')"><span class="settings-toggle-slider"></span></label>
+            </div>
+            <div class="settings-toggle-item">
+              <div>
+                <div style="font-size:14px;font-weight:600;">Weekly digest</div>
+                <div style="font-size:12px;color:var(--muted);">Summary of savings and activity every Monday</div>
+              </div>
+              <label class="settings-toggle"><input type="checkbox" checked onchange="toggleNotif(this,'weekly')"><span class="settings-toggle-slider"></span></label>
+            </div>
+            <div class="settings-toggle-item">
+              <div>
+                <div style="font-size:14px;font-weight:600;">Report ready alerts</div>
+                <div style="font-size:12px;color:var(--muted);">Email when a new report is ready to review</div>
+              </div>
+              <label class="settings-toggle"><input type="checkbox" checked onchange="toggleNotif(this,'reports')"><span class="settings-toggle-slider"></span></label>
+            </div>
+            <div class="settings-toggle-item">
+              <div>
+                <div style="font-size:14px;font-weight:600;">Insight notifications</div>
+                <div style="font-size:12px;color:var(--muted);">Email when a new insight is surfaced</div>
+              </div>
+              <label class="settings-toggle"><input type="checkbox" onchange="toggleNotif(this,'insights')"><span class="settings-toggle-slider"></span></label>
+            </div>
+            <div id="notifMsg" style="display:none;margin-top:12px;font-size:12px;color:var(--green);font-weight:600;">Preferences saved.</div>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-section-title">Your Account Manager</div>
+          <div class="settings-card" style="display:flex;flex-direction:column;gap:16px;">
+            <div style="display:flex;align-items:center;gap:14px;">
+              <div style="width:48px;height:48px;background:linear-gradient(135deg,var(--blue),var(--cyan));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#fff;flex-shrink:0;">SC</div>
+              <div>
+                <div style="font-size:15px;font-weight:800;">Sarah Chen</div>
+                <div style="font-size:12px;color:var(--muted);">Account Manager · Backbone AI</div>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <a href="mailto:sarah.chen@backboneai.co.uk" class="settings-contact-btn">✉ sarah.chen@backboneai.co.uk</a>
+              <a href="tel:+447700900456" class="settings-contact-btn">📞 +44 7700 900456</a>
+            </div>
+            <div style="font-size:12px;color:var(--muted);line-height:1.5;">Sarah is available Monday–Friday, 8am–6pm. For urgent operational alerts outside these hours, use the anomaly notification system.</div>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-section-title">Portal Access</div>
+          <div class="settings-card">
+            <div style="font-size:13px;color:var(--muted2);margin-bottom:16px;line-height:1.6;">Your 9-digit client code grants access to this portal. Keep it confidential. If you believe it has been shared with unauthorised parties, contact Sarah to issue a new code.</div>
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+              <div style="font-size:22px;font-weight:900;letter-spacing:4px;color:var(--blue-bright);font-family:monospace;" id="accessCodeDisplay">•••-•••-•••</div>
+              <button class="report-btn report-btn-ghost" onclick="toggleCode(this)">Reveal</button>
+            </div>
+            <button class="settings-save-btn" style="background:rgba(244,63,94,0.1);border-color:rgba(244,63,94,0.3);color:#f87171;" onclick="requestNewCode(this)">Request new access code</button>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-section-title">Data &amp; Security</div>
+          <div class="settings-card">
+            <div style="font-size:13px;color:var(--muted2);line-height:1.7;margin-bottom:16px;">All your data is stored on UK-based servers only. AES-256 encryption in transit and at rest. Never shared with third parties. Compliant with UK GDPR and the ICO Data Protection Framework.</div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted2);"><span style="color:var(--green);font-weight:700;">✓</span>UK-based servers only</div>
+              <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted2);"><span style="color:var(--green);font-weight:700;">✓</span>AES-256 encryption at rest &amp; in transit</div>
+              <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted2);"><span style="color:var(--green);font-weight:700;">✓</span>UK GDPR &amp; ICO compliant</div>
+              <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted2);"><span style="color:var(--green);font-weight:700;">✓</span>Data deletion on request</div>
+            </div>
+            <button class="settings-save-btn" style="margin-top:16px;" onclick="requestDataExport(this)">Request data export</button>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /page-settings -->
+
     </div><!-- /content -->
   </main>
 
@@ -1027,6 +1631,154 @@
         ]
       }
     };
+
+    // ─── PAGE SWITCHING ───
+    const PAGE_TITLES = {
+      dashboard: 'Operations Dashboard',
+      insights:  'Operational Insights',
+      reports:   'Reports',
+      settings:  'Settings',
+      invoices:  'Invoice Processing',
+      routes:    'Route Optimisation',
+      compliance:'Compliance Documentation',
+      suppliers: 'Supplier Intelligence',
+      inventory: 'Inventory & Demand Forecasting',
+    };
+
+    let autoPageChart = null;
+
+    function showPage(id, btn) {
+      // deactivate all pages
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      // deactivate all nav buttons
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+
+      // automation pages all use the shared template
+      const isAuto = ['invoices','routes','compliance','suppliers','inventory'].includes(id);
+      if (isAuto) {
+        document.getElementById('page-automation').classList.add('active');
+        loadAutoPage(id);
+      } else {
+        const page = document.getElementById('page-' + id);
+        if (page) page.classList.add('active');
+      }
+
+      // update topbar
+      document.querySelector('.topbar-title').textContent = PAGE_TITLES[id] || 'Dashboard';
+    }
+
+    function loadAutoPage(key) {
+      const m = modules[key];
+      if (!m) return;
+      document.getElementById('autoPageTitle').textContent = m.title;
+      document.getElementById('autoPageSub').textContent = m.sub;
+      document.getElementById('autoChartTag').textContent = m.title;
+
+      // KPI row
+      const colors = { blue:'var(--blue)', green:'var(--green)', red:'var(--red)', orange:'var(--orange)', purple:'var(--purple)' };
+      document.getElementById('autoKpiRow').innerHTML = m.kpis.map(k => `
+        <div class="kpi-card" style="border-color:${k.color}22;">
+          <div class="kpi-label">${k.label}</div>
+          <div class="kpi-value" style="color:${k.color}">${k.val}</div>
+        </div>`).join('');
+
+      // chart
+      if (autoPageChart) autoPageChart.destroy();
+      const ctx = document.getElementById('autoPageChart').getContext('2d');
+      autoPageChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Oct','Nov','Dec','Jan','Feb','Mar'],
+          datasets: [{ label: 'Monthly saving (£)', data: m.trend,
+            backgroundColor: m.color + '33', borderColor: m.color,
+            borderWidth: 2, borderRadius: 6 }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { ticks: { color: '#64748b', font: { size: 11 } }, grid: { color: 'rgba(255,255,255,0.04)' } },
+            y: { ticks: { color: '#64748b', font: { size: 11 }, callback: v => '£' + v.toLocaleString() }, grid: { color: 'rgba(255,255,255,0.04)' } }
+          }
+        }
+      });
+
+      // activity log
+      document.getElementById('autoActivityLog').innerHTML = m.log.map(l => `
+        <div class="activity-item">
+          <div class="activity-dot" style="background:${l.dot}"></div>
+          <div>
+            <div class="activity-text">${l.text}</div>
+            <div class="activity-time">${l.time} · ${l.save}</div>
+          </div>
+        </div>`).join('');
+    }
+
+    // ─── INSIGHTS FILTER ───
+    function filterInsights(type, btn) {
+      document.querySelectorAll('.ifilter').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.insight-card').forEach(card => {
+        card.style.display = (type === 'all' || card.dataset.type === type) ? '' : 'none';
+      });
+    }
+
+    function markInsightDone(btn) {
+      const card = btn.closest('.insight-card');
+      card.classList.add('done');
+      btn.textContent = 'Actioned ✓';
+      btn.style.background = 'rgba(34,197,94,0.1)';
+      btn.style.borderColor = 'rgba(34,197,94,0.2)';
+      btn.style.color = '#4ade80';
+      btn.disabled = true;
+    }
+
+    // ─── REPORTS ───
+    function previewReport(btn, title) {
+      document.getElementById('reportPreviewTitle').textContent = title;
+      document.getElementById('reportPreviewOverlay').classList.add('open');
+    }
+    function closeReportPreview(e) {
+      if (e.target === document.getElementById('reportPreviewOverlay')) closeReportPreviewDirect();
+    }
+    function closeReportPreviewDirect() {
+      document.getElementById('reportPreviewOverlay').classList.remove('open');
+    }
+    function downloadReport(btn) {
+      const orig = btn.textContent;
+      btn.textContent = 'Downloaded ✓';
+      btn.style.background = 'rgba(34,197,94,0.12)';
+      btn.style.color = '#4ade80';
+      setTimeout(() => { btn.textContent = orig; btn.style.background = ''; btn.style.color = ''; }, 2500);
+    }
+
+    // ─── SETTINGS ───
+    function saveSettings(btn) {
+      btn.textContent = 'Saved ✓';
+      btn.style.background = 'rgba(34,197,94,0.12)';
+      btn.style.borderColor = 'rgba(34,197,94,0.25)';
+      btn.style.color = '#4ade80';
+      setTimeout(() => { btn.textContent = 'Save changes'; btn.style.background = ''; btn.style.borderColor = ''; btn.style.color = ''; }, 2000);
+    }
+    function toggleNotif(input, type) {
+      const msg = document.getElementById('notifMsg');
+      msg.style.display = 'block';
+      setTimeout(() => { msg.style.display = 'none'; }, 2000);
+    }
+    function toggleCode(btn) {
+      const el = document.getElementById('accessCodeDisplay');
+      if (el.textContent === '•••-•••-•••') { el.textContent = '123-456-789'; btn.textContent = 'Hide'; }
+      else { el.textContent = '•••-•••-•••'; btn.textContent = 'Reveal'; }
+    }
+    function requestNewCode(btn) {
+      btn.textContent = 'Request sent — Sarah will be in touch within 24 hours.';
+      btn.disabled = true;
+    }
+    function requestDataExport(btn) {
+      btn.textContent = 'Export requested — you\'ll receive an email within 48 hours.';
+      btn.disabled = true;
+    }
 
     // ─── KPI COUNTERS ───
     function animateVal(el, target, prefix='', suffix='') {
