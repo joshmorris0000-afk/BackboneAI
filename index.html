@@ -1075,6 +1075,65 @@
       .intake-form { padding: 28px 24px; }
     }
 
+    /* ─── SYSTEMS ─── */
+    .systems-section { background: var(--bg); }
+
+    .systems-intro {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+      align-items: center; margin-bottom: 72px;
+    }
+    .systems-intro-right {
+      display: flex; flex-direction: column; gap: 16px;
+    }
+    .systems-stat-block {
+      background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(6,182,212,0.04));
+      border: 1px solid rgba(59,130,246,0.2);
+      border-radius: 16px; padding: 24px 28px;
+    }
+    .systems-stat-num {
+      font-size: 36px; font-weight: 900; letter-spacing: -1.5px;
+      background: linear-gradient(90deg, var(--blue-bright), var(--cyan));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .systems-stat-label { font-size: 13px; color: var(--muted2); margin-top: 4px; line-height: 1.5; }
+
+    .systems-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;
+    }
+    .sys-item {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px;
+      display: grid; grid-template-columns: auto 1fr; gap: 18px;
+      align-items: flex-start;
+      transition: border-color 0.3s, transform 0.3s;
+      position: relative; overflow: hidden;
+    }
+    .sys-item:hover { border-color: rgba(59,130,246,0.25); transform: translateY(-3px); }
+    .sys-item-num {
+      width: 36px; height: 36px; border-radius: 9px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 900;
+    }
+    .sys-item-body {}
+    .sys-item-name { font-size: 15px; font-weight: 800; margin-bottom: 6px; letter-spacing: -0.2px; }
+    .sys-item-desc { font-size: 13px; color: var(--muted2); line-height: 1.6; margin-bottom: 10px; }
+    .sys-item-saving {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 700;
+      color: #4ade80;
+      background: rgba(34,197,94,0.08);
+      border: 1px solid rgba(34,197,94,0.2);
+      padding: 4px 10px; border-radius: 6px;
+    }
+    .sys-item-saving::before { content: '↓'; font-size: 11px; }
+
+    @media (max-width: 900px) {
+      .systems-intro { grid-template-columns: 1fr; gap: 40px; }
+      .systems-grid { grid-template-columns: 1fr; }
+    }
+
     /* ─── SERVICES ─── */
     .services-section { background: var(--bg2); }
 
@@ -1278,6 +1337,7 @@
       <li><a href="#what">What We Do</a></li>
       <li><a href="#how">How It Works</a></li>
       <li><a href="#services">Services</a></li>
+      <li><a href="#systems">10 Systems</a></li>
       <li><a href="#pricing">Pricing</a></li>
       <li><a href="#intake">Work With Us</a></li>
       <li><a href="client.html" style="color:var(--muted2);">Client Login</a></li>
@@ -1913,6 +1973,135 @@
           <div class="svc-addon-desc">Auto-generated monthly management report combining all KPIs, trends, and recommended actions. Ready for your board meeting.</div>
           <div class="svc-addon-who">Scale &amp; Backbone clients</div>
         </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─── SYSTEMS ─── -->
+  <section class="systems-section" id="systems">
+    <div class="container">
+      <div class="section-label reveal">What We Build</div>
+      <h2 class="section-heading reveal">10 systems that pay for<br />themselves in month one.</h2>
+
+      <div class="systems-intro">
+        <div>
+          <p style="font-size:17px;color:var(--muted2);line-height:1.8;margin-bottom:24px;">Most of the money UK manufacturers lose isn't taken in one go. It leaks — through supplier invoices nobody cross-checks, overtime nobody analyses, and stock nobody monitors until the year-end write-off. Each system below closes one of those leaks. Each one is built once and deployed across every client in the same sector.</p>
+          <p style="font-size:17px;color:var(--muted2);line-height:1.8;">We implement them as part of your retainer. The majority go live within 2–4 weeks. Most pay for a full year's retainer within the first quarter.</p>
+        </div>
+        <div class="systems-intro-right">
+          <div class="systems-stat-block">
+            <div class="systems-stat-num">£28,000</div>
+            <div class="systems-stat-label">Average found in first audit for a manufacturer spending £1m/year with suppliers — through undetected invoice discrepancies alone.</div>
+          </div>
+          <div class="systems-stat-block">
+            <div class="systems-stat-num">47 hrs</div>
+            <div class="systems-stat-label">Average hours per month saved across supplier chasers, statement reconciliation, and report writing — for a team of 5 in ops and finance.</div>
+          </div>
+          <div class="systems-stat-block">
+            <div class="systems-stat-num">2–4 wks</div>
+            <div class="systems-stat-label">Typical time from signed agreement to first system live and producing output.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="systems-grid">
+
+        <div class="sys-item reveal reveal-delay-1">
+          <div class="sys-item-num" style="background:rgba(59,130,246,0.12);color:var(--blue-bright);">01</div>
+          <div class="sys-item-body">
+            <div class="sys-item-name">3-Way Purchase Order Matching</div>
+            <div class="sys-item-desc">Automatically cross-references every supplier invoice against the original purchase order and the delivery note. Flags quantity shortfalls, price discrepancies, and duplicate billings before payment is authorised. At £1m supplier spend, most businesses find £20,000–£40,000 in the first 3 months.</div>
+            <div class="sys-item-saving">£20k–£40k recovered in year one</div>
+          </div>
+        </div>
+
+        <div class="sys-item reveal reveal-delay-2">
+          <div class="sys-item-num" style="background:rgba(6,182,212,0.12);color:var(--cyan);">02</div>
+          <div class="sys-item-body">
+            <div class="sys-item-name">Supplier Price Drift Detector</div>
+            <div class="sys-item-desc">Compares every invoice line against your contracted unit rates. Suppliers who quietly increase prices 3–8% above agreed rates are flagged instantly — not discovered 12 months later during a contract review. Most clients find at least 2–3 suppliers doing this at any given time.</div>
+            <div class="sys-item-saving">2–8% of affected supplier spend recovered</div>
+          </div>
+        </div>
+
+        <div class="sys-item reveal reveal-delay-1">
+          <div class="sys-item-num" style="background:rgba(139,92,246,0.12);color:#a78bfa;">03</div>
+          <div class="sys-item-body">
+            <div class="sys-item-name">Supplier Statement Reconciliation</div>
+            <div class="sys-item-desc">Supplier sends a PDF statement. The system reads it, maps every line to your purchase ledger, and outputs an exact reconciliation highlighting credits unclaimed, disputed invoices, and missing documents. What takes a skilled AP team 30–50 hours per month across all suppliers takes 4 minutes.</div>
+            <div class="sys-item-saving">30–50 hrs/month of AP salary freed</div>
+          </div>
+        </div>
+
+        <div class="sys-item reveal reveal-delay-2">
+          <div class="sys-item-num" style="background:rgba(249,115,22,0.12);color:var(--orange);">04</div>
+          <div class="sys-item-body">
+            <div class="sys-item-name">Goods-In Discrepancy Auto-Logger</div>
+            <div class="sys-item-desc">When a delivery arrives short or damaged, the warehouse photographs the delivery note. The system extracts quantities, compares them to the PO, and auto-generates a credit note request to the supplier within minutes — before the driver leaves the yard. Short deliveries that used to be absorbed as losses are now reclaimed.</div>
+            <div class="sys-item-saving">Short delivery losses eliminated</div>
+          </div>
+        </div>
+
+        <div class="sys-item reveal reveal-delay-1">
+          <div class="sys-item-num" style="background:rgba(34,197,94,0.12);color:#4ade80;">05</div>
+          <div class="sys-item-body">
+            <div class="sys-item-name">Quote Normalisation Engine</div>
+            <div class="sys-item-desc">Three suppliers quote in three different formats — different units, different payment terms, different lead times. The system reads every quote PDF and outputs a single normalised comparison table, with the cheapest option by line item highlighted and specification differences flagged. Procurement decisions become data-driven in seconds.</div>
+            <div class="sys-item-saving">Better buying decisions on every PO</div>
+          </div>
+        </div>
+
+        <div class="sys-item reveal reveal-delay-2">
+          <div class="sys-item-num" style="background:rgba(244,63,94,0.12);color:#f87171;">06</div>
+          <div class="sys-item-body">
+            <div class="sys-item-name">Job &amp; Customer Profitability Analyser</div>
+            <div class="sys-item-desc">Pulls actual labour hours, material costs, waste, rework, and delivery cost per job or customer — and calculates real margin. Most manufacturers discover that 20–30% of their customers generate over 80% of their profit, while a handful actively cost money. Knowing which is which changes every commercial conversation.</div>
+            <div class="sys-item-saving">Unprofitable customers identified and actioned</div>
+          </div>
+        </div>
+
+        <div class="sys-item reveal reveal-delay-1">
+          <div class="sys-item-num" style="background:rgba(245,158,11,0.12);color:#fbbf24;">07</div>
+          <div class="sys-item-body">
+            <div class="sys-item-name">Overtime &amp; Agency Cost Monitor</div>
+            <div class="sys-item-desc">Weekly automated report showing overtime hours and agency spend by department, shift, and production line — with comparison against budget and the previous 4 weeks. Ops managers get something to act on before the payroll bill lands. Most clients reduce avoidable overtime by 15–25% within 8 weeks of going live.</div>
+            <div class="sys-item-saving">15–25% reduction in avoidable overtime</div>
+          </div>
+        </div>
+
+        <div class="sys-item reveal reveal-delay-2">
+          <div class="sys-item-num" style="background:rgba(59,130,246,0.12);color:var(--blue-bright);">08</div>
+          <div class="sys-item-body">
+            <div class="sys-item-name">Slow-Moving Stock Early Warning</div>
+            <div class="sys-item-desc">Flags any SKU that hasn't moved in 60+ days — before it becomes a write-off at year end. Shows the capital tied up, the storage cost accumulating, and recommended action (discount, return to supplier, or write off now). Prevents the year-end stocktake shock and frees working capital.</div>
+            <div class="sys-item-saving">Write-offs prevented before they happen</div>
+          </div>
+        </div>
+
+        <div class="sys-item reveal reveal-delay-1">
+          <div class="sys-item-num" style="background:rgba(6,182,212,0.12);color:var(--cyan);">09</div>
+          <div class="sys-item-body">
+            <div class="sys-item-name">Supplier Chaser Automation</div>
+            <div class="sys-item-desc">Pulls every overdue purchase order and drafts a personalised chaser email calibrated to urgency — polite at 3 days, firmer at 10, escalated at 3 weeks. Sent automatically or approved with one click. A procurement team of 3 currently spends 4–6 hours per week on this. With this system, it takes 5 minutes.</div>
+            <div class="sys-item-saving">4–6 hrs/week of procurement salary freed</div>
+          </div>
+        </div>
+
+        <div class="sys-item reveal reveal-delay-2">
+          <div class="sys-item-num" style="background:rgba(139,92,246,0.12);color:#a78bfa;">10</div>
+          <div class="sys-item-body">
+            <div class="sys-item-name">Compliance Document Generator</div>
+            <div class="sys-item-desc">Quality engineers fill in key facts — what failed, when, batch numbers, root cause. The system generates a fully formatted, ISO-compliant Non-Conformance Report in 90 seconds. Same for risk assessments and method statements when tendering for contracts. What takes 2–3 hours takes 2 minutes. Compliance doesn't slip because paperwork is too slow.</div>
+            <div class="sys-item-saving">2–3 hrs per report → 2 minutes</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div style="margin-top:56px;text-align:center;" class="reveal">
+        <p style="font-size:15px;color:var(--muted2);margin-bottom:24px;">Every system above is built into your retainer. We implement, run, and maintain them — you see the savings on your dashboard.</p>
+        <a href="#pricing" style="display:inline-block;background:var(--blue);color:#fff;padding:14px 32px;border-radius:10px;font-size:15px;font-weight:700;text-decoration:none;transition:box-shadow 0.2s,transform 0.2s;" onmouseover="this.style.boxShadow='0 0 40px rgba(59,130,246,0.4)';this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='none';this.style.transform='translateY(0)'">See what this costs →</a>
       </div>
 
     </div>
