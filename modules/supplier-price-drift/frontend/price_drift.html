@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Supplier Price Drift — Backbone AI</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" onload="this.rel='stylesheet'">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" defer></script>
+<style>
+:root{--bg:#05050a;--bg2:#0c0c14;--surface:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.08);--blue:#3b82f6;--cyan:#06b6d4;--green:#22c55e;--orange:#f97316;--red:#f43f5e;--purple:#8b5cf6;--amber:#f59e0b;--text:#f1f5f9;--muted:#64748b;--muted2:#94a3b8}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
+.app{display:grid;grid-template-columns:220px 1fr;grid-template-rows:56px 1fr;height:100vh;overflow:hidden}
+.topbar{grid-column:1/-1;display:flex;align-items:center;gap:16px;padding:0 24px;background:var(--bg2);border-bottom:1px solid var(--border)}
+.topbar-logo{font-weight:700;font-size:15px;background:linear-gradient(135deg,var(--blue),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.topbar-divider{width:1px;height:20px;background:var(--border)}
+.topbar-module{font-size:13px;color:var(--muted2)}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.live-badge{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--green);background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);border-radius:20px;padding:4px 10px}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.sidebar{background:var(--bg2);border-right:1px solid var(--border);padding:20px 0;overflow-y:auto}
+.sidebar-section{padding:0 12px;margin-bottom:24px}
+.sidebar-label{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;padding:0 8px;margin-bottom:8px}
+.nav-btn{display:flex;align-items:center;gap:10px;width:100%;padding:8px 12px;border-radius:8px;border:none;background:none;color:var(--muted2);font-size:13px;cursor:pointer;transition:all .15s;text-align:left}
+.nav-btn:hover{background:var(--surface);color:var(--text)}
+.nav-btn.active{background:rgba(59,130,246,0.12);color:var(--blue)}
+.nav-badge{margin-left:auto;background:var(--red);color:#fff;font-size:10px;font-weight:600;border-radius:10px;padding:1px 6px}
+.nav-badge.amber{background:var(--amber)}
+.main{overflow-y:auto;padding:28px}
+.page{display:none}.page.active{display:block}
+.page-header{margin-bottom:24px}
+.page-title{font-size:20px;font-weight:700;margin-bottom:4px}
+.page-sub{color:var(--muted2);font-size:13px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px}
+.card-title{font-size:11px;font-weight:600;color:var(--muted2);margin-bottom:16px;text-transform:uppercase;letter-spacing:.06em}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.kpi-tile{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px}
+.kpi-label{font-size:12px;color:var(--muted2);margin-bottom:8px}
+.kpi-value{font-size:28px;font-weight:700;margin-bottom:4px}
+.kpi-sub{font-size:12px;color:var(--muted)}
+.kpi-red{border-top:2px solid var(--red)}
+.kpi-amber{border-top:2px solid var(--amber)}
+.kpi-green{border-top:2px solid var(--green)}
+.kpi-blue{border-top:2px solid var(--blue)}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 8px;border-radius:20px;white-space:nowrap}
+.badge-critical{background:rgba(244,63,94,0.15);color:var(--red);border:1px solid rgba(244,63,94,0.3)}
+.badge-alert{background:rgba(249,115,22,0.15);color:var(--orange);border:1px solid rgba(249,115,22,0.3)}
+.badge-warning{background:rgba(245,158,11,0.12);color:var(--amber);border:1px solid rgba(245,158,11,0.2)}
+.badge-info{background:rgba(59,130,246,0.1);color:var(--blue);border:1px solid rgba(59,130,246,0.2)}
+.badge-resolved{background:rgba(34,197,94,0.1);color:var(--green);border:1px solid rgba(34,197,94,0.2)}
+.badge-open{background:rgba(244,63,94,0.1);color:var(--red);border:1px solid rgba(244,63,94,0.2)}
+table{width:100%;border-collapse:collapse}
+th{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;padding:10px 14px;text-align:left;border-bottom:1px solid var(--border)}
+td{padding:12px 14px;border-bottom:1px solid rgba(255,255,255,0.04);font-size:13px;color:var(--muted2);vertical-align:middle}
+td.primary{color:var(--text);font-weight:500}
+tr:hover td{background:rgba(255,255,255,0.02)}
+tr:last-child td{border-bottom:none}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;border:none;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s}
+.btn-primary{background:var(--blue);color:#fff}.btn-primary:hover{background:#2563eb}
+.btn-ghost{background:var(--surface);color:var(--muted2);border:1px solid var(--border)}.btn-ghost:hover{color:var(--text)}
+.btn-sm{padding:5px 11px;font-size:12px;border-radius:6px}
+.btn-green{background:rgba(34,197,94,0.15);color:var(--green);border:1px solid rgba(34,197,94,0.25)}
+.filter-bar{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;align-items:center}
+.filter-btn{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:none;color:var(--muted2);font-size:12px;cursor:pointer;transition:all .15s}
+.filter-btn:hover,.filter-btn.active{background:rgba(59,130,246,0.12);border-color:rgba(59,130,246,0.3);color:var(--blue)}
+.ai-box{background:rgba(139,92,246,0.07);border:1px solid rgba(139,92,246,0.2);border-radius:10px;padding:14px 16px;font-size:13px;color:var(--muted2);line-height:1.6;margin-top:16px}
+.ai-box-title{font-size:11px;font-weight:600;color:var(--purple);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.trend-up{color:var(--red)}
+.trend-down{color:var(--green)}
+.spark{display:inline-block;width:60px;height:20px;vertical-align:middle;margin-left:8px}
+.form-group{margin-bottom:16px}
+.form-label{display:block;font-size:12px;font-weight:600;color:var(--muted2);margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em}
+.form-input{width:100%;padding:9px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:13px;outline:none}
+.form-input:focus{border-color:rgba(59,130,246,0.4)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="topbar">
+    <div class="topbar-logo">Backbone AI</div>
+    <div class="topbar-divider"></div>
+    <div class="topbar-module">Supplier Price Drift Detector</div>
+    <div class="topbar-right">
+      <span style="font-size:13px;color:var(--muted2);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:4px 10px">Whitfield Logistics Ltd</span>
+      <div class="live-badge"><div class="live-dot"></div>Monitoring active</div>
+    </div>
+  </header>
+
+  <nav class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Overview</div>
+      <button class="nav-btn active" onclick="showPage('dashboard',this)">▦ Dashboard</button>
+      <button class="nav-btn" onclick="showPage('alerts',this)">⚠ Open Alerts <span class="nav-badge">5</span></button>
+      <button class="nav-btn" onclick="showPage('history',this)">📋 Alert History</button>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Analysis</div>
+      <button class="nav-btn" onclick="showPage('suppliers',this)">🏭 By Supplier</button>
+      <button class="nav-btn" onclick="showPage('skus',this)">🔖 By SKU / Product</button>
+      <button class="nav-btn" onclick="showPage('trends',this)">📈 Trends</button>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Setup</div>
+      <button class="nav-btn" onclick="showPage('contracts',this)">📄 Contracted Prices</button>
+      <button class="nav-btn" onclick="showPage('config',this)">⚙ Thresholds</button>
+    </div>
+  </nav>
+
+  <main class="main">
+
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <div class="page-header">
+        <div class="page-title">Price Drift Overview</div>
+        <div class="page-sub">Last 90 days — updated on every invoice processed</div>
+      </div>
+      <div class="grid-4" style="margin-bottom:20px">
+        <div class="kpi-tile kpi-red">
+          <div class="kpi-label">Total Drift (90 days)</div>
+          <div class="kpi-value" style="color:var(--red)">£3,847</div>
+          <div class="kpi-sub">Invoiced above contract</div>
+        </div>
+        <div class="kpi-tile kpi-amber">
+          <div class="kpi-label">Open Alerts</div>
+          <div class="kpi-value" style="color:var(--amber)">5</div>
+          <div class="kpi-sub">Require action</div>
+        </div>
+        <div class="kpi-tile kpi-blue">
+          <div class="kpi-label">Suppliers Monitored</div>
+          <div class="kpi-value">12</div>
+          <div class="kpi-sub">With contracted prices loaded</div>
+        </div>
+        <div class="kpi-tile kpi-green">
+          <div class="kpi-label">Recovered MTD</div>
+          <div class="kpi-value" style="color:var(--green)">£1,240</div>
+          <div class="kpi-sub">Via disputes raised</div>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-bottom:20px">
+        <div class="card">
+          <div class="card-title">Monthly Drift by Supplier</div>
+          <canvas id="driftChart" height="200"></canvas>
+        </div>
+        <div class="card">
+          <div class="card-title">Worst Offenders — 90 Days</div>
+          <table>
+            <thead><tr><th>Supplier</th><th>Avg Variance</th><th>Total Drift</th><th>Trend</th></tr></thead>
+            <tbody>
+              <tr>
+                <td class="primary">Midlands Steel Supplies</td>
+                <td class="trend-up">+6.8%</td>
+                <td class="trend-up">£1,840</td>
+                <td><span class="trend-up">↑ worsening</span></td>
+              </tr>
+              <tr>
+                <td class="primary">Acme Packaging Ltd</td>
+                <td class="trend-up">+4.2%</td>
+                <td class="trend-up">£920</td>
+                <td><span style="color:var(--muted)">→ stable</span></td>
+              </tr>
+              <tr>
+                <td class="primary">Thames Logistics</td>
+                <td class="trend-up">+3.1%</td>
+                <td class="trend-up">£610</td>
+                <td><span style="color:var(--muted)">→ stable</span></td>
+              </tr>
+              <tr>
+                <td class="primary">Northern Freight</td>
+                <td class="trend-up">+2.4%</td>
+                <td class="trend-up">£477</td>
+                <td><span class="trend-down">↓ improving</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Recent Alerts</div>
+        <table id="recentAlertsTable">
+          <thead><tr><th>Alert</th><th>Supplier</th><th>Product</th><th>Variance</th><th>Impact</th><th>Severity</th><th>AI Summary</th><th></th></tr></thead>
+          <tbody id="recentAlertsTbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- OPEN ALERTS -->
+    <div class="page" id="page-alerts">
+      <div class="page-header">
+        <div class="page-title">Open Alerts</div>
+        <div class="page-sub">Price observations above threshold requiring review</div>
+      </div>
+      <div class="filter-bar">
+        <button class="filter-btn active" onclick="filterAlerts('all',this)">All</button>
+        <button class="filter-btn" onclick="filterAlerts('critical',this)">Critical</button>
+        <button class="filter-btn" onclick="filterAlerts('alert',this)">Alert</button>
+        <button class="filter-btn" onclick="filterAlerts('warning',this)">Warning</button>
+      </div>
+      <div class="card" style="padding:0">
+        <table>
+          <thead><tr><th>Invoice</th><th>Supplier</th><th>Product / SKU</th><th>Contracted</th><th>Invoiced</th><th>Variance</th><th>Impact</th><th>Severity</th><th>Actions</th></tr></thead>
+          <tbody id="alertsTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- BY SUPPLIER -->
+    <div class="page" id="page-suppliers">
+      <div class="page-header">
+        <div class="page-title">Drift by Supplier</div>
+        <div class="page-sub">Average price variance and cumulative drift per supplier</div>
+      </div>
+      <div class="card" style="padding:0">
+        <table>
+          <thead><tr><th>Supplier</th><th>Invoices (90d)</th><th>Lines Checked</th><th>Avg Variance</th><th>Total Drift</th><th>Open Alerts</th><th>Last Alert</th></tr></thead>
+          <tbody id="supplierDriftTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- BY SKU -->
+    <div class="page" id="page-skus">
+      <div class="page-header">
+        <div class="page-title">Drift by Product / SKU</div>
+        <div class="page-sub">Which specific products are consistently overcharged</div>
+      </div>
+      <div class="card" style="padding:0">
+        <table>
+          <thead><tr><th>Product</th><th>SKU</th><th>Supplier</th><th>Contracted Price</th><th>Avg Invoiced</th><th>Avg Variance</th><th>Total Impact</th></tr></thead>
+          <tbody id="skuTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TRENDS -->
+    <div class="page" id="page-trends">
+      <div class="page-header">
+        <div class="page-title">Price Drift Trends</div>
+        <div class="page-sub">Month-by-month drift accumulation</div>
+      </div>
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-title">Total Monthly Drift — All Suppliers</div>
+        <canvas id="trendChart" height="220"></canvas>
+      </div>
+    </div>
+
+    <!-- CONTRACTED PRICES -->
+    <div class="page" id="page-contracts">
+      <div class="page-header">
+        <div class="page-title">Contracted Prices</div>
+        <div class="page-sub">The agreed prices against which invoices are compared</div>
+      </div>
+      <div style="display:flex;gap:16px;margin-bottom:20px">
+        <button class="btn btn-primary" onclick="showAddContract()">+ Add Contracted Price</button>
+        <button class="btn btn-ghost">Import from CSV</button>
+      </div>
+      <div id="addContractForm" style="display:none;margin-bottom:20px">
+        <div class="card">
+          <div class="card-title">New Contracted Price</div>
+          <div class="form-row" style="margin-bottom:12px">
+            <div class="form-group"><label class="form-label">Supplier</label><input class="form-input" type="text" placeholder="Supplier name"></div>
+            <div class="form-group"><label class="form-label">SKU / Part Number</label><input class="form-input" type="text" placeholder="Optional"></div>
+          </div>
+          <div class="form-group"><label class="form-label">Product Description</label><input class="form-input" type="text" placeholder="Mild Steel Sheet 3mm 2500x1250mm"></div>
+          <div class="form-row" style="margin-bottom:12px">
+            <div class="form-group"><label class="form-label">Unit Price (£)</label><input class="form-input" type="number" placeholder="48.50" step="0.01"></div>
+            <div class="form-group"><label class="form-label">Valid From</label><input class="form-input" type="date" value="2026-01-01"></div>
+          </div>
+          <div class="form-row" style="margin-bottom:16px">
+            <div class="form-group"><label class="form-label">Valid To (leave blank = no expiry)</label><input class="form-input" type="date"></div>
+            <div class="form-group"><label class="form-label">Custom Tolerance % (optional)</label><input class="form-input" type="number" placeholder="Use client default"></div>
+          </div>
+          <div style="display:flex;gap:10px">
+            <button class="btn btn-primary" onclick="saveContract(this)">Save</button>
+            <button class="btn btn-ghost" onclick="document.getElementById('addContractForm').style.display='none'">Cancel</button>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="padding:0">
+        <table>
+          <thead><tr><th>Supplier</th><th>SKU</th><th>Description</th><th>Unit Price</th><th>Valid From</th><th>Valid To</th><th>Tolerance</th><th></th></tr></thead>
+          <tbody id="contractsTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- THRESHOLDS CONFIG -->
+    <div class="page" id="page-config">
+      <div class="page-header">
+        <div class="page-title">Alert Thresholds</div>
+        <div class="page-sub">Configure when the system raises alerts</div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">Severity Thresholds</div>
+          <div class="form-group">
+            <label class="form-label">Warning threshold (%)</label>
+            <input class="form-input" type="number" value="2" min="0" max="20" step="0.5">
+            <div style="font-size:12px;color:var(--muted);margin-top:4px">Price drift ≥ this % logs a warning — monitor but no immediate action</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Alert threshold (%)</label>
+            <input class="form-input" type="number" value="5" min="0" max="30" step="0.5">
+            <div style="font-size:12px;color:var(--muted);margin-top:4px">Drift ≥ this % raises an alert requiring AP review</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Critical threshold (%)</label>
+            <input class="form-input" type="number" value="10" min="0" max="50" step="1">
+            <div style="font-size:12px;color:var(--muted);margin-top:4px">Drift ≥ this % triggers immediate email to AP manager</div>
+          </div>
+          <button class="btn btn-primary" onclick="saveThresholds(this)">Save Thresholds</button>
+        </div>
+        <div class="card">
+          <div class="card-title">Notification Settings</div>
+          <div style="font-size:13px;color:var(--muted2);line-height:1.8">
+            <p style="margin-bottom:12px">When a <strong style="color:var(--red)">critical</strong> alert is raised, an email is sent to:</p>
+            <input class="form-input" type="email" value="ap.manager@whitfieldlogistics.co.uk" style="margin-bottom:16px">
+            <p style="margin-bottom:12px">When an <strong style="color:var(--orange)">alert</strong> is raised:</p>
+            <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+              <input type="checkbox" checked id="notifQueue"> <label for="notifQueue">Add to review queue</label>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <input type="checkbox" id="notifEmail"> <label for="notifEmail">Also send email</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+function showPage(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  const renderers = { alerts: renderAlerts, suppliers: renderSupplierDrift, skus: renderSKUs, trends: renderTrends, contracts: renderContracts };
+  if (renderers[id]) renderers[id]();
+}
+
+const SEVERITY_BADGE = {
+  critical: '<span class="badge badge-critical">🚨 Critical</span>',
+  alert:    '<span class="badge badge-alert">⚠ Alert</span>',
+  warning:  '<span class="badge badge-warning">~ Warning</span>',
+  info:     '<span class="badge badge-info">ℹ Info</span>',
+};
+
+const ALERTS_DATA = [
+  { invoice:'INV-2026-0441', supplier:'Midlands Steel Supplies', product:'Mild Steel Sheet 3mm', sku:'MS-SHEET-3MM', contracted:48.50, invoiced:54.20, variance:11.75, impact:114.00, severity:'critical', summary:'Midlands Steel Supplies invoiced steel sheet at £54.20/unit against a contracted rate of £48.50 — a 11.75% overcharge. This has cost £114.00 on this invoice alone, with £1,840 in drift identified over the past 90 days. Recommend raising a formal price dispute and requesting a credit note.' },
+  { invoice:'INV-2026-0439', supplier:'Acme Packaging Ltd', product:'Cardboard Box 400x300x200', sku:'BOX-400', contracted:1.85, invoiced:1.94, variance:4.86, impact:45.00, severity:'warning', summary:'Acme Packaging has invoiced cardboard boxes at £1.94 each against a contracted rate of £1.85 — a 4.86% variance across 500 units (£45.00 overcharge). This is within the alert threshold but approaching it. Monitor the next 2 invoices before raising a formal query.' },
+  { invoice:'INV-2026-0438', supplier:'Thames Logistics', product:'Pallet Wrap 400mm × 300m', sku:'WRAP-400', contracted:18.20, invoiced:19.64, variance:7.91, impact:72.00, severity:'alert', summary:'Thames Logistics invoiced pallet wrap 7.91% above their contracted rate of £18.20/roll. The £72.00 overcharge on 50 rolls is consistent with a second invoice last month. Recommend contacting the supplier\'s account manager to reconfirm the contracted rate before the next delivery.' },
+  { invoice:'INV-2026-0436', supplier:'Northern Freight Solutions', product:'Express Delivery — Pallet', sku:'DEL-PALLET', contracted:42.00, invoiced:43.00, variance:2.38, impact:20.00, severity:'warning', summary:'Northern Freight Solutions has invoiced express pallet delivery at £43.00 against a contracted rate of £42.00 — a 2.38% variance on 20 pallets (£20.00 overcharge). Consistent with a fuel surcharge. Verify whether a fuel surcharge clause exists in the contract.' },
+  { invoice:'INV-2026-0433', supplier:'Midlands Steel Supplies', product:'Steel Bar 40x40mm 3m', sku:'BAR-40', contracted:12.80, invoiced:14.40, variance:12.50, impact:80.00, severity:'critical', summary:'Midlands Steel Supplies charged £14.40 per bar against a contracted rate of £12.80 — a 12.5% overcharge on 50 bars totalling £80.00. This is the second critical alert from this supplier this month. Combined drift of £1,840 this quarter warrants an urgent contract renegotiation meeting.' },
+];
+
+const SUPPLIER_DRIFT = [
+  { name:'Midlands Steel Supplies', invoices:14, lines:42, avgVar:6.8, totalDrift:1840, alerts:2, lastAlert:'2026-03-05' },
+  { name:'Acme Packaging Ltd', invoices:8, lines:24, avgVar:4.2, totalDrift:920, alerts:1, lastAlert:'2026-03-04' },
+  { name:'Thames Logistics', invoices:11, lines:22, avgVar:3.1, totalDrift:610, alerts:1, lastAlert:'2026-03-03' },
+  { name:'Northern Freight', invoices:18, lines:36, avgVar:2.4, totalDrift:477, alerts:1, lastAlert:'2026-03-03' },
+  { name:'Thornton Fixings', invoices:22, lines:66, avgVar:0.2, totalDrift:28, alerts:0, lastAlert:'—' },
+];
+
+const SKU_DATA = [
+  { product:'Mild Steel Sheet 3mm 2500×1250', sku:'MS-SHEET-3MM', supplier:'Midlands Steel Supplies', contracted:48.50, avgInvoiced:54.20, avgVar:11.75, totalImpact:1240 },
+  { product:'Steel Bar 40×40mm 3m', sku:'BAR-40', supplier:'Midlands Steel Supplies', contracted:12.80, avgInvoiced:14.20, avgVar:10.94, totalImpact:600 },
+  { product:'Cardboard Box 400×300×200', sku:'BOX-400', supplier:'Acme Packaging Ltd', contracted:1.85, avgInvoiced:1.94, avgVar:4.86, totalImpact:360 },
+  { product:'Pallet Wrap 400mm × 300m', sku:'WRAP-400', supplier:'Thames Logistics', contracted:18.20, avgInvoiced:19.60, avgVar:7.69, totalImpact:280 },
+  { product:'Express Delivery — Pallet', sku:'DEL-PALLET', supplier:'Northern Freight', contracted:42.00, avgInvoiced:43.00, avgVar:2.38, totalImpact:200 },
+];
+
+const CONTRACTS_DATA = [
+  { supplier:'Midlands Steel Supplies', sku:'MS-SHEET-3MM', desc:'Mild Steel Sheet 3mm 2500×1250mm', price:48.50, from:'2026-01-01', to:'—', tol:'2%' },
+  { supplier:'Midlands Steel Supplies', sku:'BAR-40', desc:'Steel Bar 40×40mm 3m', price:12.80, from:'2026-01-01', to:'—', tol:'2%' },
+  { supplier:'Acme Packaging Ltd', sku:'BOX-400', desc:'Cardboard Box 400×300×200', price:1.85, from:'2026-01-01', to:'2026-12-31', tol:'3%' },
+  { supplier:'Thames Logistics', sku:'WRAP-400', desc:'Pallet Wrap 400mm × 300m', price:18.20, from:'2025-07-01', to:'—', tol:'5%' },
+  { supplier:'Northern Freight', sku:'DEL-PALLET', desc:'Express Pallet Delivery', price:42.00, from:'2025-10-01', to:'2026-09-30', tol:'2%' },
+];
+
+function renderRecentAlerts() {
+  document.getElementById('recentAlertsTbody').innerHTML = ALERTS_DATA.slice(0,4).map(a => `<tr data-severity="${a.severity}">
+    <td class="primary">${a.invoice}</td>
+    <td>${a.supplier}</td>
+    <td>${a.product} <span style="color:var(--muted);font-size:11px">${a.sku}</span></td>
+    <td class="trend-up">+${a.variance.toFixed(2)}%</td>
+    <td class="trend-up">£${a.impact.toFixed(2)}</td>
+    <td>${SEVERITY_BADGE[a.severity]}</td>
+    <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;color:var(--muted2)">${a.summary.substring(0,80)}…</td>
+    <td><button class="btn btn-ghost btn-sm" onclick="showAlertDetail(${ALERTS_DATA.indexOf(a)})">Detail</button></td>
+  </tr>`).join('');
+}
+
+function renderAlerts() {
+  document.getElementById('alertsTable').innerHTML = ALERTS_DATA.map((a,i) => `<tr data-severity="${a.severity}">
+    <td class="primary">${a.invoice}</td>
+    <td>${a.supplier}</td>
+    <td>${a.product}<br><span style="color:var(--muted);font-size:11px">${a.sku}</span></td>
+    <td>£${a.contracted.toFixed(2)}</td>
+    <td>£${a.invoiced.toFixed(2)}</td>
+    <td class="trend-up" style="font-weight:600">+${a.variance.toFixed(2)}%</td>
+    <td class="trend-up">£${a.impact.toFixed(2)}</td>
+    <td>${SEVERITY_BADGE[a.severity]}</td>
+    <td style="display:flex;gap:6px">
+      <button class="btn btn-ghost btn-sm" onclick="showAlertDetail(${i})">Detail</button>
+      <button class="btn btn-green btn-sm" onclick="resolveAlert(this)">Resolve</button>
+    </td>
+  </tr>`).join('');
+}
+
+function filterAlerts(severity, btn) {
+  document.querySelectorAll('#page-alerts .filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#alertsTable tr').forEach(tr => {
+    tr.style.display = (severity === 'all' || tr.dataset.severity === severity) ? '' : 'none';
+  });
+}
+
+function renderSupplierDrift() {
+  document.getElementById('supplierDriftTable').innerHTML = SUPPLIER_DRIFT.map(s => `<tr>
+    <td class="primary">${s.name}</td>
+    <td>${s.invoices}</td>
+    <td>${s.lines}</td>
+    <td class="${s.avgVar > 5 ? 'trend-up' : s.avgVar > 2 ? '' : 'trend-down'}" style="font-weight:600">+${s.avgVar}%</td>
+    <td style="color:${s.totalDrift > 1000 ? 'var(--red)' : s.totalDrift > 500 ? 'var(--amber)' : 'var(--muted2)'}">£${s.totalDrift.toLocaleString()}</td>
+    <td>${s.alerts > 0 ? `<span class="badge badge-open">${s.alerts} open</span>` : '<span class="badge badge-resolved">None</span>'}</td>
+    <td style="color:var(--muted)">${s.lastAlert}</td>
+  </tr>`).join('');
+}
+
+function renderSKUs() {
+  document.getElementById('skuTable').innerHTML = SKU_DATA.map(s => `<tr>
+    <td class="primary">${s.product}</td>
+    <td style="color:var(--muted)">${s.sku}</td>
+    <td>${s.supplier}</td>
+    <td>£${s.contracted.toFixed(2)}</td>
+    <td>£${s.avgInvoiced.toFixed(2)}</td>
+    <td class="trend-up" style="font-weight:600">+${s.avgVar.toFixed(2)}%</td>
+    <td class="trend-up">£${s.totalImpact.toLocaleString()}</td>
+  </tr>`).join('');
+}
+
+function renderContracts() {
+  document.getElementById('contractsTable').innerHTML = CONTRACTS_DATA.map(c => `<tr>
+    <td class="primary">${c.supplier}</td>
+    <td style="color:var(--muted)">${c.sku}</td>
+    <td>${c.desc}</td>
+    <td style="color:var(--text)">£${c.price.toFixed(2)}</td>
+    <td>${c.from}</td>
+    <td>${c.to}</td>
+    <td><span class="badge badge-info">${c.tol}</span></td>
+    <td><button class="btn btn-ghost btn-sm">Edit</button></td>
+  </tr>`).join('');
+}
+
+function renderTrends() {
+  setTimeout(() => {
+    if (document.getElementById('trendChart')._done) return;
+    const ctx = document.getElementById('trendChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Oct 25','Nov 25','Dec 25','Jan 26','Feb 26','Mar 26 MTD'],
+        datasets: [
+          { label:'Midlands Steel', data:[480,620,740,890,1020,1840], backgroundColor:'rgba(244,63,94,0.7)', borderRadius:3 },
+          { label:'Acme Packaging', data:[120,180,240,380,560,920], backgroundColor:'rgba(249,115,22,0.7)', borderRadius:3 },
+          { label:'Thames Logistics', data:[80,120,210,340,480,610], backgroundColor:'rgba(245,158,11,0.7)', borderRadius:3 },
+          { label:'Others', data:[60,90,140,200,280,477], backgroundColor:'rgba(139,92,246,0.6)', borderRadius:3 },
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          x: { stacked:true, ticks:{color:'#64748b'}, grid:{color:'rgba(255,255,255,0.04)'} },
+          y: { stacked:true, ticks:{color:'#64748b', callback:v=>'£'+v}, grid:{color:'rgba(255,255,255,0.04)'} }
+        },
+        plugins: { legend: { labels: { color:'#94a3b8' } } }
+      }
+    });
+    document.getElementById('trendChart')._done = true;
+  }, 50);
+}
+
+function showAlertDetail(index) {
+  const a = ALERTS_DATA[index];
+  alert(`ALERT DETAIL\n\nInvoice: ${a.invoice}\nSupplier: ${a.supplier}\nProduct: ${a.product} (${a.sku})\n\nContracted: £${a.contracted.toFixed(2)}\nInvoiced: £${a.invoiced.toFixed(2)}\nVariance: +${a.variance.toFixed(2)}%\nFinancial Impact: £${a.impact.toFixed(2)}\n\nAI Summary:\n${a.summary}`);
+}
+
+function resolveAlert(btn) {
+  const reason = prompt('Resolution notes (logged in audit trail):');
+  if (!reason) return;
+  btn.textContent = 'Resolved ✓';
+  btn.style.background = 'rgba(34,197,94,0.2)';
+  btn.disabled = true;
+}
+
+function showAddContract() {
+  const f = document.getElementById('addContractForm');
+  f.style.display = f.style.display === 'none' ? 'block' : 'none';
+}
+
+function saveContract(btn) {
+  btn.textContent = 'Saved ✓';
+  setTimeout(() => { btn.textContent = 'Save'; document.getElementById('addContractForm').style.display = 'none'; }, 1500);
+}
+
+function saveThresholds(btn) {
+  btn.textContent = 'Saved ✓';
+  setTimeout(() => { btn.textContent = 'Save Thresholds'; }, 1800);
+}
+
+// Dashboard chart
+window.addEventListener('DOMContentLoaded', () => {
+  renderRecentAlerts();
+  setTimeout(() => {
+    const ctx = document.getElementById('driftChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Oct','Nov','Dec','Jan','Feb','Mar MTD'],
+        datasets: [
+          { label:'Midlands Steel', data:[480,620,740,890,1020,1840], borderColor:'var(--red)', tension:0.4, fill:false },
+          { label:'Acme Packaging', data:[120,180,240,380,560,920], borderColor:'var(--orange)', tension:0.4, fill:false },
+          { label:'Thames Logistics', data:[80,120,210,340,480,610], borderColor:'var(--amber)', tension:0.4, fill:false },
+        ]
+      },
+      options: {
+        responsive:true,
+        scales:{
+          x:{ticks:{color:'#64748b'},grid:{color:'rgba(255,255,255,0.04)'}},
+          y:{ticks:{color:'#64748b',callback:v=>'£'+v},grid:{color:'rgba(255,255,255,0.04)'}}
+        },
+        plugins:{legend:{labels:{color:'#94a3b8'}}}
+      }
+    });
+  }, 100);
+});
+</script>
+</body>
+</html>
