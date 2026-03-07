@@ -5,11 +5,11 @@ Tracks:
 - Contracted prices (from supplier agreements / price lists)
 - Observed prices (from invoices as they are processed)
 - Drift alerts (when observed price deviates from contracted price beyond threshold)
-- SKU / product catalogue (normalised across suppliers)
 """
 import uuid
 from decimal import Decimal
 from enum import Enum
+from typing import List, Optional
 
 from sqlalchemy import Boolean, Date, DateTime, ForeignKey, Numeric, String, Text, func
 from sqlalchemy.dialects.postgresql import JSONB, UUID
@@ -50,24 +50,24 @@ class ContractedPrice(Base):
     client_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("clients.id"), nullable=False, index=True)
     supplier_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("suppliers.id"), nullable=False, index=True)
 
-    sku: Mapped[str | None] = mapped_column(String(100), nullable=True, index=True)
+    sku: Mapped[Optional[str]] = mapped_column(String(100), nullable=True, index=True)
     description: Mapped[str] = mapped_column(Text, nullable=False)
-    description_normalised: Mapped[str] = mapped_column(Text, nullable=False)  # lowercase, stripped for matching
+    description_normalised: Mapped[str] = mapped_column(Text, nullable=False)
     unit_price: Mapped[Decimal] = mapped_column(Numeric(12, 4), nullable=False)
     currency: Mapped[str] = mapped_column(String(3), default="GBP", nullable=False)
     uom: Mapped[str] = mapped_column(String(20), default="each", nullable=False)
 
     valid_from: Mapped[Date] = mapped_column(Date, nullable=False)
-    valid_to: Mapped[Date | None] = mapped_column(Date, nullable=True)  # null = no expiry
+    valid_to: Mapped[Optional[Date]] = mapped_column(Date, nullable=True)
 
     # Allowable variance before alert is raised (overrides client default if set)
-    tolerance_pct: Mapped[Decimal | None] = mapped_column(Numeric(5, 4), nullable=True)
+    tolerance_pct: Mapped[Optional[Decimal]] = mapped_column(Numeric(5, 4), nullable=True)
 
-    notes: Mapped[str | None] = mapped_column(Text, nullable=True)
+    notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     created_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
-    observations: Mapped[list["PriceObservation"]] = relationship(back_populates="contracted_price")
+    observations: Mapped[List["PriceObservation"]] = relationship(back_populates="contracted_price")
 
 
 # ─── Price Observation ────────────────────────────────────────────────────────
@@ -82,31 +82,31 @@ class PriceObservation(Base):
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     client_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("clients.id"), nullable=False, index=True)
     supplier_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("suppliers.id"), nullable=False, index=True)
-    contracted_price_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), ForeignKey("contracted_prices.id"), nullable=True)
+    contracted_price_id: Mapped[Optional[uuid.UUID]] = mapped_column(UUID(as_uuid=True), ForeignKey("contracted_prices.id"), nullable=True)
 
-    invoice_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), nullable=False)  # FK to invoices (cross-module)
+    invoice_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), nullable=False)
     invoice_number: Mapped[str] = mapped_column(String(100), nullable=False)
     invoice_date: Mapped[Date] = mapped_column(Date, nullable=False)
 
-    sku: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    sku: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
     description_raw: Mapped[str] = mapped_column(Text, nullable=False)
     observed_unit_price: Mapped[Decimal] = mapped_column(Numeric(12, 4), nullable=False)
     quantity: Mapped[Decimal] = mapped_column(Numeric(12, 4), nullable=False)
     currency: Mapped[str] = mapped_column(String(3), default="GBP", nullable=False)
 
     # Drift fields (null if no contracted price found)
-    contracted_unit_price: Mapped[Decimal | None] = mapped_column(Numeric(12, 4), nullable=True)
-    price_variance: Mapped[Decimal | None] = mapped_column(Numeric(12, 4), nullable=True)  # observed - contracted
-    price_variance_pct: Mapped[Decimal | None] = mapped_column(Numeric(7, 4), nullable=True)  # signed %
-    financial_impact: Mapped[Decimal | None] = mapped_column(Numeric(12, 4), nullable=True)  # variance × qty
+    contracted_unit_price: Mapped[Optional[Decimal]] = mapped_column(Numeric(12, 4), nullable=True)
+    price_variance: Mapped[Optional[Decimal]] = mapped_column(Numeric(12, 4), nullable=True)
+    price_variance_pct: Mapped[Optional[Decimal]] = mapped_column(Numeric(7, 4), nullable=True)
+    financial_impact: Mapped[Optional[Decimal]] = mapped_column(Numeric(12, 4), nullable=True)
 
-    drift_severity: Mapped[str | None] = mapped_column(String(10), nullable=True)
-    drift_direction: Mapped[str | None] = mapped_column(String(5), nullable=True)
+    drift_severity: Mapped[Optional[str]] = mapped_column(String(10), nullable=True)
+    drift_direction: Mapped[Optional[str]] = mapped_column(String(5), nullable=True)
 
     created_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
-    contracted_price: Mapped["ContractedPrice | None"] = relationship(back_populates="observations")
-    alert: Mapped["DriftAlert | None"] = relationship(back_populates="observation", uselist=False)
+    contracted_price: Mapped[Optional["ContractedPrice"]] = relationship(back_populates="observations")
+    alert: Mapped[Optional["DriftAlert"]] = relationship(back_populates="observation", uselist=False)
 
 
 # ─── Drift Alert ──────────────────────────────────────────────────────────────
@@ -125,17 +125,16 @@ class DriftAlert(Base):
 
     severity: Mapped[str] = mapped_column(String(10), nullable=False, index=True)
     direction: Mapped[str] = mapped_column(String(5), nullable=False)
-    status: Mapped[str] = mapped_column(String(15), default=AlertStatus.open, nullable=False, index=True)
+    status: Mapped[str] = mapped_column(String(15), default=AlertStatus.open.value, nullable=False, index=True)
 
-    # Running totals at alert creation time
     total_drift_this_month: Mapped[Decimal] = mapped_column(Numeric(12, 4), default=Decimal("0"))
     occurrences_this_month: Mapped[int] = mapped_column(default=1)
 
-    ai_summary: Mapped[str | None] = mapped_column(Text, nullable=True)  # Claude-generated plain English summary
+    ai_summary: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
-    resolved_by: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), nullable=True)
-    resolution_notes: Mapped[str | None] = mapped_column(Text, nullable=True)
-    resolved_at: Mapped[DateTime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    resolved_by: Mapped[Optional[uuid.UUID]] = mapped_column(UUID(as_uuid=True), nullable=True)
+    resolution_notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    resolved_at: Mapped[Optional[DateTime]] = mapped_column(DateTime(timezone=True), nullable=True)
 
     created_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())

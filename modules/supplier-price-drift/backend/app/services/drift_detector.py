@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 """
 Supplier Price Drift Detector — core engine.
 
@@ -12,12 +14,12 @@ The engine is called:
 2. On a nightly batch job that re-evaluates the last 90 days
 
 Severity thresholds are configurable per client and per contracted price.
-AI (Claude) generates a plain-English summary for each alert so AP teams
+Claude generates a plain-English summary for each alert so AP managers
 understand exactly what they're looking at without needing to interpret numbers.
 """
 import re
 from dataclasses import dataclass
-from datetime import UTC, datetime, date
+from datetime import datetime, date, timezone
 from decimal import Decimal
 
 import anthropic
@@ -36,7 +38,7 @@ from app.models.price_data import (
 )
 
 settings = get_settings()
-_ai = anthropic.Anthropic(api_key=settings.anthropic_api_key)
+_ai = anthropic.AsyncAnthropic(api_key=settings.anthropic_api_key)
 
 
 @dataclass
@@ -96,7 +98,7 @@ class DriftDetector:
         2. Calculate drift
         3. Create observation record
         4. Create alert if threshold exceeded
-        5. Generate AI summary for alerts
+        5. Generate AI summary for warning/alert/critical
         """
         contracted = await self._find_contracted_price(line)
 
@@ -112,13 +114,13 @@ class DriftDetector:
             financial_impact = (variance * line.quantity).quantize(Decimal("0.01"))
             direction = DriftDirection.up if variance > 0 else DriftDirection.down
 
-            tolerance = contracted.tolerance_pct or self.client_default_tolerance
+            tolerance = contracted.tolerance_pct if contracted.tolerance_pct is not None else self.client_default_tolerance
             if abs(variance / contracted.unit_price) > tolerance:
                 severity = _severity(variance_pct)
             else:
                 severity = DriftSeverity.info if variance != 0 else None
 
-        # Write observation
+        # Write observation record for every processed line
         obs = PriceObservation(
             client_id=line.client_id,
             supplier_id=line.supplier_id,
@@ -144,10 +146,12 @@ class DriftDetector:
         alert_id = None
         ai_summary = None
 
-        # Raise alert if severity warrants it
+        # Raise alert for any severity above info
         if severity and severity != DriftSeverity.info:
             monthly_totals = await self._monthly_context(line)
-            ai_summary = await self._generate_ai_summary(line, contracted, variance_pct, financial_impact, monthly_totals, severity)
+            ai_summary = await self._generate_ai_summary(
+                line, contracted, variance_pct, financial_impact, monthly_totals, severity
+            )
 
             alert = DriftAlert(
                 client_id=line.client_id,
@@ -155,7 +159,7 @@ class DriftDetector:
                 observation_id=obs.id,
                 severity=severity.value,
                 direction=direction.value,
-                status=AlertStatus.open,
+                status=AlertStatus.open.value,
                 total_drift_this_month=monthly_totals["total_drift"],
                 occurrences_this_month=monthly_totals["occurrences"],
                 ai_summary=ai_summary,
@@ -179,7 +183,7 @@ class DriftDetector:
     async def _find_contracted_price(self, line: InvoiceLine) -> ContractedPrice | None:
         """
         Find the best matching contracted price for this line item.
-        Priority: SKU exact → description fuzzy match → part number.
+        Priority: SKU exact match → description fuzzy match (≥80% similarity).
         """
         today = date.today()
 
@@ -200,7 +204,7 @@ class DriftDetector:
             if cp:
                 return cp
 
-        # Strategy 2: Description fuzzy match against all contracted prices for this supplier
+        # Strategy 2: Description fuzzy match against all active contracted prices for this supplier
         result = await self.db.execute(
             select(ContractedPrice).where(
                 and_(
@@ -228,7 +232,7 @@ class DriftDetector:
 
     async def _monthly_context(self, line: InvoiceLine) -> dict:
         """Get this month's running drift totals for this supplier, for alert context."""
-        now = datetime.now(UTC)
+        now = datetime.now(timezone.utc)
         result = await self.db.execute(
             select(
                 func.sum(PriceObservation.financial_impact),
@@ -263,18 +267,20 @@ class DriftDetector:
         Written for an AP manager who needs to understand the issue quickly
         and decide whether to raise a dispute with the supplier.
         """
+        direction_word = "overcharge" if float(variance_pct) > 0 else "undercharge"
+
         prompt = f"""You are writing a concise alert summary for an Accounts Payable manager at a UK manufacturing business.
 
-A supplier has invoiced at a price above their contracted rate. Write a 2–3 sentence plain English summary that:
-1. States clearly what happened (product, supplier, % overcharge)
-2. Quantifies the financial impact on this invoice
-3. Notes the month-to-date total if relevant
+A supplier has invoiced at a price that deviates from their contracted rate. Write a 2–3 sentence plain English summary that:
+1. States clearly what happened (product, {direction_word} %, actual vs contracted price)
+2. Quantifies the financial impact on this invoice line
+3. Notes the month-to-date total if it is material (>£0)
 4. Recommends a specific action
 
 Keep it factual and professional. No waffle. Maximum 60 words.
 
 ALERT DATA:
-- Supplier: {line.supplier_id}
+- Supplier ID: {line.supplier_id}
 - Product: {line.description}
 - SKU: {line.sku or 'not specified'}
 - Contracted unit price: £{contracted.unit_price:.4f}
@@ -287,9 +293,9 @@ ALERT DATA:
 
 Write the summary only — no labels, no JSON."""
 
-        message = _ai.messages.create(
+        message = await _ai.messages.create(
             model=settings.ai_model,
-            max_tokens=200,
+            max_tokens=settings.ai_max_tokens,
             messages=[{"role": "user", "content": prompt}],
         )
         return message.content[0].text.strip()
