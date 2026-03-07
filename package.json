@@ -1,0 +1,27 @@
+{
+  "name": "backbone-ai",
+  "version": "0.1.0",
+  "description": "Operational intelligence platform for UK manufacturing and logistics businesses. Marketing site, client portal, and operational dashboard.",
+  "private": true,
+  "homepage": "https://backboneai.co.uk",
+  "scripts": {
+    "start": "python3 -m http.server 3000",
+    "start:alt": "npx serve . -p 3000"
+  },
+  "keywords": [
+    "ai",
+    "operational-intelligence",
+    "manufacturing",
+    "logistics",
+    "uk-business"
+  ],
+  "author": {
+    "name": "Backbone AI Ltd",
+    "email": "hello@backboneai.co.uk"
+  },
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joshmorris0000-afk/backbone-ai.git"
+  }
+}

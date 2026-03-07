@@ -1,0 +1,1502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Backbone AI — Client Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:#05050a; --bg2:#0c0c14; --bg3:#10101a;
+      --surface:rgba(255,255,255,0.04); --surface2:rgba(255,255,255,0.07);
+      --border:rgba(255,255,255,0.08);
+      --blue:#3b82f6; --blue-dim:rgba(59,130,246,0.15); --blue-bright:#60a5fa;
+      --cyan:#06b6d4; --green:#22c55e; --orange:#f97316;
+      --purple:#8b5cf6; --red:#f43f5e;
+      --text:#f1f5f9; --muted:#64748b; --muted2:#94a3b8;
+      --sidebar:220px;
+    }
+    html,body{height:100%;overflow:hidden;}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);}
+    ::-webkit-scrollbar{width:5px;}
+    ::-webkit-scrollbar-track{background:transparent;}
+    ::-webkit-scrollbar-thumb{background:#1e3a5f;border-radius:3px;}
+
+    /* ─── LOGIN ─── */
+    #loginScreen {
+      position:fixed;inset:0;z-index:200;
+      display:flex;align-items:center;justify-content:center;
+      background:var(--bg);
+    }
+    .login-bg-orb {
+      position:absolute;border-radius:50%;filter:blur(120px);opacity:0.12;pointer-events:none;
+    }
+    .orb1{width:600px;height:600px;background:var(--blue);top:-200px;left:-100px;}
+    .orb2{width:400px;height:400px;background:var(--cyan);bottom:-100px;right:-100px;}
+
+    .login-card {
+      position:relative;z-index:1;
+      background:var(--bg2);border:1px solid var(--border);
+      border-radius:24px;padding:48px;width:460px;text-align:center;
+    }
+    .login-logo {
+      display:inline-flex;align-items:center;gap:10px;
+      font-size:18px;font-weight:800;margin-bottom:36px;
+    }
+    .login-logo-icon {
+      width:36px;height:36px;background:linear-gradient(135deg,var(--blue),var(--cyan));
+      border-radius:9px;display:flex;align-items:center;justify-content:center;
+      font-size:16px;font-weight:900;color:#fff;
+    }
+    .login-title{font-size:26px;font-weight:900;letter-spacing:-0.8px;margin-bottom:8px;}
+    .login-sub{font-size:14px;color:var(--muted2);margin-bottom:36px;line-height:1.6;}
+
+    .code-input-wrap {
+      display:flex;gap:6px;justify-content:center;margin-bottom:8px;
+    }
+    .code-digit {
+      width:40px;height:52px;
+      background:var(--surface);border:1.5px solid var(--border);
+      border-radius:10px;text-align:center;font-size:22px;font-weight:800;
+      color:var(--text);font-family:'Inter',sans-serif;
+      outline:none;caret-color:var(--blue);
+      transition:border-color 0.2s,box-shadow 0.2s;
+    }
+    .code-digit:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(59,130,246,0.12);}
+    .code-sep{font-size:20px;color:var(--muted);align-self:center;font-weight:300;}
+    .login-hint{font-size:12px;color:var(--muted);margin-bottom:28px;}
+    .login-hint span{color:var(--blue-bright);font-weight:600;}
+
+    .login-btn {
+      width:100%;padding:15px;
+      background:linear-gradient(135deg,var(--blue),#1d4ed8);
+      color:#fff;border:none;border-radius:10px;
+      font-size:15px;font-weight:700;cursor:pointer;
+      font-family:'Inter',sans-serif;
+      box-shadow:0 0 30px rgba(59,130,246,0.3);
+      transition:transform 0.2s,box-shadow 0.2s,opacity 0.2s;
+    }
+    .login-btn:hover{transform:translateY(-2px);box-shadow:0 0 50px rgba(59,130,246,0.5);}
+    .login-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
+
+    .login-error {
+      font-size:13px;color:#f87171;margin-top:12px;
+      display:none;background:rgba(244,63,94,0.08);
+      border:1px solid rgba(244,63,94,0.2);
+      border-radius:8px;padding:10px;
+    }
+    .login-error.show{display:block;}
+
+    .login-verifying {
+      display:none;align-items:center;gap:10px;justify-content:center;
+      font-size:14px;color:var(--muted2);margin-top:16px;
+    }
+    .login-verifying.show{display:flex;}
+    .spinner {
+      width:18px;height:18px;border:2px solid rgba(59,130,246,0.3);
+      border-top-color:var(--blue);border-radius:50%;
+      animation:spin 0.7s linear infinite;
+    }
+    @keyframes spin{to{transform:rotate(360deg);}}
+
+    .login-back{
+      margin-top:24px;font-size:13px;color:var(--muted);
+    }
+    .login-back a{color:var(--muted2);text-decoration:none;transition:color 0.2s;}
+    .login-back a:hover{color:var(--text);}
+
+    /* ─── APP SHELL ─── */
+    #appShell {
+      display:none;height:100vh;
+    }
+    #appShell.show{display:flex;}
+
+    /* ─── SIDEBAR ─── */
+    .sidebar {
+      width:var(--sidebar);min-height:100vh;
+      background:var(--bg2);border-right:1px solid var(--border);
+      display:flex;flex-direction:column;flex-shrink:0;
+    }
+    .sidebar-logo {
+      padding:22px 18px;display:flex;align-items:center;gap:9px;
+      border-bottom:1px solid var(--border);text-decoration:none;
+    }
+    .sidebar-logo-icon {
+      width:28px;height:28px;
+      background:linear-gradient(135deg,var(--blue),var(--cyan));
+      border-radius:7px;display:flex;align-items:center;justify-content:center;
+      font-size:13px;font-weight:900;color:#fff;flex-shrink:0;
+    }
+    .sidebar-logo-text{font-size:14px;font-weight:700;color:var(--text);}
+
+    .sidebar-client{
+      padding:14px 18px;border-bottom:1px solid var(--border);
+    }
+    .sidebar-client-label{
+      font-size:10px;font-weight:700;letter-spacing:1px;
+      text-transform:uppercase;color:var(--muted);margin-bottom:5px;
+    }
+    .sidebar-client-name{font-size:13px;font-weight:700;color:var(--text);}
+    .sidebar-client-meta{display:flex;gap:6px;margin-top:5px;flex-wrap:wrap;}
+    .sidebar-badge{
+      font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;
+    }
+    .badge-plan{background:rgba(59,130,246,0.12);color:var(--blue-bright);border:1px solid rgba(59,130,246,0.2);}
+    .badge-live{background:rgba(34,197,94,0.1);color:var(--green);border:1px solid rgba(34,197,94,0.2);}
+
+    .sidebar-nav{flex:1;padding:12px 10px;display:flex;flex-direction:column;gap:2px;}
+    .nav-item {
+      display:flex;align-items:center;gap:9px;
+      padding:10px 10px;border-radius:8px;
+      font-size:13px;font-weight:500;color:var(--muted2);
+      cursor:pointer;transition:background 0.2s,color 0.2s;
+      text-decoration:none;border:none;background:none;width:100%;text-align:left;
+    }
+    .nav-item:hover{background:var(--surface);color:var(--text);}
+    .nav-item.active{background:var(--blue-dim);color:var(--blue-bright);font-weight:700;}
+    .nav-item-icon{font-size:16px;flex-shrink:0;}
+    .nav-badge{
+      margin-left:auto;font-size:10px;font-weight:700;
+      background:rgba(249,115,22,0.15);color:var(--orange);
+      border:1px solid rgba(249,115,22,0.25);
+      padding:1px 6px;border-radius:4px;
+    }
+
+    .sidebar-footer{
+      padding:14px 18px;border-top:1px solid var(--border);
+      display:flex;flex-direction:column;gap:8px;
+    }
+    .sidebar-logout{
+      display:flex;align-items:center;gap:8px;
+      font-size:12px;color:var(--muted);cursor:pointer;
+      transition:color 0.2s;border:none;background:none;width:100%;text-align:left;
+      padding:6px 0;
+    }
+    .sidebar-logout:hover{color:var(--red);}
+    .sidebar-support{font-size:11px;color:var(--muted);}
+    .sidebar-support a{color:var(--blue-bright);text-decoration:none;}
+
+    /* ─── MAIN ─── */
+    .main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+
+    .topbar {
+      background:rgba(5,5,10,0.9);backdrop-filter:blur(16px);
+      border-bottom:1px solid var(--border);
+      padding:0 28px;height:60px;
+      display:flex;align-items:center;justify-content:space-between;
+      flex-shrink:0;
+    }
+    .topbar-title{font-size:15px;font-weight:800;letter-spacing:-0.3px;}
+    .topbar-sub{font-size:11px;color:var(--muted);margin-top:1px;}
+    .topbar-right{display:flex;align-items:center;gap:10px;}
+
+    .live-badge {
+      display:flex;align-items:center;gap:6px;
+      background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);
+      border-radius:6px;padding:5px 11px;
+      font-size:11px;font-weight:700;color:var(--green);
+    }
+    .live-dot{
+      width:6px;height:6px;border-radius:50%;background:var(--green);
+      box-shadow:0 0 6px var(--green);animation:pulse 2s infinite;
+    }
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+    .page-content{flex:1;overflow-y:auto;padding:24px 28px;}
+
+    /* ─── PAGE VISIBILITY ─── */
+    .page{display:none;}
+    .page.active{display:block;}
+
+    /* ─── SHARED COMPONENTS ─── */
+    .section-title{
+      font-size:20px;font-weight:900;letter-spacing:-0.5px;margin-bottom:4px;
+    }
+    .section-sub{font-size:13px;color:var(--muted2);margin-bottom:24px;}
+
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:16px;}
+    .card-header{
+      padding:18px 22px;border-bottom:1px solid var(--border);
+      display:flex;align-items:center;justify-content:space-between;
+    }
+    .card-title{font-size:14px;font-weight:800;}
+    .card-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+    .card-body{padding:22px;}
+    .card-tag{
+      font-size:11px;font-weight:600;color:var(--blue-bright);
+      background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);
+      padding:3px 9px;border-radius:6px;
+    }
+
+    /* ═══════════════════════════════
+       PAGE 1 — DASHBOARD
+    ═══════════════════════════════ */
+    .kpi-row{
+      display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px;
+    }
+    .kpi-card{
+      background:var(--surface);border:1px solid var(--border);
+      border-radius:14px;padding:20px;position:relative;overflow:hidden;
+    }
+    .kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+    .kpi-blue::before{background:linear-gradient(90deg,var(--blue),var(--cyan));}
+    .kpi-green::before{background:linear-gradient(90deg,var(--green),#16a34a);}
+    .kpi-orange::before{background:linear-gradient(90deg,var(--orange),#ea580c);}
+    .kpi-purple::before{background:linear-gradient(90deg,var(--purple),#7c3aed);}
+    .kpi-label{font-size:10px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+    .kpi-value{font-size:28px;font-weight:900;letter-spacing:-1px;margin-bottom:4px;}
+    .kpi-blue .kpi-value{color:var(--blue);}
+    .kpi-green .kpi-value{color:var(--green);}
+    .kpi-orange .kpi-value{color:var(--orange);}
+    .kpi-purple .kpi-value{color:var(--purple);}
+    .kpi-change{font-size:11px;font-weight:600;color:var(--green);}
+    .kpi-sub{font-size:10px;color:var(--muted);margin-top:1px;}
+
+    .dash-grid{display:grid;grid-template-columns:1fr 320px;gap:18px;margin-bottom:22px;}
+    .chart-wrap{height:200px;position:relative;}
+
+    .activity-list{display:flex;flex-direction:column;}
+    .activity-item{
+      display:flex;gap:10px;align-items:flex-start;
+      padding:12px 0;border-bottom:1px solid var(--border);
+    }
+    .activity-item:last-child{border-bottom:none;}
+    .act-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+    .act-text{font-size:12px;line-height:1.5;flex:1;}
+    .act-time{font-size:10px;color:var(--muted);margin-top:2px;}
+
+    .module-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px;}
+    .mod-card{
+      background:var(--surface);border:1px solid var(--border);
+      border-radius:14px;overflow:hidden;cursor:pointer;
+      transition:transform 0.2s,border-color 0.2s,box-shadow 0.2s;
+    }
+    .mod-card:hover{transform:translateY(-3px);border-color:rgba(59,130,246,0.3);box-shadow:0 12px 30px rgba(59,130,246,0.08);}
+    .mod-top{padding:16px 16px 10px;display:flex;align-items:flex-start;justify-content:space-between;}
+    .mod-icon-name{display:flex;gap:10px;align-items:center;}
+    .mod-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+    .mod-name{font-size:12px;font-weight:700;}
+    .mod-sector{font-size:10px;color:var(--muted);}
+    .mod-status{font-size:9px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;padding:2px 7px;border-radius:4px;}
+    .status-live{background:rgba(34,197,94,0.12);color:var(--green);border:1px solid rgba(34,197,94,0.2);}
+    .status-setup{background:rgba(249,115,22,0.12);color:var(--orange);border:1px solid rgba(249,115,22,0.2);}
+    .mod-stats{padding:0 16px 12px;display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+    .mod-stat{background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:8px 10px;}
+    .mod-stat-val{font-size:16px;font-weight:900;letter-spacing:-0.5px;}
+    .mod-stat-label{font-size:9px;color:var(--muted);margin-top:1px;}
+    .mod-footer{
+      padding:10px 16px;border-top:1px solid var(--border);
+      display:flex;align-items:center;justify-content:space-between;
+      background:rgba(255,255,255,0.01);
+    }
+    .mod-saving{font-size:12px;font-weight:700;color:var(--green);}
+    .mod-cta{font-size:10px;color:var(--muted2);}
+
+    .insight-list{display:flex;flex-direction:column;gap:8px;}
+    .insight-item{
+      display:flex;gap:10px;
+      background:var(--bg3);border:1px solid var(--border);
+      border-radius:10px;padding:12px;
+    }
+    .insight-icon{font-size:16px;flex-shrink:0;}
+    .insight-text{font-size:12px;color:var(--muted2);line-height:1.5;}
+    .insight-text strong{color:var(--text);font-weight:600;}
+
+    /* ═══════════════════════════════
+       PAGE 2 — DATA UPLOAD
+    ═══════════════════════════════ */
+    .upload-page-grid{display:grid;grid-template-columns:1fr 300px;gap:18px;}
+
+    .completeness-card{
+      background:var(--surface);border:1px solid var(--border);
+      border-radius:16px;padding:24px;margin-bottom:18px;
+    }
+    .completeness-header{
+      display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;
+    }
+    .completeness-title{font-size:14px;font-weight:800;}
+    .completeness-pct{
+      font-size:32px;font-weight:900;letter-spacing:-1.5px;
+      background:linear-gradient(135deg,var(--blue),var(--cyan));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .completeness-bar-wrap{
+      height:8px;background:var(--bg3);border-radius:4px;overflow:hidden;margin-bottom:8px;
+    }
+    .completeness-bar{
+      height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan));
+      border-radius:4px;transition:width 1s ease;
+    }
+    .completeness-note{font-size:12px;color:var(--muted);}
+
+    .upload-categories{display:flex;flex-direction:column;gap:14px;}
+
+    .upload-cat{
+      background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;
+    }
+    .upload-cat-header{
+      padding:16px 20px;display:flex;align-items:center;justify-content:space-between;
+      cursor:pointer;transition:background 0.2s;
+    }
+    .upload-cat-header:hover{background:var(--surface2);}
+    .upload-cat-left{display:flex;align-items:center;gap:12px;}
+    .upload-cat-icon{font-size:20px;}
+    .upload-cat-name{font-size:13px;font-weight:700;}
+    .upload-cat-desc{font-size:11px;color:var(--muted);margin-top:1px;}
+    .upload-cat-right{display:flex;align-items:center;gap:10px;}
+    .upload-cat-count{
+      font-size:11px;font-weight:600;color:var(--muted2);
+    }
+    .upload-chevron{
+      font-size:12px;color:var(--muted);
+      transition:transform 0.2s;
+    }
+    .upload-cat.open .upload-chevron{transform:rotate(180deg);}
+    .upload-cat-status{
+      font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;
+    }
+    .us-complete{background:rgba(34,197,94,0.1);color:var(--green);border:1px solid rgba(34,197,94,0.2);}
+    .us-partial{background:rgba(249,115,22,0.1);color:var(--orange);border:1px solid rgba(249,115,22,0.2);}
+    .us-missing{background:rgba(244,63,94,0.1);color:var(--red);border:1px solid rgba(244,63,94,0.2);}
+
+    .upload-cat-body{
+      display:none;padding:0 20px 16px;border-top:1px solid var(--border);
+    }
+    .upload-cat.open .upload-cat-body{display:block;}
+
+    .file-list{margin-top:14px;display:flex;flex-direction:column;gap:6px;}
+    .file-item{
+      display:flex;align-items:center;gap:10px;
+      background:var(--bg2);border:1px solid var(--border);
+      border-radius:8px;padding:9px 12px;
+    }
+    .file-icon{font-size:14px;flex-shrink:0;}
+    .file-name{font-size:12px;font-weight:500;flex:1;}
+    .file-size{font-size:10px;color:var(--muted);}
+    .file-status{
+      font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;flex-shrink:0;
+    }
+    .fs-processed{background:rgba(34,197,94,0.1);color:var(--green);}
+    .fs-processing{background:rgba(59,130,246,0.1);color:var(--blue-bright);}
+    .fs-pending{background:rgba(100,116,139,0.1);color:var(--muted2);}
+
+    .required-items{margin-top:14px;display:flex;flex-direction:column;gap:6px;}
+    .required-item{
+      display:flex;align-items:center;gap:10px;
+      background:rgba(249,115,22,0.04);border:1px solid rgba(249,115,22,0.15);
+      border-radius:8px;padding:9px 12px;font-size:12px;color:var(--muted2);
+    }
+    .req-icon{font-size:14px;flex-shrink:0;}
+
+    .drop-zone{
+      border:2px dashed var(--border);border-radius:10px;
+      padding:20px;text-align:center;margin-top:14px;
+      cursor:pointer;transition:border-color 0.2s,background 0.2s;
+      position:relative;
+    }
+    .drop-zone:hover,.drop-zone.drag-over{
+      border-color:rgba(59,130,246,0.4);background:rgba(59,130,246,0.03);
+    }
+    .drop-zone input[type=file]{
+      position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;
+    }
+    .drop-zone-text{font-size:12px;color:var(--muted);}
+    .drop-zone-text span{color:var(--blue-bright);font-weight:600;}
+
+    .upload-sidebar-card{
+      background:var(--surface);border:1px solid var(--border);
+      border-radius:14px;padding:20px;margin-bottom:14px;
+    }
+    .upload-sidebar-title{font-size:13px;font-weight:800;margin-bottom:12px;}
+
+    .still-needed{display:flex;flex-direction:column;gap:8px;}
+    .still-item{
+      display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--muted2);
+      background:rgba(244,63,94,0.05);border:1px solid rgba(244,63,94,0.12);
+      border-radius:7px;padding:9px;line-height:1.4;
+    }
+    .still-dot{
+      width:6px;height:6px;border-radius:50%;background:var(--red);flex-shrink:0;margin-top:3px;
+    }
+
+    .security-note{
+      background:rgba(34,197,94,0.05);border:1px solid rgba(34,197,94,0.15);
+      border-radius:10px;padding:14px;font-size:12px;color:var(--muted2);line-height:1.6;
+    }
+    .security-note strong{color:var(--text);}
+
+    /* ═══════════════════════════════
+       PAGE 3 — PROCESS TRACKER
+    ═══════════════════════════════ */
+    .tracker-grid{display:grid;grid-template-columns:1fr 280px;gap:18px;}
+
+    .phase{margin-bottom:8px;}
+    .phase-header{
+      display:flex;align-items:center;gap:12px;
+      padding:16px 20px;cursor:pointer;
+    }
+    .phase-num{
+      width:32px;height:32px;border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      font-size:13px;font-weight:800;flex-shrink:0;
+    }
+    .phase-num-done{background:rgba(34,197,94,0.15);color:var(--green);border:1px solid rgba(34,197,94,0.3);}
+    .phase-num-active{background:rgba(59,130,246,0.15);color:var(--blue-bright);border:1px solid rgba(59,130,246,0.3);}
+    .phase-num-future{background:rgba(100,116,139,0.1);color:var(--muted);border:1px solid var(--border);}
+
+    .phase-name{font-size:14px;font-weight:800;flex:1;}
+    .phase-status-badge{
+      font-size:10px;font-weight:700;padding:3px 10px;border-radius:5px;
+    }
+    .psb-done{background:rgba(34,197,94,0.1);color:var(--green);border:1px solid rgba(34,197,94,0.2);}
+    .psb-active{background:rgba(59,130,246,0.1);color:var(--blue-bright);border:1px solid rgba(59,130,246,0.2);}
+    .psb-future{background:rgba(100,116,139,0.08);color:var(--muted2);border:1px solid var(--border);}
+
+    .phase-tasks{padding:0 20px 16px;}
+    .task-item{
+      display:flex;gap:12px;align-items:flex-start;
+      padding:12px 0;border-bottom:1px solid var(--border);
+    }
+    .task-item:last-child{border-bottom:none;}
+    .task-icon{
+      width:28px;height:28px;border-radius:7px;
+      display:flex;align-items:center;justify-content:center;font-size:13px;
+      flex-shrink:0;
+    }
+    .ti-done{background:rgba(34,197,94,0.1);}
+    .ti-active{background:rgba(59,130,246,0.1);}
+    .ti-future{background:rgba(100,116,139,0.08);}
+    .ti-blocked{background:rgba(244,63,94,0.1);}
+
+    .task-body{flex:1;}
+    .task-name{font-size:13px;font-weight:700;margin-bottom:3px;}
+    .task-desc{font-size:12px;color:var(--muted2);line-height:1.5;margin-bottom:6px;}
+    .task-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+    .task-date{font-size:10px;color:var(--muted);}
+    .task-tag{
+      font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;
+    }
+    .tt-done{background:rgba(34,197,94,0.1);color:var(--green);}
+    .tt-inprog{background:rgba(59,130,246,0.1);color:var(--blue-bright);}
+    .tt-planned{background:rgba(100,116,139,0.08);color:var(--muted2);}
+    .tt-blocked{background:rgba(244,63,94,0.1);color:var(--red);}
+
+    .task-progress-wrap{margin-top:8px;}
+    .task-progress-label{
+      display:flex;justify-content:space-between;
+      font-size:10px;color:var(--muted);margin-bottom:4px;
+    }
+    .task-progress-bar{height:4px;background:var(--bg3);border-radius:2px;}
+    .task-progress-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--blue),var(--cyan));}
+
+    .tracker-sidebar-card{
+      background:var(--surface);border:1px solid var(--border);
+      border-radius:14px;padding:18px;margin-bottom:14px;
+    }
+    .tracker-sidebar-title{font-size:12px;font-weight:800;color:var(--muted2);
+    letter-spacing:0.5px;text-transform:uppercase;margin-bottom:14px;}
+
+    .progress-overview{display:flex;flex-direction:column;gap:10px;}
+    .po-item{
+      display:flex;align-items:center;justify-content:space-between;
+      font-size:12px;
+    }
+    .po-label{color:var(--muted2);}
+    .po-val{font-weight:700;}
+
+    .timeline-mini{display:flex;flex-direction:column;gap:0;}
+    .tm-item{display:flex;gap:10px;align-items:flex-start;}
+    .tm-left{display:flex;flex-direction:column;align-items:center;width:16px;}
+    .tm-dot{
+      width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:2px;
+    }
+    .tm-line{width:2px;flex:1;min-height:20px;}
+    .tm-text{padding-bottom:14px;}
+    .tm-event{font-size:11px;font-weight:600;}
+    .tm-date{font-size:10px;color:var(--muted);}
+
+    /* ─── MODAL ─── */
+    .modal-overlay{
+      position:fixed;inset:0;z-index:300;
+      background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);
+      display:flex;align-items:center;justify-content:center;
+      opacity:0;pointer-events:none;transition:opacity 0.2s;
+    }
+    .modal-overlay.open{opacity:1;pointer-events:all;}
+    .modal{
+      background:var(--bg2);border:1px solid var(--border);
+      border-radius:22px;width:680px;max-width:95vw;max-height:88vh;
+      overflow-y:auto;
+      transform:translateY(20px) scale(0.98);transition:transform 0.2s;
+    }
+    .modal-overlay.open .modal{transform:translateY(0) scale(1);}
+    .modal-header{
+      padding:24px 28px;border-bottom:1px solid var(--border);
+      display:flex;align-items:center;justify-content:space-between;
+    }
+    .modal-title{font-size:18px;font-weight:900;letter-spacing:-0.5px;}
+    .modal-sub{font-size:12px;color:var(--muted);margin-top:2px;}
+    .modal-close{
+      width:32px;height:32px;border-radius:8px;
+      background:var(--surface);border:1px solid var(--border);
+      color:var(--muted2);cursor:pointer;font-size:18px;
+      display:flex;align-items:center;justify-content:center;
+      transition:background 0.2s,color 0.2s;
+    }
+    .modal-close:hover{background:var(--surface2);color:var(--text);}
+    .modal-body{padding:24px 28px;}
+    .modal-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:22px;}
+    .modal-kpi{
+      background:var(--bg3);border:1px solid var(--border);
+      border-radius:10px;padding:14px;text-align:center;
+    }
+    .modal-kpi-val{font-size:22px;font-weight:900;letter-spacing:-0.8px;margin-bottom:3px;}
+    .modal-kpi-label{font-size:10px;color:var(--muted);}
+    .modal-chart-wrap{height:180px;margin-bottom:20px;}
+    .modal-log{display:flex;flex-direction:column;gap:6px;}
+    .log-item{
+      display:flex;align-items:center;gap:10px;
+      background:var(--bg3);border:1px solid var(--border);
+      border-radius:7px;padding:10px 13px;font-size:12px;
+    }
+    .log-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+    .log-time{color:var(--muted);flex-shrink:0;min-width:72px;font-size:10px;}
+    .log-text{flex:1;}
+    .log-save{color:var(--green);font-weight:700;flex-shrink:0;font-size:11px;}
+
+    @media(max-width:1100px){
+      .dash-grid,.upload-page-grid,.tracker-grid{grid-template-columns:1fr;}
+      .module-grid{grid-template-columns:1fr 1fr;}
+      .kpi-row{grid-template-columns:1fr 1fr;}
+      .modal-kpis{grid-template-columns:1fr 1fr;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════ LOGIN SCREEN ═══════ -->
+<div id="loginScreen">
+  <div class="login-bg-orb orb1"></div>
+  <div class="login-bg-orb orb2"></div>
+
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-logo-icon">B</div>
+      Backbone AI
+    </div>
+    <div class="login-title">Client Portal</div>
+    <div class="login-sub">Enter your 9-digit access code to view your operational intelligence dashboard.</div>
+
+    <div class="code-input-wrap" id="codeInputs">
+      <input class="code-digit" maxlength="1" type="text" inputmode="numeric" />
+      <input class="code-digit" maxlength="1" type="text" inputmode="numeric" />
+      <input class="code-digit" maxlength="1" type="text" inputmode="numeric" />
+      <span class="code-sep">–</span>
+      <input class="code-digit" maxlength="1" type="text" inputmode="numeric" />
+      <input class="code-digit" maxlength="1" type="text" inputmode="numeric" />
+      <input class="code-digit" maxlength="1" type="text" inputmode="numeric" />
+      <span class="code-sep">–</span>
+      <input class="code-digit" maxlength="1" type="text" inputmode="numeric" />
+      <input class="code-digit" maxlength="1" type="text" inputmode="numeric" />
+      <input class="code-digit" maxlength="1" type="text" inputmode="numeric" />
+    </div>
+    <div class="login-hint">Demo code: <span>1 2 3 – 4 5 6 – 7 8 9</span></div>
+
+    <button class="login-btn" id="loginBtn" onclick="attemptLogin()">Access Dashboard</button>
+    <div class="login-error" id="loginError">Invalid access code. Please check your code and try again, or contact your account manager.</div>
+    <div class="login-verifying" id="loginVerifying">
+      <div class="spinner"></div>
+      Verifying your access code…
+    </div>
+    <div class="login-back">← <a href="index.html">Return to Backbone AI</a></div>
+  </div>
+</div>
+
+<!-- ═══════ APP SHELL ═══════ -->
+<div id="appShell">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <a href="index.html" class="sidebar-logo">
+      <div class="sidebar-logo-icon">B</div>
+      <span class="sidebar-logo-text">Backbone AI</span>
+    </a>
+
+    <div class="sidebar-client">
+      <div class="sidebar-client-label">Your Account</div>
+      <div class="sidebar-client-name" id="sidebarClientName">—</div>
+      <div class="sidebar-client-meta">
+        <span class="sidebar-badge badge-plan" id="sidebarPlan">Scale</span>
+        <span class="sidebar-badge badge-live">Live</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button class="nav-item active" onclick="showPage('dashboard',this)">
+        <span class="nav-item-icon">📊</span> Dashboard
+      </button>
+      <button class="nav-item" onclick="showPage('upload',this)">
+        <span class="nav-item-icon">📁</span> Data Upload
+        <span class="nav-badge">2 needed</span>
+      </button>
+      <button class="nav-item" onclick="showPage('tracker',this)">
+        <span class="nav-item-icon">🗂️</span> Project Tracker
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="sidebar-logout" onclick="logout()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+        Sign out
+      </button>
+      <div class="sidebar-support">Need help? <a href="mailto:support@backboneai.co.uk">Contact us</a></div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main">
+    <div class="topbar">
+      <div>
+        <div class="topbar-title" id="topbarTitle">Operations Dashboard</div>
+        <div class="topbar-sub" id="topbarSub">Last updated today at 09:47</div>
+      </div>
+      <div class="topbar-right">
+        <div class="live-badge"><div class="live-dot"></div> Live</div>
+      </div>
+    </div>
+
+    <div class="page-content">
+
+      <!-- ══════ PAGE 1: DASHBOARD ══════ -->
+      <div class="page active" id="page-dashboard">
+
+        <div class="section-title">Your Operational Intelligence</div>
+        <div class="section-sub">Real-time view of every automation running inside your business and the value it's generating.</div>
+
+        <div class="kpi-row">
+          <div class="kpi-card kpi-green">
+            <div class="kpi-label">Cost Saved This Month</div>
+            <div class="kpi-value" id="k1">£0</div>
+            <div class="kpi-change">↑ +18% vs last month</div>
+            <div class="kpi-sub">Cumulative: £47,200</div>
+          </div>
+          <div class="kpi-card kpi-blue">
+            <div class="kpi-label">Hours Saved</div>
+            <div class="kpi-value" id="k2">0h</div>
+            <div class="kpi-change">↑ +12% vs last month</div>
+            <div class="kpi-sub">Across all automations</div>
+          </div>
+          <div class="kpi-card kpi-orange">
+            <div class="kpi-label">Tasks Automated</div>
+            <div class="kpi-value" id="k3">0</div>
+            <div class="kpi-change">↑ +24% vs last month</div>
+            <div class="kpi-sub">Invoices, routes, reports</div>
+          </div>
+          <div class="kpi-card kpi-purple">
+            <div class="kpi-label">Monthly ROI</div>
+            <div class="kpi-value" id="k4">0x</div>
+            <div class="kpi-change">↑ vs 2.8x last month</div>
+            <div class="kpi-sub">Return on retainer</div>
+          </div>
+        </div>
+
+        <div class="dash-grid">
+          <div class="card">
+            <div class="card-header">
+              <div><div class="card-title">Savings Trend — 6 Months</div><div class="card-sub">Cost saved & hours saved per month</div></div>
+              <span class="card-tag">All automations</span>
+            </div>
+            <div class="card-body"><div class="chart-wrap"><canvas id="trendChart"></canvas></div></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div><div class="card-title">Live Activity</div><div class="card-sub">What the AI is doing right now</div></div></div>
+            <div class="card-body" style="padding:6px 16px;">
+              <div class="activity-list">
+                <div class="activity-item"><div class="act-dot" style="background:var(--green)"></div><div><div class="act-text">Invoice #INV-4821 from Hargreaves Transport — matched, approved</div><div class="act-time">2 min ago · 11 min saved</div></div></div>
+                <div class="activity-item"><div class="act-dot" style="background:var(--blue)"></div><div><div class="act-text">Tuesday routes re-optimised — 3 merged, 47 miles saved</div><div class="act-time">14 min ago · £38 saved</div></div></div>
+                <div class="activity-item"><div class="act-dot" style="background:var(--orange)"></div><div><div class="act-text">Supplier alert: Midlands Freight Co — 4th late delivery flagged</div><div class="act-time">1 hour ago · insight raised</div></div></div>
+                <div class="activity-item"><div class="act-dot" style="background:var(--green)"></div><div><div class="act-text">Invoice #INV-4820 — £120 discrepancy vs PO, flagged for review</div><div class="act-time">2 hours ago · error caught</div></div></div>
+                <div class="activity-item"><div class="act-dot" style="background:var(--purple)"></div><div><div class="act-text">Monthly compliance report auto-drafted — ready for 2-min review</div><div class="act-time">This morning · 6h saved</div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:14px;"><div style="font-size:15px;font-weight:800;margin-bottom:2px;">Active Automations</div><div style="font-size:12px;color:var(--muted);">Click any module to see full detail, history, and trend data.</div></div>
+
+        <div class="module-grid">
+          <div class="mod-card" onclick="openModal('invoices')">
+            <div class="mod-top">
+              <div class="mod-icon-name"><div class="mod-icon" style="background:rgba(59,130,246,0.12)">🧾</div><div><div class="mod-name">Invoice Processing</div><div class="mod-sector">300 invoices/month</div></div></div>
+              <div class="mod-status status-live">Live</div>
+            </div>
+            <div class="mod-stats">
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--blue)">312</div><div class="mod-stat-label">Processed</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--green)">47h</div><div class="mod-stat-label">Hrs saved</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--red)">7</div><div class="mod-stat-label">Errors caught</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--orange)">98.7%</div><div class="mod-stat-label">Accuracy</div></div>
+            </div>
+            <div class="mod-footer"><div class="mod-saving">£2,100 saved this month</div><div class="mod-cta">View detail →</div></div>
+          </div>
+
+          <div class="mod-card" onclick="openModal('routes')">
+            <div class="mod-top">
+              <div class="mod-icon-name"><div class="mod-icon" style="background:rgba(139,92,246,0.12)">🚚</div><div><div class="mod-name">Route Optimisation</div><div class="mod-sector">20 vehicles</div></div></div>
+              <div class="mod-status status-live">Live</div>
+            </div>
+            <div class="mod-stats">
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--purple)">1,840</div><div class="mod-stat-label">Miles saved</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--green)">60h</div><div class="mod-stat-label">Driver hrs saved</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--blue)">94%</div><div class="mod-stat-label">On-time rate</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--orange)">3</div><div class="mod-stat-label">Failed drops ↓</div></div>
+            </div>
+            <div class="mod-footer"><div class="mod-saving">£3,800 saved this month</div><div class="mod-cta">View detail →</div></div>
+          </div>
+
+          <div class="mod-card" onclick="openModal('suppliers')">
+            <div class="mod-top">
+              <div class="mod-icon-name"><div class="mod-icon" style="background:rgba(249,115,22,0.12)">📋</div><div><div class="mod-name">Supplier Intelligence</div><div class="mod-sector">14 suppliers tracked</div></div></div>
+              <div class="mod-status status-live">Live</div>
+            </div>
+            <div class="mod-stats">
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--orange)">14</div><div class="mod-stat-label">Suppliers</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--red)">3</div><div class="mod-stat-label">Alerts raised</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--green)">£840</div><div class="mod-stat-label">Disputes avoided</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--blue)">88%</div><div class="mod-stat-label">Avg on-time</div></div>
+            </div>
+            <div class="mod-footer"><div class="mod-saving">£1,400 saved this month</div><div class="mod-cta">View detail →</div></div>
+          </div>
+
+          <div class="mod-card" onclick="openModal('compliance')">
+            <div class="mod-top">
+              <div class="mod-icon-name"><div class="mod-icon" style="background:rgba(34,197,94,0.12)">🛡️</div><div><div class="mod-name">Compliance Docs</div><div class="mod-sector">Monthly reporting</div></div></div>
+              <div class="mod-status status-live">Live</div>
+            </div>
+            <div class="mod-stats">
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--green)">4</div><div class="mod-stat-label">Reports</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--green)">38h</div><div class="mod-stat-label">Hrs saved</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--blue)">100%</div><div class="mod-stat-label">Audit ready</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--orange)">2 min</div><div class="mod-stat-label">Avg review</div></div>
+            </div>
+            <div class="mod-footer"><div class="mod-saving">£1,600 saved this month</div><div class="mod-cta">View detail →</div></div>
+          </div>
+
+          <div class="mod-card" onclick="openModal('inventory')">
+            <div class="mod-top">
+              <div class="mod-icon-name"><div class="mod-icon" style="background:rgba(244,63,94,0.12)">📦</div><div><div class="mod-name">Inventory Forecast</div><div class="mod-sector">Demand planning</div></div></div>
+              <div class="mod-status status-live">Live</div>
+            </div>
+            <div class="mod-stats">
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--red)">0</div><div class="mod-stat-label">Stockouts</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--green)">12%</div><div class="mod-stat-label">Overstock ↓</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--blue)">97%</div><div class="mod-stat-label">Forecast accuracy</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--orange)">£4.2k</div><div class="mod-stat-label">Capital freed</div></div>
+            </div>
+            <div class="mod-footer"><div class="mod-saving">£4,200 saved this month</div><div class="mod-cta">View detail →</div></div>
+          </div>
+
+          <div class="mod-card" style="opacity:0.5;cursor:default;">
+            <div class="mod-top">
+              <div class="mod-icon-name"><div class="mod-icon" style="background:rgba(100,116,139,0.1)">➕</div><div><div class="mod-name">Next Automation</div><div class="mod-sector">Driver comms & POD</div></div></div>
+              <div class="mod-status status-setup">In Setup</div>
+            </div>
+            <div class="mod-stats">
+              <div class="mod-stat" style="grid-column:span 2;text-align:center;padding:14px;">
+                <div style="font-size:11px;color:var(--muted2);">Estimated saving: <strong style="color:var(--text)">£900/mo</strong> · Live in ~2 weeks</div>
+              </div>
+            </div>
+            <div class="mod-footer"><div style="font-size:11px;color:var(--muted);">See Project Tracker for details</div></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><div><div class="card-title">Operational Insights</div><div class="card-sub">Patterns surfaced from your data this month</div></div><span class="card-tag">AI generated</span></div>
+          <div class="card-body">
+            <div class="insight-list">
+              <div class="insight-item"><div class="insight-icon">⚠️</div><div class="insight-text"><strong>Midlands Freight Co reliability has dropped to 72%</strong> — 4 late deliveries in 30 days, down from 91% last quarter. We recommend reviewing contract terms.</div></div>
+              <div class="insight-item"><div class="insight-icon">💡</div><div class="insight-text"><strong>Tuesday afternoon slots have a 34% higher failed-drop rate</strong> — costing ~£280/month in reattempts. Shifting 3 postcodes to Wednesday morning would eliminate most of this.</div></div>
+              <div class="insight-item"><div class="insight-icon">📈</div><div class="insight-text"><strong>86% of invoice discrepancies come from just 2 suppliers</strong> — both involve PO reference formatting. A single supplier communication this week would prevent most future errors.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════ PAGE 2: DATA UPLOAD ══════ -->
+      <div class="page" id="page-upload">
+        <div class="section-title">Data Upload Centre</div>
+        <div class="section-sub">Upload the documents and data we need to build, train, and improve your AI systems. All files are encrypted in transit and at rest.</div>
+
+        <div class="completeness-card">
+          <div class="completeness-header">
+            <div>
+              <div class="completeness-title">Data Completeness Score</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:3px;">2 items still needed to complete your setup</div>
+            </div>
+            <div class="completeness-pct">73%</div>
+          </div>
+          <div class="completeness-bar-wrap"><div class="completeness-bar" style="width:73%"></div></div>
+          <div class="completeness-note">Upload the remaining items below to unlock full system capability and improve forecast accuracy.</div>
+        </div>
+
+        <div class="upload-page-grid">
+          <div class="upload-categories">
+
+            <!-- Operational Data -->
+            <div class="upload-cat open" id="cat-ops">
+              <div class="upload-cat-header" onclick="toggleCat('cat-ops')">
+                <div class="upload-cat-left">
+                  <div class="upload-cat-icon">📊</div>
+                  <div><div class="upload-cat-name">Operational Data</div><div class="upload-cat-desc">ERP exports, production logs, delivery records</div></div>
+                </div>
+                <div class="upload-cat-right">
+                  <div class="upload-cat-status us-complete">Complete</div>
+                  <div class="upload-chevron">▾</div>
+                </div>
+              </div>
+              <div class="upload-cat-body">
+                <div class="file-list">
+                  <div class="file-item"><div class="file-icon">📊</div><div class="file-name">Delivery_Records_Q1_2026.xlsx</div><div class="file-size">2.4 MB</div><div class="file-status fs-processed">Processed</div></div>
+                  <div class="file-item"><div class="file-icon">📊</div><div class="file-name">Route_Data_Jan_Mar_2026.csv</div><div class="file-size">890 KB</div><div class="file-status fs-processed">Processed</div></div>
+                  <div class="file-item"><div class="file-icon">📊</div><div class="file-name">Fleet_Usage_Report.xlsx</div><div class="file-size">1.1 MB</div><div class="file-status fs-processing">Processing</div></div>
+                </div>
+                <div class="drop-zone" id="dz-ops">
+                  <input type="file" multiple onchange="handleUpload(event,'ops')" />
+                  <div class="drop-zone-text">Drop files here or <span>browse</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Financial Data -->
+            <div class="upload-cat" id="cat-fin">
+              <div class="upload-cat-header" onclick="toggleCat('cat-fin')">
+                <div class="upload-cat-left">
+                  <div class="upload-cat-icon">🧾</div>
+                  <div><div class="upload-cat-name">Financial & Invoice Data</div><div class="upload-cat-desc">Sample invoices, supplier statements, PO records</div></div>
+                </div>
+                <div class="upload-cat-right">
+                  <div class="upload-cat-status us-partial">1 item needed</div>
+                  <div class="upload-chevron">▾</div>
+                </div>
+              </div>
+              <div class="upload-cat-body">
+                <div class="file-list">
+                  <div class="file-item"><div class="file-icon">📄</div><div class="file-name">Sample_Supplier_Invoices_x20.pdf</div><div class="file-size">4.1 MB</div><div class="file-status fs-processed">Processed</div></div>
+                  <div class="file-item"><div class="file-icon">📊</div><div class="file-name">Purchase_Orders_2025.xlsx</div><div class="file-size">1.8 MB</div><div class="file-status fs-processed">Processed</div></div>
+                </div>
+                <div class="required-items">
+                  <div class="required-item"><div class="req-icon">⚠️</div>Supplier statement from Midlands Freight Co (last 3 months) — needed for dispute tracking</div>
+                </div>
+                <div class="drop-zone" id="dz-fin">
+                  <input type="file" multiple onchange="handleUpload(event,'fin')" />
+                  <div class="drop-zone-text">Drop files here or <span>browse</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Process Documents -->
+            <div class="upload-cat" id="cat-proc">
+              <div class="upload-cat-header" onclick="toggleCat('cat-proc')">
+                <div class="upload-cat-left">
+                  <div class="upload-cat-icon">📋</div>
+                  <div><div class="upload-cat-name">Process Documents</div><div class="upload-cat-desc">SOPs, workflows, driver handbooks, checklists</div></div>
+                </div>
+                <div class="upload-cat-right">
+                  <div class="upload-cat-status us-partial">1 item needed</div>
+                  <div class="upload-chevron">▾</div>
+                </div>
+              </div>
+              <div class="upload-cat-body">
+                <div class="file-list">
+                  <div class="file-item"><div class="file-icon">📄</div><div class="file-name">Driver_Operations_Handbook_v3.pdf</div><div class="file-size">3.2 MB</div><div class="file-status fs-processed">Processed</div></div>
+                </div>
+                <div class="required-items">
+                  <div class="required-item"><div class="req-icon">⚠️</div>Proof of Delivery (POD) process document — needed for driver comms automation build</div>
+                </div>
+                <div class="drop-zone" id="dz-proc">
+                  <input type="file" multiple onchange="handleUpload(event,'proc')" />
+                  <div class="drop-zone-text">Drop files here or <span>browse</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Compliance -->
+            <div class="upload-cat" id="cat-comp">
+              <div class="upload-cat-header" onclick="toggleCat('cat-comp')">
+                <div class="upload-cat-left">
+                  <div class="upload-cat-icon">🛡️</div>
+                  <div><div class="upload-cat-name">Compliance & Regulatory</div><div class="upload-cat-desc">Operator licences, insurance, audit records, HSE docs</div></div>
+                </div>
+                <div class="upload-cat-right">
+                  <div class="upload-cat-status us-complete">Complete</div>
+                  <div class="upload-chevron">▾</div>
+                </div>
+              </div>
+              <div class="upload-cat-body">
+                <div class="file-list">
+                  <div class="file-item"><div class="file-icon">📄</div><div class="file-name">Operator_Licence_2026.pdf</div><div class="file-size">820 KB</div><div class="file-status fs-processed">Processed</div></div>
+                  <div class="file-item"><div class="file-icon">📄</div><div class="file-name">Fleet_Insurance_Certificate.pdf</div><div class="file-size">540 KB</div><div class="file-status fs-processed">Processed</div></div>
+                  <div class="file-item"><div class="file-icon">📄</div><div class="file-name">HSE_Risk_Assessment_2025.pdf</div><div class="file-size">1.3 MB</div><div class="file-status fs-processed">Processed</div></div>
+                </div>
+                <div class="drop-zone" id="dz-comp">
+                  <input type="file" multiple onchange="handleUpload(event,'comp')" />
+                  <div class="drop-zone-text">Drop additional files here or <span>browse</span></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Upload Sidebar -->
+          <div>
+            <div class="upload-sidebar-card">
+              <div class="upload-sidebar-title">Still needed (2 items)</div>
+              <div class="still-needed">
+                <div class="still-item"><div class="still-dot"></div>Midlands Freight Co supplier statement — last 3 months</div>
+                <div class="still-item"><div class="still-dot"></div>Proof of Delivery (POD) process document</div>
+              </div>
+            </div>
+            <div class="upload-sidebar-card">
+              <div class="upload-sidebar-title">Data Security</div>
+              <div class="security-note">
+                <strong>Your data is fully protected.</strong> All uploads are encrypted with AES-256 in transit and at rest. Files are stored in UK-based servers, never shared with third parties, and deleted upon request.<br /><br />
+                We are compliant with UK GDPR and the ICO Data Protection Framework.
+              </div>
+            </div>
+            <div class="upload-sidebar-card">
+              <div class="upload-sidebar-title">What happens next?</div>
+              <div style="display:flex;flex-direction:column;gap:10px;">
+                <div style="display:flex;gap:10px;font-size:12px;color:var(--muted2);align-items:flex-start;"><span style="color:var(--blue-bright);font-weight:700;flex-shrink:0;">1.</span>We review your upload within 24 hours.</div>
+                <div style="display:flex;gap:10px;font-size:12px;color:var(--muted2);align-items:flex-start;"><span style="color:var(--blue-bright);font-weight:700;flex-shrink:0;">2.</span>Our team processes and structures the data.</div>
+                <div style="display:flex;gap:10px;font-size:12px;color:var(--muted2);align-items:flex-start;"><span style="color:var(--blue-bright);font-weight:700;flex-shrink:0;">3.</span>It's fed into your AI systems to improve accuracy.</div>
+                <div style="display:flex;gap:10px;font-size:12px;color:var(--muted2);align-items:flex-start;"><span style="color:var(--blue-bright);font-weight:700;flex-shrink:0;">4.</span>You'll see the impact in your dashboard within 48 hrs.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════ PAGE 3: PROCESS TRACKER ══════ -->
+      <div class="page" id="page-tracker">
+        <div class="section-title">Project Tracker</div>
+        <div class="section-sub">Everything we've done, what's in progress, and what's coming next. Updated in real time by your account team.</div>
+
+        <div class="tracker-grid">
+          <div>
+
+            <!-- Phase 1 -->
+            <div class="card" style="margin-bottom:12px;">
+              <div class="phase-header">
+                <div class="phase-num phase-num-done">1</div>
+                <div class="phase-name">Onboarding & Discovery</div>
+                <div class="phase-status-badge psb-done">Complete</div>
+              </div>
+              <div class="phase-tasks">
+                <div class="task-item">
+                  <div class="task-icon ti-done">✓</div>
+                  <div class="task-body">
+                    <div class="task-name">Initial consultation & scope agreement</div>
+                    <div class="task-desc">60-minute audit call. Identified 5 automation opportunities. Agreed on Scale plan starting with invoice processing and route optimisation.</div>
+                    <div class="task-meta"><span class="task-tag tt-done">Complete</span><span class="task-date">Completed 14 Jan 2026</span></div>
+                  </div>
+                </div>
+                <div class="task-item">
+                  <div class="task-icon ti-done">✓</div>
+                  <div class="task-body">
+                    <div class="task-name">Access credentials & portal setup</div>
+                    <div class="task-desc">9-digit client code issued. Portal access configured. Account manager assigned.</div>
+                    <div class="task-meta"><span class="task-tag tt-done">Complete</span><span class="task-date">Completed 15 Jan 2026</span></div>
+                  </div>
+                </div>
+                <div class="task-item">
+                  <div class="task-icon ti-done">✓</div>
+                  <div class="task-body">
+                    <div class="task-name">Data audit & gap analysis</div>
+                    <div class="task-desc">Mapped all data sources. Identified 3 priority integrations. Created data requirements list.</div>
+                    <div class="task-meta"><span class="task-tag tt-done">Complete</span><span class="task-date">Completed 17 Jan 2026</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Phase 2 -->
+            <div class="card" style="margin-bottom:12px;">
+              <div class="phase-header">
+                <div class="phase-num phase-num-done">2</div>
+                <div class="phase-name">Data Foundation</div>
+                <div class="phase-status-badge psb-done">Complete</div>
+              </div>
+              <div class="phase-tasks">
+                <div class="task-item">
+                  <div class="task-icon ti-done">✓</div>
+                  <div class="task-body">
+                    <div class="task-name">Data collection & upload</div>
+                    <div class="task-desc">7 of 9 required documents received and processed. 2 items outstanding (see Data Upload page).</div>
+                    <div class="task-meta"><span class="task-tag tt-done">Complete</span><span class="task-date">Completed 22 Jan 2026</span></div>
+                  </div>
+                </div>
+                <div class="task-item">
+                  <div class="task-icon ti-done">✓</div>
+                  <div class="task-body">
+                    <div class="task-name">Data cleaning & structuring</div>
+                    <div class="task-desc">Consolidated 6 data sources. Standardised invoice formats. Cleaned 18 months of delivery records. Built unified data layer.</div>
+                    <div class="task-meta"><span class="task-tag tt-done">Complete</span><span class="task-date">Completed 28 Jan 2026</span></div>
+                  </div>
+                </div>
+                <div class="task-item">
+                  <div class="task-icon ti-done">✓</div>
+                  <div class="task-body">
+                    <div class="task-name">System connections established</div>
+                    <div class="task-desc">Connected to Sage accounts export, fleet management system, and Google Sheets operational logs.</div>
+                    <div class="task-meta"><span class="task-tag tt-done">Complete</span><span class="task-date">Completed 30 Jan 2026</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Phase 3 -->
+            <div class="card" style="margin-bottom:12px;">
+              <div class="phase-header">
+                <div class="phase-num phase-num-done">3</div>
+                <div class="phase-name">AI System Build & Go-Live</div>
+                <div class="phase-status-badge psb-done">Complete</div>
+              </div>
+              <div class="phase-tasks">
+                <div class="task-item">
+                  <div class="task-icon ti-done">✓</div>
+                  <div class="task-body">
+                    <div class="task-name">Invoice processing automation built & tested</div>
+                    <div class="task-desc">AI model trained on 200 sample invoices. PO matching logic configured. Anomaly detection thresholds set. Tested on 30 live invoices before full deployment.</div>
+                    <div class="task-meta"><span class="task-tag tt-done">Complete</span><span class="task-date">Went live 10 Feb 2026</span></div>
+                  </div>
+                </div>
+                <div class="task-item">
+                  <div class="task-icon ti-done">✓</div>
+                  <div class="task-body">
+                    <div class="task-name">Route optimisation system deployed</div>
+                    <div class="task-desc">Dynamic routing integrated with fleet management. Live traffic data connected. Driver app notifications configured.</div>
+                    <div class="task-meta"><span class="task-tag tt-done">Complete</span><span class="task-date">Went live 17 Feb 2026</span></div>
+                  </div>
+                </div>
+                <div class="task-item">
+                  <div class="task-icon ti-done">✓</div>
+                  <div class="task-body">
+                    <div class="task-name">Compliance reporting & supplier intelligence live</div>
+                    <div class="task-desc">Auto-reporting from operational data. Supplier scorecards active across 14 suppliers.</div>
+                    <div class="task-meta"><span class="task-tag tt-done">Complete</span><span class="task-date">Went live 1 Mar 2026</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Phase 4 — Active -->
+            <div class="card" style="margin-bottom:12px;border-color:rgba(59,130,246,0.25);">
+              <div class="phase-header">
+                <div class="phase-num phase-num-active">4</div>
+                <div class="phase-name">Optimise & Expand</div>
+                <div class="phase-status-badge psb-active">In Progress</div>
+              </div>
+              <div class="phase-tasks">
+                <div class="task-item">
+                  <div class="task-icon ti-done">✓</div>
+                  <div class="task-body">
+                    <div class="task-name">First monthly performance review</div>
+                    <div class="task-desc">Reviewed February results. Identified Tuesday slot issue. Recommended supplier review for Midlands Freight Co.</div>
+                    <div class="task-meta"><span class="task-tag tt-done">Complete</span><span class="task-date">Completed 5 Mar 2026</span></div>
+                  </div>
+                </div>
+                <div class="task-item">
+                  <div class="task-icon ti-active" style="font-size:16px;">⚙</div>
+                  <div class="task-body">
+                    <div class="task-name">Driver communications & POD automation</div>
+                    <div class="task-desc">Building automated proof-of-delivery system. Waiting on POD process document upload to complete build.</div>
+                    <div class="task-progress-wrap">
+                      <div class="task-progress-label"><span>Build progress</span><span>65%</span></div>
+                      <div class="task-progress-bar"><div class="task-progress-fill" style="width:65%"></div></div>
+                    </div>
+                    <div class="task-meta" style="margin-top:8px;"><span class="task-tag tt-inprog">In Progress</span><span class="task-date">Est. live: 22 Mar 2026</span></div>
+                  </div>
+                </div>
+                <div class="task-item">
+                  <div class="task-icon ti-future">○</div>
+                  <div class="task-body">
+                    <div class="task-name">Inventory & demand forecasting refinement</div>
+                    <div class="task-desc">Improving forecast accuracy using 2 additional months of order data. Targeting 99% accuracy.</div>
+                    <div class="task-meta"><span class="task-tag tt-planned">Planned</span><span class="task-date">Starts: 25 Mar 2026</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Phase 5 — Future -->
+            <div class="card" style="opacity:0.7;">
+              <div class="phase-header">
+                <div class="phase-num phase-num-future">5</div>
+                <div class="phase-name">Advanced Intelligence Layer</div>
+                <div class="phase-status-badge psb-future">Planned — Q2 2026</div>
+              </div>
+              <div class="phase-tasks">
+                <div class="task-item">
+                  <div class="task-icon ti-future">○</div>
+                  <div class="task-body">
+                    <div class="task-name">Predictive maintenance scheduling</div>
+                    <div class="task-desc">Use fleet usage data to predict maintenance needs before breakdowns occur.</div>
+                    <div class="task-meta"><span class="task-tag tt-planned">Planned</span><span class="task-date">Est. start: Apr 2026</span></div>
+                  </div>
+                </div>
+                <div class="task-item">
+                  <div class="task-icon ti-future">○</div>
+                  <div class="task-body">
+                    <div class="task-name">Customer delivery intelligence dashboard</div>
+                    <div class="task-desc">Give your customers live delivery tracking and proactive communication — reducing inbound calls by an estimated 40%.</div>
+                    <div class="task-meta"><span class="task-tag tt-planned">Planned</span><span class="task-date">Est. start: May 2026</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Tracker Sidebar -->
+          <div>
+            <div class="tracker-sidebar-card">
+              <div class="tracker-sidebar-title">Project Overview</div>
+              <div class="progress-overview">
+                <div class="po-item"><span class="po-label">Plan</span><span class="po-val" style="color:var(--blue-bright)">Scale</span></div>
+                <div class="po-item"><span class="po-label">Start date</span><span class="po-val">14 Jan 2026</span></div>
+                <div class="po-item"><span class="po-label">Tasks complete</span><span class="po-val" style="color:var(--green)">11 / 14</span></div>
+                <div class="po-item"><span class="po-label">In progress</span><span class="po-val" style="color:var(--blue-bright)">2</span></div>
+                <div class="po-item"><span class="po-label">Planned</span><span class="po-val" style="color:var(--muted2)">4</span></div>
+                <div class="po-item"><span class="po-label">Account manager</span><span class="po-val">Sarah M.</span></div>
+              </div>
+            </div>
+
+            <div class="tracker-sidebar-card">
+              <div class="tracker-sidebar-title">Recent Updates</div>
+              <div class="timeline-mini">
+                <div class="tm-item">
+                  <div class="tm-left"><div class="tm-dot" style="background:var(--blue)"></div><div class="tm-line" style="background:rgba(59,130,246,0.15)"></div></div>
+                  <div class="tm-text"><div class="tm-event">Driver comms build at 65%</div><div class="tm-date">Today</div></div>
+                </div>
+                <div class="tm-item">
+                  <div class="tm-left"><div class="tm-dot" style="background:var(--green)"></div><div class="tm-line" style="background:rgba(34,197,94,0.15)"></div></div>
+                  <div class="tm-text"><div class="tm-event">Monthly review completed</div><div class="tm-date">5 Mar 2026</div></div>
+                </div>
+                <div class="tm-item">
+                  <div class="tm-left"><div class="tm-dot" style="background:var(--green)"></div><div class="tm-line" style="background:rgba(34,197,94,0.15)"></div></div>
+                  <div class="tm-text"><div class="tm-event">Compliance reporting live</div><div class="tm-date">1 Mar 2026</div></div>
+                </div>
+                <div class="tm-item">
+                  <div class="tm-left"><div class="tm-dot" style="background:var(--green)"></div><div class="tm-line" style="background:rgba(34,197,94,0.15)"></div></div>
+                  <div class="tm-text"><div class="tm-event">Route optimisation live</div><div class="tm-date">17 Feb 2026</div></div>
+                </div>
+                <div class="tm-item">
+                  <div class="tm-left"><div class="tm-dot" style="background:var(--green)"></div></div>
+                  <div class="tm-text"><div class="tm-event">Invoice processing live</div><div class="tm-date">10 Feb 2026</div></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="tracker-sidebar-card" style="background:rgba(59,130,246,0.05);border-color:rgba(59,130,246,0.2);">
+              <div class="tracker-sidebar-title" style="color:var(--blue-bright)">Action Required</div>
+              <div style="font-size:12px;color:var(--muted2);line-height:1.6;">
+                Upload your <strong style="color:var(--text)">POD process document</strong> to unblock the driver comms build. This is the only item preventing go-live on 22 Mar.<br/><br/>
+                <button onclick="showPage('upload',null)" style="background:var(--blue);color:#fff;border:none;border-radius:7px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;">Go to Data Upload →</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /page-content -->
+  </div><!-- /main -->
+</div><!-- /appShell -->
+
+<!-- ─── MODULE MODAL ─── -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOnBg(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div><div class="modal-title" id="modalTitle"></div><div class="modal-sub" id="modalSub"></div></div>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-kpis" id="modalKpis"></div>
+      <div class="modal-chart-wrap"><canvas id="modalChart"></canvas></div>
+      <div style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">Recent Activity</div>
+      <div class="modal-log" id="modalLog"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ═══ CLIENT DATA ═══ */
+  const CLIENTS = {
+    '123456789': { name: 'Whitfield Logistics Ltd', sector: 'Logistics & Distribution', plan: 'Scale' },
+    '987654321': { name: 'Thornton Manufacturing Co', sector: 'Manufacturing', plan: 'Backbone' },
+    '456123789': { name: 'Northern Freight Solutions', sector: 'Logistics & Distribution', plan: 'Pilot' },
+  };
+
+  /* ═══ CODE INPUT ═══ */
+  const digits = document.querySelectorAll('.code-digit');
+  digits.forEach((d, i) => {
+    d.addEventListener('input', () => {
+      d.value = d.value.replace(/\D/g, '').slice(-1);
+      if (d.value && i < digits.length - 1) digits[i + 1].focus();
+    });
+    d.addEventListener('keydown', e => {
+      if (e.key === 'Backspace' && !d.value && i > 0) digits[i - 1].focus();
+    });
+    d.addEventListener('paste', e => {
+      e.preventDefault();
+      const text = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '');
+      [...text].forEach((ch, j) => { if (digits[i + j]) digits[i + j].value = ch; });
+      const next = Math.min(i + text.length, digits.length - 1);
+      digits[next].focus();
+    });
+  });
+
+  function getCode() {
+    return [...digits].map(d => d.value).join('');
+  }
+
+  function attemptLogin() {
+    const code = getCode();
+    if (code.length < 9) {
+      document.getElementById('loginError').textContent = 'Please enter all 9 digits.';
+      document.getElementById('loginError').classList.add('show');
+      return;
+    }
+    document.getElementById('loginError').classList.remove('show');
+    document.getElementById('loginBtn').disabled = true;
+    document.getElementById('loginVerifying').classList.add('show');
+
+    setTimeout(() => {
+      const client = CLIENTS[code];
+      if (client) {
+        document.getElementById('loginScreen').style.opacity = '0';
+        document.getElementById('loginScreen').style.transition = 'opacity 0.4s';
+        setTimeout(() => {
+          document.getElementById('loginScreen').style.display = 'none';
+          document.getElementById('sidebarClientName').textContent = client.name;
+          document.getElementById('sidebarPlan').textContent = client.plan;
+          document.getElementById('appShell').classList.add('show');
+          initCharts();
+          animateKPIs();
+        }, 400);
+      } else {
+        document.getElementById('loginVerifying').classList.remove('show');
+        document.getElementById('loginBtn').disabled = false;
+        document.getElementById('loginError').textContent = 'Invalid access code. Please check your code or contact your account manager.';
+        document.getElementById('loginError').classList.add('show');
+        digits.forEach(d => d.value = '');
+        digits[0].focus();
+      }
+    }, 1800);
+  }
+
+  /* Enter key submits */
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && document.getElementById('loginScreen').style.display !== 'none') attemptLogin();
+  });
+
+  function logout() {
+    document.getElementById('appShell').classList.remove('show');
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('loginScreen').style.opacity = '1';
+    digits.forEach(d => d.value = '');
+    document.getElementById('loginBtn').disabled = false;
+    document.getElementById('loginVerifying').classList.remove('show');
+    document.getElementById('loginError').classList.remove('show');
+    digits[0].focus();
+  }
+
+  /* ═══ PAGE NAVIGATION ═══ */
+  function showPage(id, btn) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    else {
+      const btns = document.querySelectorAll('.nav-item');
+      btns.forEach(b => { if (b.textContent.includes('Data Upload')) b.classList.add('active'); });
+    }
+
+    const titles = {
+      dashboard: ['Operations Dashboard', 'Live view of your AI systems and savings'],
+      upload: ['Data Upload Centre', 'Upload documents to improve your AI systems'],
+      tracker: ['Project Tracker', 'Progress on all work completed and planned']
+    };
+    document.getElementById('topbarTitle').textContent = titles[id][0];
+    document.getElementById('topbarSub').textContent = titles[id][1];
+  }
+
+  /* ═══ KPI ANIMATION ═══ */
+  function animCount(el, end, prefix='', suffix='', isFloat=false) {
+    const dur = 1600;
+    const start = performance.now();
+    const update = t => {
+      const p = Math.min((t - start) / dur, 1);
+      const e = 1 - Math.pow(1 - p, 3);
+      const v = isFloat ? (e * end).toFixed(1) : Math.round(e * end);
+      el.textContent = prefix + Number(v).toLocaleString() + suffix;
+      if (p < 1) requestAnimationFrame(update);
+    };
+    requestAnimationFrame(update);
+  }
+
+  function animateKPIs() {
+    setTimeout(() => {
+      animCount(document.getElementById('k1'), 13100, '£');
+      animCount(document.getElementById('k2'), 192, '', 'h');
+      animCount(document.getElementById('k3'), 1847);
+      animCount(document.getElementById('k4'), 3.7, '', 'x', true);
+    }, 200);
+  }
+
+  /* ═══ CHARTS ═══ */
+  const months = ['Oct','Nov','Dec','Jan','Feb','Mar'];
+  let trendChart, modalChartInst;
+
+  function initCharts() {
+    if (trendChart) return;
+    const ctx = document.getElementById('trendChart').getContext('2d');
+    trendChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: months,
+        datasets: [
+          { label: 'Cost saved (£)', data: [3400,5200,7800,9400,11200,13100], borderColor: '#22c55e', backgroundColor: 'rgba(34,197,94,0.07)', borderWidth: 2, tension: 0.4, fill: true, pointRadius: 3 },
+          { label: 'Hours saved', data: [48,82,114,141,168,192], borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.05)', borderWidth: 2, tension: 0.4, fill: true, pointRadius: 3, yAxisID: 'y2' }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: { legend: { labels: { color: '#94a3b8', font: { size: 11, family: 'Inter' }, boxWidth: 10 } } },
+        scales: {
+          x: { ticks: { color: '#64748b', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.04)' } },
+          y: { ticks: { color: '#64748b', font: { size: 10 }, callback: v => '£' + v.toLocaleString() }, grid: { color: 'rgba(255,255,255,0.04)' } },
+          y2: { position: 'right', ticks: { color: '#64748b', font: { size: 10 }, callback: v => v + 'h' }, grid: { display: false } }
+        }
+      }
+    });
+  }
+
+  /* ═══ MODULE MODAL DATA ═══ */
+  const MODULES = {
+    invoices: {
+      title: 'Invoice Processing', sub: 'AI extraction, PO matching & anomaly detection · 312 invoices this month', color: '#3b82f6',
+      kpis: [{ val:'312', label:'Invoices processed', color:'#3b82f6' },{ val:'47h', label:'Hours saved', color:'#22c55e' },{ val:'7', label:'Errors caught', color:'#f43f5e' },{ val:'£2,100', label:'Cost saved', color:'#22c55e' }],
+      trend: [980,1200,1450,1700,1900,2100],
+      log: [
+        { time:'09:42 today', text:'INV-4821 Hargreaves Transport — matched PO-3341, approved', save:'11 min saved', dot:'#22c55e' },
+        { time:'09:31 today', text:'INV-4820 City Haulage — £120 discrepancy vs PO, flagged', save:'Error caught', dot:'#f43f5e' },
+        { time:'08:55 today', text:'INV-4818 Northern Fuel — approved, payment queued', save:'12 min saved', dot:'#22c55e' },
+        { time:'Yesterday', text:'INV-4812 Evans Logistics — duplicate invoice blocked', save:'£340 saved', dot:'#f97316' },
+        { time:'Yesterday', text:'Overnight batch of 14 invoices — all matched & approved', save:'2.8h saved', dot:'#22c55e' },
+      ]
+    },
+    routes: {
+      title: 'Route Optimisation', sub: 'Dynamic daily replanning for 20 vehicles · 1,840 miles saved this month', color: '#8b5cf6',
+      kpis: [{ val:'1,840', label:'Miles saved', color:'#8b5cf6' },{ val:'60h', label:'Driver hours saved', color:'#22c55e' },{ val:'94%', label:'On-time delivery', color:'#3b82f6' },{ val:'£3,800', label:'Cost saved', color:'#22c55e' }],
+      trend: [1800,2200,2700,3100,3500,3800],
+      log: [
+        { time:'09:14 today', text:'Tuesday routes optimised — 3 merged, 47 miles reduced', save:'£38 saved', dot:'#8b5cf6' },
+        { time:'08:30 today', text:'Vehicle 7 re-routed around M6 incident — ETA maintained', save:'Delay avoided', dot:'#22c55e' },
+        { time:'Yesterday', text:'Monday routes — 12% fewer miles vs manual planning', save:'£94 saved', dot:'#22c55e' },
+        { time:'Yesterday', text:'Late order added to Vehicle 3 dynamically — no extra trip', save:'£62 saved', dot:'#22c55e' },
+      ]
+    },
+    suppliers: {
+      title: 'Supplier Intelligence', sub: 'Live scorecards for 14 suppliers · 3 alerts raised this month', color: '#f97316',
+      kpis: [{ val:'14', label:'Suppliers tracked', color:'#f97316' },{ val:'3', label:'Alerts raised', color:'#f43f5e' },{ val:'£840', label:'Disputes avoided', color:'#22c55e' },{ val:'£1,400', label:'Cost saved', color:'#22c55e' }],
+      trend: [400,600,850,1000,1200,1400],
+      log: [
+        { time:'1 hour ago', text:'Midlands Freight Co — 4th late delivery, reliability now 72%', save:'Alert raised', dot:'#f43f5e' },
+        { time:'Yesterday', text:'City Haulage invoice formatting — 6th instance, supplier notified', save:'Pattern flagged', dot:'#f97316' },
+        { time:'1 week ago', text:'Northern Fuel — on-time rate improved to 96%', save:'Positive', dot:'#22c55e' },
+        { time:'2 weeks ago', text:'Evans Logistics duplicate invoice blocked', save:'£340 saved', dot:'#22c55e' },
+      ]
+    },
+    compliance: {
+      title: 'Compliance Documentation', sub: 'Auto-drafted from operational data · 4 reports generated this month', color: '#22c55e',
+      kpis: [{ val:'4', label:'Reports generated', color:'#22c55e' },{ val:'38h', label:'Hours saved', color:'#22c55e' },{ val:'2 min', label:'Avg review time', color:'#3b82f6' },{ val:'£1,600', label:'Cost saved', color:'#22c55e' }],
+      trend: [600,900,1100,1300,1500,1600],
+      log: [
+        { time:'This morning', text:'Monthly operations compliance report drafted — ready for review', save:'6h saved', dot:'#22c55e' },
+        { time:'2 weeks ago', text:'Driver hours & working time report auto-generated', save:'4h saved', dot:'#22c55e' },
+        { time:'Last month', text:'Annual audit preparation pack generated automatically', save:'25h saved', dot:'#22c55e' },
+      ]
+    },
+    inventory: {
+      title: 'Inventory & Demand Forecasting', sub: 'AI demand planning from order history · 97% forecast accuracy', color: '#f43f5e',
+      kpis: [{ val:'0', label:'Stockouts this month', color:'#22c55e' },{ val:'97%', label:'Forecast accuracy', color:'#3b82f6' },{ val:'12%', label:'Overstock reduced', color:'#22c55e' },{ val:'£4,200', label:'Capital freed', color:'#22c55e' }],
+      trend: [1200,1800,2400,3000,3700,4200],
+      log: [
+        { time:'Today', text:'Forecast updated — 3-week projection revised from new orders', save:'Up to date', dot:'#3b82f6' },
+        { time:'3 days ago', text:'Low stock alert: Packing material — reorder auto-triggered', save:'Stockout prevented', dot:'#22c55e' },
+        { time:'1 week ago', text:'Overstock on Line 4 consumables — order paused, saving £320', save:'£320 saved', dot:'#22c55e' },
+      ]
+    }
+  };
+
+  function openModal(key) {
+    if (event) event.preventDefault();
+    const m = MODULES[key]; if (!m) return;
+    document.getElementById('modalTitle').textContent = m.title;
+    document.getElementById('modalSub').textContent = m.sub;
+    document.getElementById('modalKpis').innerHTML = m.kpis.map(k =>
+      `<div class="modal-kpi"><div class="modal-kpi-val" style="color:${k.color}">${k.val}</div><div class="modal-kpi-label">${k.label}</div></div>`
+    ).join('');
+    if (modalChartInst) modalChartInst.destroy();
+    modalChartInst = new Chart(document.getElementById('modalChart').getContext('2d'), {
+      type: 'bar',
+      data: { labels: months, datasets: [{ label: 'Monthly saving (£)', data: m.trend, backgroundColor: m.color + '33', borderColor: m.color, borderWidth: 2, borderRadius: 5 }] },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { ticks: { color:'#64748b', font:{size:10} }, grid:{color:'rgba(255,255,255,0.04)'} },
+          y: { ticks: { color:'#64748b', font:{size:10}, callback: v => '£'+v.toLocaleString() }, grid:{color:'rgba(255,255,255,0.04)'} }
+        }
+      }
+    });
+    document.getElementById('modalLog').innerHTML = m.log.map(l =>
+      `<div class="log-item"><div class="log-dot" style="background:${l.dot}"></div><span class="log-time">${l.time}</span><span class="log-text">${l.text}</span><span class="log-save">${l.save}</span></div>`
+    ).join('');
+    document.getElementById('modalOverlay').classList.add('open');
+  }
+
+  function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+  function closeModalOnBg(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  /* ═══ UPLOAD CATEGORIES ═══ */
+  function toggleCat(id) {
+    document.getElementById(id).classList.toggle('open');
+  }
+
+  function handleUpload(e, cat) {
+    const files = Array.from(e.target.files);
+    if (!files.length) return;
+    alert(`${files.length} file(s) uploaded successfully. Our team will process and confirm within 24 hours.`);
+  }
+
+  /* ═══ DRAG & DROP ═══ */
+  document.querySelectorAll('.drop-zone').forEach(zone => {
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+    zone.addEventListener('drop', e => {
+      e.preventDefault(); zone.classList.remove('drag-over');
+      const files = Array.from(e.dataTransfer.files);
+      if (files.length) alert(`${files.length} file(s) uploaded successfully. Our team will review within 24 hours.`);
+    });
+  });
+</script>
+</body>
+</html>

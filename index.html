@@ -1,0 +1,2221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Backbone AI — Managed AI Operations for British Business</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #05050a;
+      --bg2: #0c0c14;
+      --surface: rgba(255,255,255,0.04);
+      --surface-hover: rgba(255,255,255,0.07);
+      --border: rgba(255,255,255,0.08);
+      --blue: #3b82f6;
+      --blue-bright: #60a5fa;
+      --cyan: #06b6d4;
+      --text: #f1f5f9;
+      --muted: #64748b;
+      --muted2: #94a3b8;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* ─── SCROLLBAR ─── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: #1e3a5f; border-radius: 3px; }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 0 48px;
+      height: 72px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(5,5,10,0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      transition: all 0.3s;
+    }
+
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 18px; font-weight: 700; letter-spacing: -0.3px;
+      text-decoration: none; color: var(--text);
+    }
+
+    .nav-logo-icon {
+      width: 32px; height: 32px;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 900; color: #fff;
+    }
+
+    .nav-links {
+      display: flex; align-items: center; gap: 36px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted2); text-decoration: none;
+      font-size: 14px; font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-cta {
+      background: var(--blue);
+      color: #fff !important;
+      padding: 10px 22px;
+      border-radius: 8px;
+      font-weight: 600 !important;
+      transition: background 0.2s, transform 0.1s !important;
+    }
+    .nav-cta:hover { background: var(--blue-bright) !important; transform: translateY(-1px); }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+      padding: 120px 48px 80px;
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+    }
+
+    /* Animated grid */
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(59,130,246,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(59,130,246,0.06) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+    }
+
+    /* Glowing orbs */
+    .hero-orb {
+      position: absolute; border-radius: 50%;
+      filter: blur(120px); opacity: 0.15;
+      animation: drift 8s ease-in-out infinite alternate;
+    }
+    .hero-orb-1 {
+      width: 600px; height: 600px;
+      background: var(--blue);
+      top: -200px; left: -100px;
+      animation-delay: 0s;
+    }
+    .hero-orb-2 {
+      width: 500px; height: 500px;
+      background: var(--cyan);
+      bottom: -150px; right: -100px;
+      animation-delay: -4s;
+    }
+    .hero-orb-3 {
+      width: 300px; height: 300px;
+      background: #8b5cf6;
+      top: 50%; right: 25%;
+      animation-delay: -2s;
+    }
+
+    @keyframes drift {
+      from { transform: translate(0, 0) scale(1); }
+      to   { transform: translate(30px, 20px) scale(1.05); }
+    }
+
+    .hero-content {
+      position: relative; z-index: 1;
+      max-width: 960px; text-align: center;
+    }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(59,130,246,0.12);
+      border: 1px solid rgba(59,130,246,0.3);
+      color: var(--blue-bright);
+      padding: 8px 18px; border-radius: 100px;
+      font-size: 13px; font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-bottom: 32px;
+      opacity: 0; animation: fadeUp 0.6s 0.2s forwards;
+    }
+
+    .hero-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--cyan);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--cyan);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .hero h1 {
+      font-size: clamp(44px, 7vw, 88px);
+      font-weight: 900;
+      line-height: 1.0;
+      letter-spacing: -3px;
+      margin-bottom: 28px;
+      opacity: 0; animation: fadeUp 0.7s 0.4s forwards;
+    }
+
+    .grad {
+      background: linear-gradient(135deg, #fff 0%, var(--blue-bright) 50%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: clamp(17px, 2vw, 21px);
+      color: var(--muted2);
+      max-width: 620px; margin: 0 auto 48px;
+      line-height: 1.7;
+      font-weight: 400;
+      opacity: 0; animation: fadeUp 0.7s 0.6s forwards;
+    }
+
+    .hero-actions {
+      display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+      opacity: 0; animation: fadeUp 0.7s 0.8s forwards;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--blue), #1d4ed8);
+      color: #fff; padding: 16px 36px;
+      border-radius: 10px; font-weight: 700; font-size: 16px;
+      text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+      box-shadow: 0 0 40px rgba(59,130,246,0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 60px rgba(59,130,246,0.6); }
+
+    .btn-ghost {
+      background: var(--surface);
+      color: var(--text); padding: 16px 36px;
+      border-radius: 10px; font-weight: 600; font-size: 16px;
+      text-decoration: none; border: 1px solid var(--border);
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-ghost:hover { background: var(--surface-hover); transform: translateY(-2px); }
+
+    .hero-stats {
+      display: flex; gap: 0; justify-content: center;
+      margin-top: 80px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      background: var(--surface);
+      opacity: 0; animation: fadeUp 0.7s 1.0s forwards;
+    }
+
+    .hero-stat {
+      flex: 1; padding: 28px 32px;
+      text-align: center;
+      border-right: 1px solid var(--border);
+    }
+    .hero-stat:last-child { border-right: none; }
+
+    .hero-stat-num {
+      font-size: 36px; font-weight: 900;
+      letter-spacing: -1px;
+      background: linear-gradient(135deg, var(--blue-bright), var(--cyan));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-stat-label {
+      font-size: 13px; color: var(--muted); margin-top: 4px; font-weight: 500;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── SECTIONS ─── */
+    section { padding: 120px 48px; }
+
+    .container { max-width: 1120px; margin: 0 auto; }
+
+    .section-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      color: var(--blue-bright); font-size: 12px; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .section-label::before {
+      content: '';
+      width: 20px; height: 2px;
+      background: linear-gradient(90deg, var(--blue), var(--cyan));
+      border-radius: 2px;
+    }
+
+    .section-heading {
+      font-size: clamp(34px, 4vw, 54px);
+      font-weight: 900; letter-spacing: -2px;
+      line-height: 1.1; margin-bottom: 20px;
+    }
+
+    .section-sub {
+      font-size: 18px; color: var(--muted2);
+      max-width: 560px; line-height: 1.7;
+    }
+
+    /* ─── PROBLEM ─── */
+    .problem { background: var(--bg2); }
+
+    .problem-intro {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+      margin-bottom: 80px;
+    }
+
+    .problem-text p {
+      color: var(--muted2); font-size: 17px; line-height: 1.8; margin-top: 20px;
+    }
+
+    .problem-cards {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px; padding: 32px;
+      position: relative;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+    .stat-card:hover { transform: translateY(-4px); border-color: rgba(59,130,246,0.3); }
+
+    .stat-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--blue), var(--cyan));
+    }
+
+    .stat-num {
+      font-size: 56px; font-weight: 900; letter-spacing: -2px;
+      background: linear-gradient(135deg, #fff, var(--blue-bright));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .stat-desc {
+      font-size: 14px; color: var(--muted2); margin-top: 8px; line-height: 1.6;
+    }
+
+    .stat-source {
+      font-size: 11px; color: var(--muted); margin-top: 12px;
+      font-style: italic;
+    }
+
+    /* ─── WHAT WE DO ─── */
+    .pillars {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+      margin-top: 64px;
+    }
+
+    .pillar {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px; padding: 40px 36px;
+      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+      position: relative; overflow: hidden;
+    }
+    .pillar:hover {
+      transform: translateY(-6px);
+      border-color: rgba(59,130,246,0.4);
+      box-shadow: 0 20px 60px rgba(59,130,246,0.1);
+    }
+
+    .pillar-glow {
+      position: absolute; width: 200px; height: 200px;
+      border-radius: 50%; filter: blur(60px); opacity: 0;
+      transition: opacity 0.4s;
+      top: -50px; right: -50px;
+    }
+    .pillar:hover .pillar-glow { opacity: 0.15; }
+    .pillar-1 .pillar-glow { background: var(--blue); }
+    .pillar-2 .pillar-glow { background: var(--cyan); }
+    .pillar-3 .pillar-glow { background: #8b5cf6; }
+
+    .pillar-icon {
+      width: 56px; height: 56px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; margin-bottom: 28px;
+    }
+    .pi-blue { background: rgba(59,130,246,0.15); }
+    .pi-cyan { background: rgba(6,182,212,0.15); }
+    .pi-purple { background: rgba(139,92,246,0.15); }
+
+    .pillar h3 {
+      font-size: 22px; font-weight: 800; letter-spacing: -0.5px;
+      margin-bottom: 14px;
+    }
+
+    .pillar p { color: var(--muted2); font-size: 15px; line-height: 1.7; }
+
+    .pillar-tag {
+      display: inline-block;
+      margin-top: 24px;
+      background: rgba(59,130,246,0.1);
+      border: 1px solid rgba(59,130,246,0.2);
+      color: var(--blue-bright);
+      font-size: 12px; font-weight: 600;
+      padding: 5px 12px; border-radius: 6px;
+    }
+
+    /* ─── HOW WE DO IT ─── */
+    .process { background: var(--bg2); }
+
+    .process-header {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+      align-items: start; margin-bottom: 80px;
+    }
+
+    .steps {
+      display: flex; flex-direction: column; gap: 0;
+    }
+
+    .step {
+      display: grid; grid-template-columns: 80px 1fr; gap: 0;
+      position: relative;
+    }
+
+    .step-left {
+      display: flex; flex-direction: column; align-items: center;
+    }
+
+    .step-num {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; font-weight: 800; color: #fff;
+      flex-shrink: 0; position: relative; z-index: 1;
+      box-shadow: 0 0 20px rgba(59,130,246,0.4);
+    }
+
+    .step-line {
+      width: 2px; flex: 1;
+      background: linear-gradient(180deg, rgba(59,130,246,0.4), rgba(6,182,212,0.1));
+      margin: 8px 0;
+    }
+
+    .step:last-child .step-line { display: none; }
+
+    .step-content {
+      padding: 0 0 48px 0;
+    }
+
+    .step-content h4 {
+      font-size: 19px; font-weight: 800; letter-spacing: -0.3px;
+      margin-bottom: 8px; margin-top: 10px;
+    }
+
+    .step-content p { color: var(--muted2); font-size: 15px; line-height: 1.7; }
+
+    .step-badge {
+      display: inline-block; margin-top: 10px;
+      font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+      color: var(--cyan); background: rgba(6,182,212,0.1);
+      border: 1px solid rgba(6,182,212,0.2);
+      padding: 3px 10px; border-radius: 4px;
+    }
+
+    /* ─── COMPARISON ─── */
+    .compare-wrapper {
+      margin-top: 64px;
+      border: 1px solid var(--border);
+      border-radius: 20px; overflow: hidden;
+    }
+
+    .compare-header {
+      display: grid; grid-template-columns: 2fr 1fr 1fr;
+      background: rgba(255,255,255,0.03);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .compare-col-head {
+      padding: 24px 32px;
+      font-size: 13px; font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .compare-col-head.ours {
+      background: rgba(59,130,246,0.08);
+      border-left: 1px solid rgba(59,130,246,0.2);
+      color: var(--blue-bright);
+    }
+
+    .compare-row {
+      display: grid; grid-template-columns: 2fr 1fr 1fr;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.2s;
+    }
+    .compare-row:last-child { border-bottom: none; }
+    .compare-row:hover { background: var(--surface); }
+
+    .compare-cell {
+      padding: 20px 32px;
+      font-size: 14px; display: flex; align-items: center;
+    }
+
+    .compare-cell.ours {
+      background: rgba(59,130,246,0.05);
+      border-left: 1px solid rgba(59,130,246,0.15);
+      font-weight: 600; color: var(--text);
+    }
+
+    .compare-cell.theirs { color: var(--muted); }
+    .compare-cell.feature { color: var(--muted2); font-weight: 500; }
+
+    .check { color: #22c55e; font-size: 18px; margin-right: 8px; }
+    .cross { color: #ef4444; font-size: 18px; margin-right: 8px; }
+
+    /* ─── PRICING ─── */
+    .pricing-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+      margin-top: 64px;
+    }
+
+    .price-card {
+      border: 1px solid var(--border);
+      border-radius: 20px; padding: 40px 36px;
+      position: relative; overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .price-card:hover { transform: translateY(-6px); }
+
+    .price-card.featured {
+      border-color: rgba(59,130,246,0.5);
+      background: linear-gradient(180deg, rgba(59,130,246,0.08) 0%, var(--surface) 100%);
+      box-shadow: 0 0 60px rgba(59,130,246,0.15);
+    }
+
+    .price-featured-badge {
+      position: absolute; top: 20px; right: 20px;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      color: #fff; font-size: 11px; font-weight: 700;
+      padding: 4px 12px; border-radius: 100px;
+      letter-spacing: 0.5px;
+    }
+
+    .price-name {
+      font-size: 14px; font-weight: 700; color: var(--muted2);
+      letter-spacing: 1px; text-transform: uppercase; margin-bottom: 20px;
+    }
+
+    .price-amount {
+      display: flex; align-items: baseline; gap: 4px;
+      margin-bottom: 6px;
+    }
+
+    .price-currency { font-size: 22px; font-weight: 700; color: var(--muted2); }
+
+    .price-num {
+      font-size: 56px; font-weight: 900; letter-spacing: -2px;
+    }
+
+    .price-period { font-size: 14px; color: var(--muted); }
+
+    .price-setup {
+      font-size: 13px; color: var(--muted); margin-bottom: 32px;
+    }
+
+    .price-divider {
+      height: 1px; background: var(--border); margin-bottom: 28px;
+    }
+
+    .price-features { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+
+    .price-features li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 14px; color: var(--muted2);
+    }
+
+    .price-features li .check { flex-shrink: 0; font-size: 14px; }
+
+    .price-btn {
+      display: block; text-align: center;
+      margin-top: 36px; padding: 14px;
+      border-radius: 10px; font-weight: 700; font-size: 15px;
+      text-decoration: none; transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .price-btn-secondary {
+      border: 1px solid var(--border);
+      color: var(--text); background: var(--surface);
+    }
+    .price-btn-secondary:hover { background: var(--surface-hover); transform: translateY(-2px); }
+
+    .price-btn-primary {
+      background: linear-gradient(135deg, var(--blue), #1d4ed8);
+      color: #fff;
+      box-shadow: 0 0 30px rgba(59,130,246,0.35);
+    }
+    .price-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 50px rgba(59,130,246,0.5); }
+
+    /* ─── INDUSTRIES ─── */
+    .industries { background: var(--bg2); }
+
+    .industry-grid {
+      display: grid; grid-template-columns: 1.4fr 1fr; gap: 32px;
+      margin-top: 64px; align-items: start;
+    }
+
+    .industry-feature {
+      border: 1px solid rgba(59,130,246,0.3);
+      border-radius: 20px; padding: 48px;
+      background: linear-gradient(135deg, rgba(59,130,246,0.06) 0%, rgba(6,182,212,0.03) 100%);
+      position: relative; overflow: hidden;
+    }
+
+    .industry-feature::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--blue), var(--cyan));
+    }
+
+    .industry-icon-large {
+      font-size: 48px; margin-bottom: 24px; display: block;
+    }
+
+    .industry-feature h3 {
+      font-size: 28px; font-weight: 900; letter-spacing: -1px;
+      margin-bottom: 14px;
+    }
+
+    .industry-feature p {
+      color: var(--muted2); font-size: 16px; line-height: 1.7; margin-bottom: 28px;
+    }
+
+    .use-cases { display: flex; flex-direction: column; gap: 12px; }
+
+    .use-case {
+      display: flex; align-items: center; gap: 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 10px; padding: 14px 18px;
+      font-size: 14px; font-weight: 500;
+    }
+    .use-case-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      flex-shrink: 0;
+    }
+
+    .industry-list { display: flex; flex-direction: column; gap: 16px; }
+
+    .industry-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px; padding: 24px;
+      display: flex; align-items: center; gap: 16px;
+      transition: border-color 0.3s, transform 0.3s;
+      cursor: default;
+    }
+    .industry-item:hover { border-color: rgba(59,130,246,0.25); transform: translateX(4px); }
+
+    .industry-item-icon {
+      font-size: 28px; flex-shrink: 0;
+    }
+
+    .industry-item-text h4 {
+      font-size: 15px; font-weight: 700; margin-bottom: 4px;
+    }
+
+    .industry-item-text p {
+      font-size: 13px; color: var(--muted); line-height: 1.4;
+    }
+
+    .industry-item-pct {
+      margin-left: auto; flex-shrink: 0;
+      font-size: 13px; font-weight: 700;
+      color: var(--blue-bright);
+      background: rgba(59,130,246,0.1);
+      padding: 4px 10px; border-radius: 6px;
+    }
+
+    /* ─── ROI SECTION ─── */
+    .roi-section { background: var(--bg2); }
+
+    .roi-intro {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+      align-items: center; margin-bottom: 80px;
+    }
+
+    .roi-intro p { color: var(--muted2); font-size: 17px; line-height: 1.8; margin-top: 16px; }
+
+    .roi-investment-box {
+      background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(6,182,212,0.05));
+      border: 1px solid rgba(59,130,246,0.25);
+      border-radius: 20px; padding: 36px;
+    }
+
+    .roi-investment-box h4 {
+      font-size: 13px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--muted2); margin-bottom: 24px;
+    }
+
+    .roi-math {
+      display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px;
+    }
+
+    .roi-math-row {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 15px;
+    }
+
+    .roi-math-label { color: var(--muted2); }
+    .roi-math-val { font-weight: 700; }
+    .roi-math-val.cost { color: #f87171; }
+    .roi-math-val.save { color: #4ade80; }
+
+    .roi-math-divider { height: 1px; background: var(--border); }
+
+    .roi-math-result {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-top: 4px;
+    }
+
+    .roi-math-result-label {
+      font-size: 15px; font-weight: 700;
+    }
+
+    .roi-math-result-val {
+      font-size: 26px; font-weight: 900; letter-spacing: -1px;
+      background: linear-gradient(135deg, #4ade80, #22c55e);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .roi-note {
+      font-size: 12px; color: var(--muted); font-style: italic;
+    }
+
+    /* Automation cards */
+    .automation-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+    }
+
+    .auto-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px; overflow: hidden;
+      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+
+    .auto-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(59,130,246,0.35);
+      box-shadow: 0 20px 50px rgba(59,130,246,0.1);
+    }
+
+    .auto-card-header {
+      padding: 28px 28px 20px;
+      display: flex; align-items: flex-start; gap: 14px;
+    }
+
+    .auto-card-icon {
+      width: 46px; height: 46px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; flex-shrink: 0;
+    }
+
+    .auto-card-title { font-size: 16px; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 4px; }
+    .auto-card-sector { font-size: 12px; color: var(--muted); }
+
+    .auto-card-body { padding: 0 28px 20px; }
+
+    .auto-before-after {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+      background: var(--border); border-radius: 10px; overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    .auto-before, .auto-after {
+      padding: 12px 14px;
+      background: var(--bg);
+    }
+
+    .auto-before-label, .auto-after-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; margin-bottom: 4px;
+    }
+
+    .auto-before-label { color: #f87171; }
+    .auto-after-label { color: #4ade80; }
+
+    .auto-before-val, .auto-after-val {
+      font-size: 13px; font-weight: 600; line-height: 1.4;
+    }
+
+    .auto-saving {
+      display: flex; justify-content: space-between; align-items: center;
+      background: rgba(34,197,94,0.06);
+      border: 1px solid rgba(34,197,94,0.15);
+      border-radius: 8px; padding: 10px 14px;
+    }
+
+    .auto-saving-label { font-size: 12px; color: var(--muted2); font-weight: 500; }
+
+    .auto-saving-val {
+      font-size: 15px; font-weight: 900;
+      background: linear-gradient(135deg, #4ade80, #22c55e);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .auto-card-footer {
+      padding: 14px 28px;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .auto-payback {
+      font-size: 12px; color: var(--muted2);
+    }
+
+    .auto-payback strong { color: var(--blue-bright); }
+
+    .auto-see-more {
+      font-size: 12px; color: var(--blue-bright); font-weight: 600;
+      display: flex; align-items: center; gap: 4px;
+    }
+
+    @media (max-width: 900px) {
+      .roi-intro { grid-template-columns: 1fr; gap: 40px; }
+      .automation-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ─── INTAKE ─── */
+    .intake { background: var(--bg); }
+
+    .intake-grid {
+      display: grid; grid-template-columns: 1fr 1.3fr; gap: 80px;
+      align-items: start; margin-top: 64px;
+    }
+
+    .intake-intro h3 {
+      font-size: 22px; font-weight: 800; letter-spacing: -0.5px;
+      margin-bottom: 14px; color: var(--text);
+    }
+
+    .intake-intro p {
+      font-size: 15px; color: var(--muted2); line-height: 1.75; margin-bottom: 28px;
+    }
+
+    .intake-what {
+      display: flex; flex-direction: column; gap: 12px;
+    }
+
+    .intake-what-item {
+      display: flex; gap: 12px; align-items: flex-start;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px; padding: 14px 16px;
+    }
+
+    .intake-what-icon {
+      font-size: 18px; flex-shrink: 0; margin-top: 1px;
+    }
+
+    .intake-what-text {
+      font-size: 13px; color: var(--muted2); line-height: 1.5;
+    }
+
+    .intake-what-text strong {
+      display: block; color: var(--text); font-weight: 600;
+      font-size: 13px; margin-bottom: 2px;
+    }
+
+    /* Form */
+    .intake-form {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px; padding: 40px;
+    }
+
+    .form-title {
+      font-size: 18px; font-weight: 800; letter-spacing: -0.3px;
+      margin-bottom: 6px;
+    }
+
+    .form-subtitle {
+      font-size: 13px; color: var(--muted); margin-bottom: 32px;
+    }
+
+    .form-row {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .form-group {
+      display: flex; flex-direction: column; gap: 7px;
+      margin-bottom: 16px;
+    }
+
+    .form-group:last-of-type { margin-bottom: 0; }
+
+    .form-label {
+      font-size: 12px; font-weight: 700; color: var(--muted2);
+      letter-spacing: 0.5px; text-transform: uppercase;
+    }
+
+    .form-input, .form-select, .form-textarea {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 10px; padding: 12px 16px;
+      color: var(--text); font-size: 14px; font-family: inherit;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none; width: 100%;
+    }
+
+    .form-input::placeholder, .form-textarea::placeholder {
+      color: var(--muted);
+    }
+
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: rgba(59,130,246,0.5);
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.08);
+    }
+
+    .form-select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 40px;
+      cursor: pointer;
+    }
+
+    .form-select option { background: #0c0c14; color: var(--text); }
+
+    .form-textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
+
+    /* Drag & drop upload */
+    .upload-zone {
+      border: 2px dashed var(--border);
+      border-radius: 12px; padding: 28px 20px;
+      text-align: center; cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      position: relative; margin-bottom: 16px;
+    }
+
+    .upload-zone:hover, .upload-zone.drag-over {
+      border-color: rgba(59,130,246,0.5);
+      background: rgba(59,130,246,0.04);
+    }
+
+    .upload-zone input[type="file"] {
+      position: absolute; inset: 0;
+      opacity: 0; cursor: pointer; width: 100%; height: 100%;
+    }
+
+    .upload-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: rgba(59,130,246,0.1);
+      border: 1px solid rgba(59,130,246,0.2);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 12px;
+    }
+
+    .upload-main {
+      font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px;
+    }
+
+    .upload-sub {
+      font-size: 12px; color: var(--muted);
+    }
+
+    .upload-types {
+      display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-top: 10px;
+    }
+
+    .upload-type-tag {
+      font-size: 11px; color: var(--muted2);
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      padding: 2px 8px; border-radius: 4px;
+    }
+
+    /* File list */
+    .file-list {
+      display: flex; flex-direction: column; gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .file-item {
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(59,130,246,0.06);
+      border: 1px solid rgba(59,130,246,0.15);
+      border-radius: 8px; padding: 10px 14px;
+      animation: slideIn 0.2s ease;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .file-item-icon { font-size: 16px; flex-shrink: 0; }
+
+    .file-item-name {
+      font-size: 13px; font-weight: 500; flex: 1;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
+    .file-item-size {
+      font-size: 11px; color: var(--muted); flex-shrink: 0;
+    }
+
+    .file-remove {
+      background: none; border: none; cursor: pointer;
+      color: var(--muted); font-size: 16px; padding: 0 0 0 6px;
+      transition: color 0.2s; line-height: 1; flex-shrink: 0;
+    }
+    .file-remove:hover { color: #ef4444; }
+
+    /* Submit */
+    .form-submit {
+      width: 100%; padding: 15px;
+      background: linear-gradient(135deg, var(--blue), #1d4ed8);
+      color: #fff; border: none; border-radius: 10px;
+      font-size: 15px; font-weight: 700; cursor: pointer;
+      font-family: inherit;
+      box-shadow: 0 0 30px rgba(59,130,246,0.3);
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      margin-top: 24px;
+    }
+    .form-submit:hover { transform: translateY(-2px); box-shadow: 0 0 50px rgba(59,130,246,0.5); }
+    .form-submit:active { transform: translateY(0); }
+
+    .form-note {
+      font-size: 12px; color: var(--muted); text-align: center; margin-top: 12px;
+    }
+
+    /* Success state */
+    .form-success {
+      display: none; text-align: center; padding: 40px 20px;
+    }
+
+    .form-success.visible { display: block; }
+    .form-fields.hidden { display: none; }
+
+    .success-icon {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: rgba(34,197,94,0.12);
+      border: 2px solid rgba(34,197,94,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; margin: 0 auto 20px;
+    }
+
+    .success-title {
+      font-size: 22px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 10px;
+    }
+
+    .success-sub {
+      font-size: 14px; color: var(--muted2); line-height: 1.6;
+    }
+
+    @media (max-width: 900px) {
+      .intake-grid { grid-template-columns: 1fr; gap: 40px; }
+      .form-row { grid-template-columns: 1fr; }
+      .intake-form { padding: 28px 24px; }
+    }
+
+    /* ─── CTA ─── */
+    .cta-section { text-align: center; position: relative; overflow: hidden; }
+
+    .cta-bg-orb {
+      position: absolute; width: 800px; height: 800px;
+      background: radial-gradient(circle, rgba(59,130,246,0.12) 0%, transparent 70%);
+      top: 50%; left: 50%; transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .cta-section h2 {
+      font-size: clamp(36px, 5vw, 64px);
+      font-weight: 900; letter-spacing: -2px;
+      margin-bottom: 20px; position: relative;
+    }
+
+    .cta-section p {
+      font-size: 19px; color: var(--muted2);
+      max-width: 500px; margin: 0 auto 48px;
+      position: relative;
+    }
+
+    .cta-actions { display: flex; gap: 16px; justify-content: center; position: relative; }
+
+    .cta-guarantee {
+      margin-top: 32px; font-size: 13px; color: var(--muted);
+      position: relative;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 48px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+
+    .footer-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 16px; font-weight: 700; color: var(--text);
+    }
+
+    .footer-logo-icon {
+      width: 28px; height: 28px;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 900; color: #fff;
+    }
+
+    .footer-links { display: flex; gap: 32px; }
+    .footer-links a {
+      color: var(--muted); text-decoration: none; font-size: 14px;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--text); }
+
+    .footer-copy {
+      font-size: 13px; color: var(--muted);
+    }
+
+    /* ─── ANIMATIONS ─── */
+    .reveal {
+      opacity: 0; transform: translateY(32px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      nav { padding: 0 24px; }
+      .nav-links { display: none; }
+      section { padding: 80px 24px; }
+      .hero { padding: 100px 24px 60px; }
+      .hero-stats { flex-direction: column; }
+      .hero-stat { border-right: none; border-bottom: 1px solid var(--border); }
+      .hero-stat:last-child { border-bottom: none; }
+      .problem-intro { grid-template-columns: 1fr; gap: 40px; }
+      .problem-cards { grid-template-columns: 1fr 1fr; }
+      .pillars { grid-template-columns: 1fr; }
+      .process-header { grid-template-columns: 1fr; gap: 40px; }
+      .compare-header, .compare-row { grid-template-columns: 1.5fr 1fr 1fr; }
+      .compare-cell, .compare-col-head { padding: 16px 20px; font-size: 13px; }
+      .pricing-grid { grid-template-columns: 1fr; }
+      .industry-grid { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 24px; text-align: center; }
+      .footer-links { flex-wrap: wrap; justify-content: center; }
+    }
+
+    @media (max-width: 600px) {
+      .problem-cards { grid-template-columns: 1fr; }
+      .hero h1 { letter-spacing: -1.5px; }
+      footer { padding: 32px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── NAV ─── -->
+  <nav>
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-icon">B</div>
+      Backbone AI
+    </a>
+    <ul class="nav-links">
+      <li><a href="#problem">The Problem</a></li>
+      <li><a href="#what">What We Do</a></li>
+      <li><a href="#how">How It Works</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#intake">Work With Us</a></li>
+      <li><a href="client.html" style="color:var(--muted2);">Client Login</a></li>
+      <li><a href="#contact" class="nav-cta">Book a Call</a></li>
+    </ul>
+  </nav>
+
+  <!-- ─── HERO ─── -->
+  <section class="hero">
+    <div class="hero-bg">
+      <div class="hero-grid"></div>
+      <div class="hero-orb hero-orb-1"></div>
+      <div class="hero-orb hero-orb-2"></div>
+      <div class="hero-orb hero-orb-3"></div>
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-badge">Operational intelligence for UK manufacturing &amp; logistics</div>
+
+      <h1>
+        See what your operation<br />
+        is <span class="grad">actually costing you.</span>
+      </h1>
+
+      <p class="hero-sub">
+        Most British manufacturers and logistics firms lose thousands every week to inefficiencies buried in their data. We surface them, automate the root causes, and make sure they stay fixed.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary">
+          Book a Free Audit
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#how" class="btn-ghost">See how it works</a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-num">£4bn</div>
+          <div class="hero-stat-label">lost annually by UK manufacturers to admin inefficiency <span style="font-size:10px;opacity:0.5;display:block;margin-top:2px;">YouGov / SafetyCulture</span></div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">7.7wks</div>
+          <div class="hero-stat-label">per year managers spend on low-value tasks <span style="font-size:10px;opacity:0.5;display:block;margin-top:2px;">YouGov / SafetyCulture</span></div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">5%</div>
+          <div class="hero-stat-label">of UK manufacturing firms currently use AI <span style="font-size:10px;opacity:0.5;display:block;margin-top:2px;">ONS, 2025</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── PROBLEM ─── -->
+  <section class="problem" id="problem">
+    <div class="container">
+      <div class="problem-intro">
+        <div class="problem-text">
+          <div class="section-label reveal">The Problem</div>
+          <h2 class="section-heading reveal">British manufacturers are flying blind.</h2>
+          <p class="reveal">The data exists. It's in your ERP, your spreadsheets, your quality logs, your delivery records. But it's fragmented, inconsistent, and impossible to act on — so decisions get made on gut feel and whoever shouts loudest.</p>
+          <p class="reveal">When companies do try to fix it with AI, 42% scrap the project entirely. Not because AI doesn't work — because nobody fixed the data first, and nobody stayed to make it run.</p>
+          <p class="reveal">Operational intelligence changes that. Connect the data. Surface the waste. Automate the fix. Measure the result.</p>
+        </div>
+        <div class="problem-cards">
+          <div class="stat-card reveal reveal-delay-1">
+            <div class="stat-num">42%</div>
+            <div class="stat-desc">of UK companies scrapped AI initiatives in 2025 — up 147% from 2024.</div>
+            <div class="stat-source">Source: ResultSense, 2025</div>
+          </div>
+          <div class="stat-card reveal reveal-delay-2">
+            <div class="stat-num">95%</div>
+            <div class="stat-desc">of AI project failures are caused by poor data quality — not the technology.</div>
+            <div class="stat-source">Source: ResultSense, 2025</div>
+          </div>
+          <div class="stat-card reveal reveal-delay-3">
+            <div class="stat-num">87%</div>
+            <div class="stat-desc">of businesses said consultancies did not ease their AI transformation fatigue.</div>
+            <div class="stat-source">Source: Consultancy.uk, 2025</div>
+          </div>
+          <div class="stat-card reveal reveal-delay-1">
+            <div class="stat-num">£4bn</div>
+            <div class="stat-desc">lost every year by UK manufacturers to middle management time wasted on low-value admin tasks.</div>
+            <div class="stat-source">Source: YouGov / SafetyCulture</div>
+          </div>
+          <div class="stat-card reveal reveal-delay-2">
+            <div class="stat-num">7.7wks</div>
+            <div class="stat-desc">per year the average manufacturing manager spends picking up unnecessary or low-value tasks.</div>
+            <div class="stat-source">Source: YouGov / SafetyCulture</div>
+          </div>
+          <div class="stat-card reveal reveal-delay-3">
+            <div class="stat-num">5%</div>
+            <div class="stat-desc">of UK manufacturing firms have adopted AI — leaving 95% of the sector with no operational intelligence whatsoever.</div>
+            <div class="stat-source">Source: ONS, March 2025</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── WHAT WE DO ─── -->
+  <section id="what">
+    <div class="container">
+      <div class="section-label reveal">What We Do</div>
+      <h2 class="section-heading reveal">Operational intelligence.<br />Not just automation.</h2>
+      <p class="section-sub reveal">Most firms automate what they already do. We first show you what you shouldn't be doing at all — then automate the rest.</p>
+
+      <div class="pillars">
+        <div class="pillar pillar-1 reveal reveal-delay-1">
+          <div class="pillar-glow"></div>
+          <div class="pillar-icon pi-blue">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35M11 8v6M8 11h6"/></svg>
+          </div>
+          <h3>Surface What's Hidden</h3>
+          <p>We connect every data source in your operation — ERP, spreadsheets, quality systems, delivery records — and surface patterns you've never been able to see. Which supplier is quietly costing you thousands. Which process has a defect spike every Tuesday. Where your margin is leaking.</p>
+          <span class="pillar-tag">Intelligence, not guesswork</span>
+        </div>
+
+        <div class="pillar pillar-2 reveal reveal-delay-2">
+          <div class="pillar-glow"></div>
+          <div class="pillar-icon pi-cyan">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          </div>
+          <h3>Automate the Root Causes</h3>
+          <p>Once we know where the waste is, we build AI systems that eliminate it. Quality reports generated from raw data. Supplier invoices processed and reconciled automatically. Compliance documents drafted from your operational records. We build it, run it, and own the outcome.</p>
+          <span class="pillar-tag">We run it — you benefit</span>
+        </div>
+
+        <div class="pillar pillar-3 reveal reveal-delay-3">
+          <div class="pillar-glow"></div>
+          <div class="pillar-icon pi-purple">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          </div>
+          <h3>Paid on Results</h3>
+          <p>A fixed monthly retainer covers operations. A performance share — tied to measurable savings or gains — means we only earn more when you do. No day rates. No invoices for time spent regardless of outcome. Our incentives are identical to yours.</p>
+          <span class="pillar-tag">Skin in the game</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── ROI / VALUE SECTION ─── -->
+  <section class="roi-section" id="value">
+    <div class="container">
+      <div class="section-label reveal">The Investment Case</div>
+      <h2 class="section-heading reveal">This isn't a cost.<br />It's the highest-return investment you'll make this year.</h2>
+
+      <div class="roi-intro">
+        <div class="reveal">
+          <p>Most UK businesses are cash-conscious — and rightly so. Every pound spent needs to earn its keep. That's exactly why operational intelligence pays back faster than almost any other investment you can make.</p>
+          <p>You're not buying software. You're recovering money that's already leaving your business every single week — through manual processes, duplicated effort, missed errors, and decisions made without the right data.</p>
+          <p>The question isn't whether you can afford this. It's how much longer you can afford <em>not to</em>.</p>
+        </div>
+        <div class="roi-investment-box reveal reveal-delay-1">
+          <h4>Example: Scale plan client — logistics firm, 45 staff</h4>
+          <div class="roi-math">
+            <div class="roi-math-row">
+              <span class="roi-math-label">Monthly retainer</span>
+              <span class="roi-math-val cost">−£3,500</span>
+            </div>
+            <div class="roi-math-row">
+              <span class="roi-math-label">Invoice processing automation</span>
+              <span class="roi-math-val save">+£2,100 saved</span>
+            </div>
+            <div class="roi-math-row">
+              <span class="roi-math-label">Route & scheduling optimisation</span>
+              <span class="roi-math-val save">+£3,800 saved</span>
+            </div>
+            <div class="roi-math-row">
+              <span class="roi-math-label">Compliance reporting automation</span>
+              <span class="roi-math-val save">+£1,600 saved</span>
+            </div>
+            <div class="roi-math-row">
+              <span class="roi-math-label">Error & dispute reduction</span>
+              <span class="roi-math-val save">+£900 saved</span>
+            </div>
+            <div class="roi-math-divider"></div>
+            <div class="roi-math-result">
+              <span class="roi-math-result-label">Net monthly gain</span>
+              <span class="roi-math-result-val">+£4,900</span>
+            </div>
+          </div>
+          <div class="roi-note">Illustrative based on comparable firms. Your audit will produce figures specific to your operation.</div>
+        </div>
+      </div>
+
+      <div class="section-label reveal" style="margin-bottom: 24px;">Real automations. Real numbers.</div>
+      <h3 class="reveal" style="font-size: clamp(22px,3vw,34px); font-weight:900; letter-spacing:-1px; margin-bottom:12px;">What does this actually look like in practice?</h3>
+      <p class="reveal" style="color:var(--muted2); font-size:16px; margin-bottom:48px; max-width:560px;">Click any automation below to see what we build, what it replaces, and what it saves.</p>
+
+      <div class="automation-grid">
+
+        <div class="auto-card reveal reveal-delay-1" onclick="window.location.href='dashboard.html'">
+          <div class="auto-card-header">
+            <div class="auto-card-icon" style="background:rgba(59,130,246,0.12);">🧾</div>
+            <div>
+              <div class="auto-card-title">Invoice Processing</div>
+              <div class="auto-card-sector">Manufacturing &amp; Logistics</div>
+            </div>
+          </div>
+          <div class="auto-card-body">
+            <div class="auto-before-after">
+              <div class="auto-before">
+                <div class="auto-before-label">Before</div>
+                <div class="auto-before-val">12 min per invoice, manually keyed, error-checked by hand</div>
+              </div>
+              <div class="auto-after">
+                <div class="auto-after-label">After</div>
+                <div class="auto-after-val">90 sec review, AI extracts, matches PO, flags anomalies</div>
+              </div>
+            </div>
+            <div class="auto-saving">
+              <span class="auto-saving-label">Avg. monthly saving (300 invoices)</span>
+              <span class="auto-saving-val">£2,100 / 47hrs</span>
+            </div>
+          </div>
+          <div class="auto-card-footer">
+            <span class="auto-payback">Pays back in <strong>&lt; 2 months</strong></span>
+            <span class="auto-see-more">See live demo →</span>
+          </div>
+        </div>
+
+        <div class="auto-card reveal reveal-delay-2" onclick="window.location.href='dashboard.html'">
+          <div class="auto-card-header">
+            <div class="auto-card-icon" style="background:rgba(6,182,212,0.12);">📋</div>
+            <div>
+              <div class="auto-card-title">Quality Control Reporting</div>
+              <div class="auto-card-sector">Manufacturing</div>
+            </div>
+          </div>
+          <div class="auto-card-body">
+            <div class="auto-before-after">
+              <div class="auto-before">
+                <div class="auto-before-label">Before</div>
+                <div class="auto-before-val">3 hrs per report, compiled manually from 4 separate logs</div>
+              </div>
+              <div class="auto-after">
+                <div class="auto-after-label">After</div>
+                <div class="auto-after-val">Auto-generated from live data in under 4 minutes</div>
+              </div>
+            </div>
+            <div class="auto-saving">
+              <span class="auto-saving-label">Avg. monthly saving (5 reports/wk)</span>
+              <span class="auto-saving-val">£1,800 / 52hrs</span>
+            </div>
+          </div>
+          <div class="auto-card-footer">
+            <span class="auto-payback">Pays back in <strong>&lt; 2 months</strong></span>
+            <span class="auto-see-more">See live demo →</span>
+          </div>
+        </div>
+
+        <div class="auto-card reveal reveal-delay-3" onclick="window.location.href='dashboard.html'">
+          <div class="auto-card-header">
+            <div class="auto-card-icon" style="background:rgba(139,92,246,0.12);">🚚</div>
+            <div>
+              <div class="auto-card-title">Route &amp; Schedule Optimisation</div>
+              <div class="auto-card-sector">Logistics &amp; Distribution</div>
+            </div>
+          </div>
+          <div class="auto-card-body">
+            <div class="auto-before-after">
+              <div class="auto-before">
+                <div class="auto-before-label">Before</div>
+                <div class="auto-before-val">Planned manually each morning, no live traffic or order-change logic</div>
+              </div>
+              <div class="auto-after">
+                <div class="auto-after-label">After</div>
+                <div class="auto-after-val">AI replans dynamically — fewer miles, fewer delays, fewer failed drops</div>
+              </div>
+            </div>
+            <div class="auto-saving">
+              <span class="auto-saving-label">Avg. monthly saving (20 vehicles)</span>
+              <span class="auto-saving-val">£3,800 / 60hrs</span>
+            </div>
+          </div>
+          <div class="auto-card-footer">
+            <span class="auto-payback">Pays back in <strong>&lt; 1 month</strong></span>
+            <span class="auto-see-more">See live demo →</span>
+          </div>
+        </div>
+
+        <div class="auto-card reveal reveal-delay-1" onclick="window.location.href='dashboard.html'">
+          <div class="auto-card-header">
+            <div class="auto-card-icon" style="background:rgba(251,146,60,0.12);">📊</div>
+            <div>
+              <div class="auto-card-title">Supplier Intelligence</div>
+              <div class="auto-card-sector">Manufacturing &amp; Logistics</div>
+            </div>
+          </div>
+          <div class="auto-card-body">
+            <div class="auto-before-after">
+              <div class="auto-before">
+                <div class="auto-before-label">Before</div>
+                <div class="auto-before-val">No visibility on supplier reliability — issues found after they become problems</div>
+              </div>
+              <div class="auto-after">
+                <div class="auto-after-label">After</div>
+                <div class="auto-after-val">Live supplier scorecards — late delivery, defect rate, invoice accuracy tracked automatically</div>
+              </div>
+            </div>
+            <div class="auto-saving">
+              <span class="auto-saving-label">Avg. dispute &amp; delay cost avoided</span>
+              <span class="auto-saving-val">£1,400 / mo</span>
+            </div>
+          </div>
+          <div class="auto-card-footer">
+            <span class="auto-payback">Pays back in <strong>&lt; 3 months</strong></span>
+            <span class="auto-see-more">See live demo →</span>
+          </div>
+        </div>
+
+        <div class="auto-card reveal reveal-delay-2" onclick="window.location.href='dashboard.html'">
+          <div class="auto-card-header">
+            <div class="auto-card-icon" style="background:rgba(34,197,94,0.12);">🛡️</div>
+            <div>
+              <div class="auto-card-title">Compliance Documentation</div>
+              <div class="auto-card-sector">Manufacturing</div>
+            </div>
+          </div>
+          <div class="auto-card-body">
+            <div class="auto-before-after">
+              <div class="auto-before">
+                <div class="auto-before-label">Before</div>
+                <div class="auto-before-val">ISO, HSE &amp; audit docs prepared manually — days of effort per cycle</div>
+              </div>
+              <div class="auto-after">
+                <div class="auto-after-label">After</div>
+                <div class="auto-after-val">Auto-drafted from your operational data, reviewed in minutes not days</div>
+              </div>
+            </div>
+            <div class="auto-saving">
+              <span class="auto-saving-label">Avg. monthly saving</span>
+              <span class="auto-saving-val">£1,600 / 38hrs</span>
+            </div>
+          </div>
+          <div class="auto-card-footer">
+            <span class="auto-payback">Pays back in <strong>&lt; 2 months</strong></span>
+            <span class="auto-see-more">See live demo →</span>
+          </div>
+        </div>
+
+        <div class="auto-card reveal reveal-delay-3" onclick="window.location.href='dashboard.html'">
+          <div class="auto-card-header">
+            <div class="auto-card-icon" style="background:rgba(244,63,94,0.12);">📦</div>
+            <div>
+              <div class="auto-card-title">Inventory &amp; Demand Forecasting</div>
+              <div class="auto-card-sector">Manufacturing &amp; Logistics</div>
+            </div>
+          </div>
+          <div class="auto-card-body">
+            <div class="auto-before-after">
+              <div class="auto-before">
+                <div class="auto-before-label">Before</div>
+                <div class="auto-before-val">Ordered on gut feel — overstocked on some lines, stockouts on others</div>
+              </div>
+              <div class="auto-after">
+                <div class="auto-after-label">After</div>
+                <div class="auto-after-val">AI forecasts demand from your order history — right stock, right time</div>
+              </div>
+            </div>
+            <div class="auto-saving">
+              <span class="auto-saving-label">Avg. working capital freed up</span>
+              <span class="auto-saving-val">£4,200 / mo</span>
+            </div>
+          </div>
+          <div class="auto-card-footer">
+            <span class="auto-payback">Pays back in <strong>&lt; 1 month</strong></span>
+            <span class="auto-see-more">See live demo →</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="reveal" style="margin-top:48px; text-align:center;">
+        <a href="dashboard.html" class="btn-primary" style="display:inline-flex;">
+          See the live client dashboard
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <p style="font-size:13px; color:var(--muted); margin-top:12px;">A real-time view of exactly what we track for every client.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── HOW WE DO IT ─── -->
+  <section class="process" id="how">
+    <div class="container">
+      <div class="process-header">
+        <div>
+          <div class="section-label reveal">How It Works</div>
+          <h2 class="section-heading reveal">From audit to running AI in 6 weeks.</h2>
+          <p class="section-sub reveal">A proven five-step process that puts AI into production — and keeps it there. No fumble period. No abandoned pilots.</p>
+        </div>
+        <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 32px;" class="reveal">
+          <div style="font-size: 13px; color: var(--muted); margin-bottom: 8px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase;">Typical client results</div>
+          <div style="display: flex; flex-direction: column; gap: 20px; margin-top: 20px;">
+            <div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span style="font-size: 13px; color: var(--muted2);">Time saved per week</span>
+                <span style="font-size: 13px; font-weight: 700; color: var(--blue-bright);">12–18 hours</span>
+              </div>
+              <div style="height: 4px; background: var(--border); border-radius: 2px;">
+                <div style="height: 100%; width: 75%; background: linear-gradient(90deg, var(--blue), var(--cyan)); border-radius: 2px;"></div>
+              </div>
+            </div>
+            <div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span style="font-size: 13px; color: var(--muted2);">Error rate reduction</span>
+                <span style="font-size: 13px; font-weight: 700; color: var(--blue-bright);">60–85%</span>
+              </div>
+              <div style="height: 4px; background: var(--border); border-radius: 2px;">
+                <div style="height: 100%; width: 85%; background: linear-gradient(90deg, var(--blue), var(--cyan)); border-radius: 2px;"></div>
+              </div>
+            </div>
+            <div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span style="font-size: 13px; color: var(--muted2);">ROI within 90 days</span>
+                <span style="font-size: 13px; font-weight: 700; color: var(--blue-bright);">3–8x</span>
+              </div>
+              <div style="height: 4px; background: var(--border); border-radius: 2px;">
+                <div style="height: 100%; width: 90%; background: linear-gradient(90deg, var(--blue), var(--cyan)); border-radius: 2px;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="steps">
+        <div class="step reveal">
+          <div class="step-left">
+            <div class="step-num">1</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-content">
+            <h4>Data &amp; Operations Audit</h4>
+            <p>We map every data source, workflow, and process in your business. We identify exactly where AI can produce measurable value — and where it can't. You get a clear, honest picture with no fluff.</p>
+            <span class="step-badge">Week 1</span>
+          </div>
+        </div>
+
+        <div class="step reveal">
+          <div class="step-left">
+            <div class="step-num">2</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-content">
+            <h4>Data Structuring &amp; Cleaning</h4>
+            <p>We fix your data before we touch any AI. Inconsistent formats, siloed spreadsheets, missing records — we sort it. This is the unglamorous step that determines whether everything else works.</p>
+            <span class="step-badge">Weeks 2–3</span>
+          </div>
+        </div>
+
+        <div class="step reveal">
+          <div class="step-left">
+            <div class="step-num">3</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-content">
+            <h4>AI System Build</h4>
+            <p>We build the AI systems tailored to your specific workflows — not off-the-shelf tools configured halfway. Compliance documentation, invoice processing, reporting, scheduling — built for exactly how you operate.</p>
+            <span class="step-badge">Weeks 3–5</span>
+          </div>
+        </div>
+
+        <div class="step reveal">
+          <div class="step-left">
+            <div class="step-num">4</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-content">
+            <h4>Live Integration &amp; Handover</h4>
+            <p>We embed the AI into your live operation — not a test environment. Your team sees it working in real time. We run it together until confidence is complete. No fumble period.</p>
+            <span class="step-badge">Week 6</span>
+          </div>
+        </div>
+
+        <div class="step reveal">
+          <div class="step-left">
+            <div class="step-num">5</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-content">
+            <h4>Ongoing Managed Operations</h4>
+            <p>We don't leave. We monitor, iterate, and scale the AI systems as your business grows. Monthly performance reporting with hard numbers. We're invested in your results because our fees depend on them.</p>
+            <span class="step-badge">Month 2 onwards</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── COMPARISON ─── -->
+  <section>
+    <div class="container">
+      <div class="section-label reveal">Why Backbone AI</div>
+      <h2 class="section-heading reveal">We're not another consultant.<br />We're not another platform.</h2>
+      <p class="section-sub reveal">Every other option in the market makes you carry the risk. We flip that.</p>
+
+      <div class="compare-wrapper reveal">
+        <div class="compare-header">
+          <div class="compare-col-head"></div>
+          <div class="compare-col-head" style="color: var(--muted2);">Typical consultants &amp; agencies</div>
+          <div class="compare-col-head ours">Backbone AI</div>
+        </div>
+        <div class="compare-row">
+          <div class="compare-cell feature">Fix data quality first</div>
+          <div class="compare-cell theirs"><span class="cross">✗</span> Skipped entirely</div>
+          <div class="compare-cell ours"><span class="check">✓</span> Step one, always</div>
+        </div>
+        <div class="compare-row">
+          <div class="compare-cell feature">Outcome-based pricing</div>
+          <div class="compare-cell theirs"><span class="cross">✗</span> Day rates, regardless of results</div>
+          <div class="compare-cell ours"><span class="check">✓</span> Retainer + performance share</div>
+        </div>
+        <div class="compare-row">
+          <div class="compare-cell feature">Ongoing managed operations</div>
+          <div class="compare-cell theirs"><span class="cross">✗</span> Handover and leave</div>
+          <div class="compare-cell ours"><span class="check">✓</span> We run it indefinitely</div>
+        </div>
+        <div class="compare-row">
+          <div class="compare-cell feature">UK regulatory compliance built in</div>
+          <div class="compare-cell theirs"><span class="cross">✗</span> US-first, GDPR as afterthought</div>
+          <div class="compare-cell ours"><span class="check">✓</span> ICO, GDPR, HMRC standard</div>
+        </div>
+        <div class="compare-row">
+          <div class="compare-cell feature">Industry-specific expertise</div>
+          <div class="compare-cell theirs"><span class="cross">✗</span> Generic frameworks</div>
+          <div class="compare-cell ours"><span class="check">✓</span> Deep vertical specialisation</div>
+        </div>
+        <div class="compare-row">
+          <div class="compare-cell feature">Skin in the game</div>
+          <div class="compare-cell theirs"><span class="cross">✗</span> Paid whether it works or not</div>
+          <div class="compare-cell ours"><span class="check">✓</span> We only earn when you do</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── PRICING ─── -->
+  <section id="pricing" style="background: var(--bg2);">
+    <div class="container">
+      <div class="section-label reveal">Pricing</div>
+      <h2 class="section-heading reveal">Transparent. Accountable. Aligned.</h2>
+      <p class="section-sub reveal">No day rates. No scope creep. A clear structure where we only earn more when you do.</p>
+
+      <div class="pricing-grid">
+        <div class="price-card reveal reveal-delay-1">
+          <div class="price-name">Pilot</div>
+          <div class="price-amount">
+            <span class="price-currency">£</span>
+            <span class="price-num">1,500</span>
+          </div>
+          <div class="price-period">per month</div>
+          <div class="price-setup">+ £5,000 one-off setup</div>
+          <div class="price-divider"></div>
+          <ul class="price-features">
+            <li><span class="check">✓</span> Data &amp; operations audit</li>
+            <li><span class="check">✓</span> One AI workflow automated</li>
+            <li><span class="check">✓</span> Monthly performance report</li>
+            <li><span class="check">✓</span> UK compliance built in</li>
+            <li><span class="check">✓</span> Dedicated account manager</li>
+          </ul>
+          <a href="#contact" class="price-btn price-btn-secondary">Get started</a>
+        </div>
+
+        <div class="price-card featured reveal reveal-delay-2">
+          <div class="price-featured-badge">Most popular</div>
+          <div class="price-name">Scale</div>
+          <div class="price-amount">
+            <span class="price-currency">£</span>
+            <span class="price-num">3,500</span>
+          </div>
+          <div class="price-period">per month</div>
+          <div class="price-setup">+ £10,000 one-off setup + 15% performance share</div>
+          <div class="price-divider"></div>
+          <ul class="price-features">
+            <li><span class="check">✓</span> Everything in Pilot</li>
+            <li><span class="check">✓</span> Three AI workflows automated</li>
+            <li><span class="check">✓</span> Full data structuring &amp; cleaning</li>
+            <li><span class="check">✓</span> Weekly performance reviews</li>
+            <li><span class="check">✓</span> Staff training included</li>
+            <li><span class="check">✓</span> Continuous iteration &amp; scaling</li>
+          </ul>
+          <a href="#contact" class="price-btn price-btn-primary">Book a free audit</a>
+        </div>
+
+        <div class="price-card reveal reveal-delay-3">
+          <div class="price-name">Backbone</div>
+          <div class="price-amount">
+            <span class="price-currency">£</span>
+            <span class="price-num">6,500</span>
+          </div>
+          <div class="price-period">per month</div>
+          <div class="price-setup">+ £15,000 one-off setup + 20% performance share</div>
+          <div class="price-divider"></div>
+          <ul class="price-features">
+            <li><span class="check">✓</span> Everything in Scale</li>
+            <li><span class="check">✓</span> Unlimited AI workflows</li>
+            <li><span class="check">✓</span> Full operational embedding</li>
+            <li><span class="check">✓</span> Priority support &amp; response</li>
+            <li><span class="check">✓</span> Quarterly business reviews</li>
+            <li><span class="check">✓</span> Custom AI model development</li>
+          </ul>
+          <a href="#contact" class="price-btn price-btn-secondary">Talk to us</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── INDUSTRIES ─── -->
+  <section class="industries" id="industries">
+    <div class="container">
+      <div class="section-label reveal">Industries</div>
+      <h2 class="section-heading reveal">Deep expertise.<br />Not generic playbooks.</h2>
+      <p class="section-sub reveal">We go deep in specific sectors. That means faster deployment, better results, and word-of-mouth that spreads across your industry.</p>
+
+      <div class="industry-grid">
+        <div class="industry-feature reveal">
+          <div style="display: flex; gap: 16px; margin-bottom: 24px;">
+            <span style="font-size: 44px;">🏭</span>
+            <span style="font-size: 44px;">📦</span>
+          </div>
+          <div style="display: inline-block; background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.25); color: var(--blue-bright); font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 100px; margin-bottom: 16px; letter-spacing: 1px; text-transform: uppercase;">Current focus</div>
+          <h3>Manufacturing &amp; Logistics</h3>
+          <p>Two of Britain's most operationally complex, paper-heavy, and AI-underserved sectors. 83% of firms have no AI in place — yet the use cases are consistent, high-value, and immediately deployable across every site and fleet.</p>
+
+          <div style="font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; margin-top: 24px;">Manufacturing</div>
+          <div class="use-cases" style="margin-bottom: 20px;">
+            <div class="use-case"><div class="use-case-dot"></div>Automated quality control reporting &amp; defect tracking</div>
+            <div class="use-case"><div class="use-case-dot"></div>Supplier procurement &amp; purchase order automation</div>
+            <div class="use-case"><div class="use-case-dot"></div>Production planning &amp; shift scheduling optimisation</div>
+            <div class="use-case"><div class="use-case-dot"></div>ISO 9001 &amp; HSE compliance documentation</div>
+            <div class="use-case"><div class="use-case-dot"></div>Inventory management &amp; demand forecasting</div>
+          </div>
+
+          <div style="font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px;">Logistics &amp; Distribution</div>
+          <div class="use-cases">
+            <div class="use-case"><div class="use-case-dot"></div>Route optimisation &amp; dynamic delivery scheduling</div>
+            <div class="use-case"><div class="use-case-dot"></div>Driver communications &amp; proof of delivery automation</div>
+            <div class="use-case"><div class="use-case-dot"></div>Invoice processing &amp; supplier reconciliation</div>
+            <div class="use-case"><div class="use-case-dot"></div>Fleet maintenance tracking &amp; MOT compliance</div>
+            <div class="use-case"><div class="use-case-dot"></div>Customer shipment tracking &amp; exception management</div>
+          </div>
+        </div>
+
+        <div class="industry-list">
+          <div class="industry-item reveal reveal-delay-1">
+            <div class="industry-item-icon">🏗️</div>
+            <div class="industry-item-text">
+              <h4>UK Construction</h4>
+              <p>CDM compliance, site reporting, invoice &amp; subcontractor automation</p>
+            </div>
+            <div class="industry-item-pct">Coming Q3</div>
+          </div>
+          <div class="industry-item reveal reveal-delay-2">
+            <div class="industry-item-icon">⚖️</div>
+            <div class="industry-item-text">
+              <h4>Legal Services</h4>
+              <p>Document review, contract analysis, compliance tracking</p>
+            </div>
+            <div class="industry-item-pct">Coming Q3</div>
+          </div>
+          <div class="industry-item reveal reveal-delay-3">
+            <div class="industry-item-icon">🏥</div>
+            <div class="industry-item-text">
+              <h4>Healthcare &amp; Private Clinics</h4>
+              <p>Patient intake, appointment management, GDPR-compliant records</p>
+            </div>
+            <div class="industry-item-pct">Coming Q4</div>
+          </div>
+          <div class="industry-item reveal">
+            <div class="industry-item-icon">🏢</div>
+            <div class="industry-item-text">
+              <h4>Commercial Real Estate</h4>
+              <p>Lease management, compliance, tenant communications</p>
+            </div>
+            <div class="industry-item-pct">Coming Q4</div>
+          </div>
+          <div class="industry-item reveal">
+            <div class="industry-item-icon">🛒</div>
+            <div class="industry-item-text">
+              <h4>Retail &amp; E-commerce</h4>
+              <p>Inventory, customer service automation, demand planning</p>
+            </div>
+            <div class="industry-item-pct">2027</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── INTAKE ─── -->
+  <section class="intake" id="intake">
+    <div class="container">
+      <div class="section-label reveal">Work With Us</div>
+      <h2 class="section-heading reveal">Tell us about your business.<br />We'll do the rest.</h2>
+      <p class="section-sub reveal">The more we understand upfront, the faster we can show you exactly where AI will make a difference. Fill in the form and upload any relevant documents — our team reviews every submission within 24 hours.</p>
+
+      <div class="intake-grid">
+
+        <!-- Left: What to upload -->
+        <div class="reveal">
+          <h3>What should I upload?</h3>
+          <p>Don't overthink it. Anything that shows how your business currently operates gives us a head start. Even rough documents are useful — we're looking for process, not polish.</p>
+          <div class="intake-what">
+            <div class="intake-what-item">
+              <div class="intake-what-icon">📊</div>
+              <div class="intake-what-text">
+                <strong>Data files &amp; spreadsheets</strong>
+                Current reports, stock sheets, production logs, delivery manifests — anything you track in Excel or similar.
+              </div>
+            </div>
+            <div class="intake-what-item">
+              <div class="intake-what-icon">📋</div>
+              <div class="intake-what-text">
+                <strong>Process documents</strong>
+                SOPs, workflow diagrams, checklists, onboarding guides — anything that describes how your team operates.
+              </div>
+            </div>
+            <div class="intake-what-item">
+              <div class="intake-what-icon">🧾</div>
+              <div class="intake-what-text">
+                <strong>Sample invoices or forms</strong>
+                Supplier invoices, delivery notes, quality control forms — the paperwork your team handles every day.
+              </div>
+            </div>
+            <div class="intake-what-item">
+              <div class="intake-what-icon">📝</div>
+              <div class="intake-what-text">
+                <strong>Compliance &amp; regulatory documents</strong>
+                ISO certificates, HSE reports, audit trails — so we understand your regulatory environment from day one.
+              </div>
+            </div>
+            <div class="intake-what-item">
+              <div class="intake-what-icon">💬</div>
+              <div class="intake-what-text">
+                <strong>Nothing? That's fine too.</strong>
+                Just fill in the form and describe your situation. We'll ask for documents once we've spoken.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Form -->
+        <div class="intake-form reveal reveal-delay-1">
+          <div class="form-title">Start your free audit</div>
+          <div class="form-subtitle">Takes 3 minutes. We'll be in touch within 24 hours.</div>
+
+          <div class="form-fields">
+            <div class="form-row">
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">First name</label>
+                <input class="form-input" type="text" placeholder="James" />
+              </div>
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">Last name</label>
+                <input class="form-input" type="text" placeholder="Whitfield" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Business name</label>
+              <input class="form-input" type="text" placeholder="Whitfield Manufacturing Ltd" />
+            </div>
+
+            <div class="form-row">
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">Work email</label>
+                <input class="form-input" type="email" placeholder="james@whitfield.co.uk" />
+              </div>
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">Phone number</label>
+                <input class="form-input" type="tel" placeholder="+44 7700 000000" />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">Sector</label>
+                <select class="form-select">
+                  <option value="" disabled selected>Select your sector</option>
+                  <option>Manufacturing</option>
+                  <option>Logistics &amp; Distribution</option>
+                  <option>Both Manufacturing &amp; Logistics</option>
+                  <option>Construction</option>
+                  <option>Legal Services</option>
+                  <option>Healthcare</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">Company size</label>
+                <select class="form-select">
+                  <option value="" disabled selected>No. of employees</option>
+                  <option>1–10</option>
+                  <option>11–50</option>
+                  <option>51–200</option>
+                  <option>201–500</option>
+                  <option>500+</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">What software does your team currently use?</label>
+              <input class="form-input" type="text" placeholder="e.g. SAP, Sage, Excel, Xero, custom spreadsheets, paper-based..." />
+            </div>
+
+            <div class="form-row">
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">Hours/week spent on manual admin</label>
+                <select class="form-select">
+                  <option value="" disabled selected>Estimate across your team</option>
+                  <option>Less than 5 hours</option>
+                  <option>5–15 hours</option>
+                  <option>15–30 hours</option>
+                  <option>30–60 hours</option>
+                  <option>60+ hours</option>
+                </select>
+              </div>
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">Annual turnover (approx)</label>
+                <select class="form-select">
+                  <option value="" disabled selected>Select range</option>
+                  <option>Under £500k</option>
+                  <option>£500k – £2m</option>
+                  <option>£2m – £10m</option>
+                  <option>£10m – £50m</option>
+                  <option>£50m+</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">What's your biggest operational headache right now?</label>
+              <textarea class="form-textarea" placeholder="e.g. Our quality control reports take 4 hours a day to compile manually. We also struggle to keep on top of supplier invoices..."></textarea>
+            </div>
+
+            <!-- Upload zone -->
+            <div class="form-group" style="margin-bottom:0">
+              <label class="form-label">Upload documents (optional)</label>
+              <div class="upload-zone" id="uploadZone">
+                <input type="file" id="fileInput" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.png,.jpg,.jpeg,.txt" />
+                <div class="upload-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+                </div>
+                <div class="upload-main">Drop files here or click to browse</div>
+                <div class="upload-sub">Up to 10 files, 20MB each</div>
+                <div class="upload-types">
+                  <span class="upload-type-tag">PDF</span>
+                  <span class="upload-type-tag">Excel</span>
+                  <span class="upload-type-tag">CSV</span>
+                  <span class="upload-type-tag">Word</span>
+                  <span class="upload-type-tag">Images</span>
+                </div>
+              </div>
+              <div class="file-list" id="fileList"></div>
+            </div>
+
+            <button class="form-submit" id="submitBtn" type="button">
+              Submit &amp; request your free audit
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+            <div class="form-note">No spam. No sales calls unless you want one. We'll email you first.</div>
+          </div>
+
+          <!-- Success state -->
+          <div class="form-success" id="formSuccess">
+            <div class="success-icon">✓</div>
+            <div class="success-title">We've got your details.</div>
+            <div class="success-sub">Our team will review your submission and reach out within 24 hours. If you uploaded documents, we'll have already looked at them before we call.<br /><br />Keep an eye on your inbox.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CTA ─── -->
+  <section class="cta-section" id="contact">
+    <div class="cta-bg-orb"></div>
+    <div class="container">
+      <div class="section-label reveal" style="justify-content: center;">Get Started</div>
+      <h2 class="reveal">
+        Find out what your operation<br />
+        <span class="grad">is actually costing you.</span>
+      </h2>
+      <p class="reveal">Start with a free 60-minute operational audit. We'll connect your data, identify your biggest cost leaks, and give you a clear picture — no obligation, no sales pitch.</p>
+      <div class="cta-actions reveal">
+        <a href="mailto:hello@backboneai.co.uk" class="btn-primary">
+          Book your free audit
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="tel:+441234567890" class="btn-ghost">Call us directly</a>
+      </div>
+      <p class="cta-guarantee reveal">No day rates. No lock-in contracts. No results, no performance fee.</p>
+    </div>
+  </section>
+
+  <!-- ─── FOOTER ─── -->
+  <footer>
+    <div class="footer-logo">
+      <div class="footer-logo-icon">B</div>
+      Backbone AI
+    </div>
+    <div class="footer-links">
+      <a href="#problem">The Problem</a>
+      <a href="#what">What We Do</a>
+      <a href="#how">How It Works</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#industries">Industries</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="footer-copy">
+      &copy; 2026 Backbone AI Ltd. Registered in England &amp; Wales.
+    </div>
+  </footer>
+
+  <script>
+    // ─── File upload ───
+    const uploadZone = document.getElementById('uploadZone');
+    const fileInput  = document.getElementById('fileInput');
+    const fileList   = document.getElementById('fileList');
+    let uploadedFiles = [];
+
+    function formatSize(bytes) {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+      return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+    }
+
+    function getFileIcon(name) {
+      const ext = name.split('.').pop().toLowerCase();
+      if (['pdf'].includes(ext)) return '📄';
+      if (['xls','xlsx','csv'].includes(ext)) return '📊';
+      if (['doc','docx'].includes(ext)) return '📝';
+      if (['png','jpg','jpeg'].includes(ext)) return '🖼️';
+      return '📎';
+    }
+
+    function renderFiles() {
+      fileList.innerHTML = '';
+      uploadedFiles.forEach((file, i) => {
+        const item = document.createElement('div');
+        item.className = 'file-item';
+        item.innerHTML = `
+          <span class="file-item-icon">${getFileIcon(file.name)}</span>
+          <span class="file-item-name">${file.name}</span>
+          <span class="file-item-size">${formatSize(file.size)}</span>
+          <button class="file-remove" data-index="${i}" title="Remove">×</button>
+        `;
+        fileList.appendChild(item);
+      });
+      fileList.querySelectorAll('.file-remove').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          uploadedFiles.splice(parseInt(e.target.dataset.index), 1);
+          renderFiles();
+        });
+      });
+    }
+
+    fileInput.addEventListener('change', () => {
+      const newFiles = Array.from(fileInput.files);
+      newFiles.forEach(f => {
+        if (!uploadedFiles.find(u => u.name === f.name)) uploadedFiles.push(f);
+      });
+      renderFiles();
+      fileInput.value = '';
+    });
+
+    uploadZone.addEventListener('dragover', (e) => { e.preventDefault(); uploadZone.classList.add('drag-over'); });
+    uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-over'));
+    uploadZone.addEventListener('drop', (e) => {
+      e.preventDefault(); uploadZone.classList.remove('drag-over');
+      const dropped = Array.from(e.dataTransfer.files);
+      dropped.forEach(f => { if (!uploadedFiles.find(u => u.name === f.name)) uploadedFiles.push(f); });
+      renderFiles();
+    });
+
+    // ─── Form submit ───
+    document.getElementById('submitBtn').addEventListener('click', () => {
+      const fields = document.querySelector('.form-fields');
+      const success = document.getElementById('formSuccess');
+      fields.classList.add('hidden');
+      success.classList.add('visible');
+    });
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    reveals.forEach(el => observer.observe(el));
+
+    // Nav scroll effect
+    const nav = document.querySelector('nav');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        nav.style.borderBottomColor = 'rgba(255,255,255,0.12)';
+      } else {
+        nav.style.borderBottomColor = 'rgba(255,255,255,0.08)';
+      }
+    });
+
+    // Smooth scroll for nav links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // Counter animation for hero stats
+    function animateCounter(el, target, suffix = '', prefix = '') {
+      const duration = 1800;
+      const start = performance.now();
+      const isFloat = target % 1 !== 0;
+      const update = (time) => {
+        const elapsed = time - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const value = isFloat
+          ? (eased * target).toFixed(1)
+          : Math.round(eased * target);
+        el.textContent = prefix + value + suffix;
+        if (progress < 1) requestAnimationFrame(update);
+      };
+      requestAnimationFrame(update);
+    }
+
+    const statObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const nums = entry.target.querySelectorAll('.hero-stat-num');
+          const data = [
+            { val: 4, prefix: '£', suffix: 'bn' },
+            { val: 7.7, suffix: 'wks' },
+            { val: 5, suffix: '%' }
+          ];
+          nums.forEach((el, i) => {
+            if (data[i]) animateCounter(el, data[i].val, data[i].suffix || '', data[i].prefix || '');
+          });
+          statObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    const heroStats = document.querySelector('.hero-stats');
+    if (heroStats) statObserver.observe(heroStats);
+  </script>
+</body>
+</html>
