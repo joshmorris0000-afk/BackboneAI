@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PO Matching — Backbone AI</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" onload="this.rel='stylesheet'">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" defer></script>
+<style>
+:root {
+  --bg:      #05050a;
+  --bg2:     #0c0c14;
+  --surface: rgba(255,255,255,0.04);
+  --border:  rgba(255,255,255,0.08);
+  --blue:    #3b82f6;
+  --cyan:    #06b6d4;
+  --green:   #22c55e;
+  --orange:  #f97316;
+  --red:     #f43f5e;
+  --purple:  #8b5cf6;
+  --amber:   #f59e0b;
+  --text:    #f1f5f9;
+  --muted:   #64748b;
+  --muted2:  #94a3b8;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
+
+/* ─── Layout ─────────────────────────────────────────────────────────────── */
+.app{display:grid;grid-template-columns:240px 1fr;grid-template-rows:56px 1fr;height:100vh;overflow:hidden}
+.topbar{grid-column:1/-1;display:flex;align-items:center;gap:16px;padding:0 24px;background:var(--bg2);border-bottom:1px solid var(--border);z-index:10}
+.topbar-logo{font-weight:700;font-size:15px;background:linear-gradient(135deg,var(--blue),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.topbar-divider{width:1px;height:20px;background:var(--border)}
+.topbar-module{font-size:13px;color:var(--muted2)}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.topbar-client{font-size:13px;color:var(--muted2);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:4px 10px}
+.live-badge{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--green);background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);border-radius:20px;padding:4px 10px}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* ─── Sidebar ────────────────────────────────────────────────────────────── */
+.sidebar{background:var(--bg2);border-right:1px solid var(--border);padding:20px 0;overflow-y:auto}
+.sidebar-section{padding:0 12px;margin-bottom:24px}
+.sidebar-label{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;padding:0 8px;margin-bottom:8px}
+.nav-btn{display:flex;align-items:center;gap:10px;width:100%;padding:8px 12px;border-radius:8px;border:none;background:none;color:var(--muted2);font-size:13px;cursor:pointer;transition:all .15s;text-align:left}
+.nav-btn:hover{background:var(--surface);color:var(--text)}
+.nav-btn.active{background:rgba(59,130,246,0.12);color:var(--blue)}
+.nav-icon{width:16px;text-align:center;flex-shrink:0}
+.nav-badge{margin-left:auto;background:var(--red);color:#fff;font-size:10px;font-weight:600;border-radius:10px;padding:1px 6px;min-width:18px;text-align:center}
+.nav-badge.amber{background:var(--amber)}
+.nav-badge.green{background:var(--green)}
+
+/* ─── Main ───────────────────────────────────────────────────────────────── */
+.main{overflow-y:auto;padding:28px}
+.page{display:none}
+.page.active{display:block}
+.page-header{margin-bottom:24px}
+.page-title{font-size:20px;font-weight:700;margin-bottom:4px}
+.page-sub{color:var(--muted2);font-size:13px}
+
+/* ─── Cards / surfaces ───────────────────────────────────────────────────── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px}
+.card-title{font-size:13px;font-weight:600;color:var(--muted2);margin-bottom:16px;text-transform:uppercase;letter-spacing:.04em}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+
+/* ─── KPI tiles ──────────────────────────────────────────────────────────── */
+.kpi-tile{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px}
+.kpi-label{font-size:12px;color:var(--muted2);margin-bottom:8px}
+.kpi-value{font-size:28px;font-weight:700;margin-bottom:4px}
+.kpi-sub{font-size:12px;color:var(--muted)}
+.kpi-blue{border-top:2px solid var(--blue)}
+.kpi-green{border-top:2px solid var(--green)}
+.kpi-amber{border-top:2px solid var(--amber)}
+.kpi-red{border-top:2px solid var(--red)}
+
+/* ─── Status badges ──────────────────────────────────────────────────────── */
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:3px 8px;border-radius:20px;white-space:nowrap}
+.badge-green{background:rgba(34,197,94,0.12);color:var(--green);border:1px solid rgba(34,197,94,0.2)}
+.badge-amber{background:rgba(245,158,11,0.12);color:var(--amber);border:1px solid rgba(245,158,11,0.2)}
+.badge-red{background:rgba(244,63,94,0.12);color:var(--red);border:1px solid rgba(244,63,94,0.2)}
+.badge-blue{background:rgba(59,130,246,0.12);color:var(--blue);border:1px solid rgba(59,130,246,0.2)}
+.badge-muted{background:rgba(255,255,255,0.06);color:var(--muted2);border:1px solid var(--border)}
+
+/* ─── Table ──────────────────────────────────────────────────────────────── */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;padding:10px 14px;text-align:left;border-bottom:1px solid var(--border)}
+td{padding:12px 14px;border-bottom:1px solid rgba(255,255,255,0.04);font-size:13px;color:var(--muted2);vertical-align:middle}
+td.primary{color:var(--text);font-weight:500}
+tr:hover td{background:rgba(255,255,255,0.02)}
+tr:last-child td{border-bottom:none}
+
+/* ─── Buttons ────────────────────────────────────────────────────────────── */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;border:none;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{background:#2563eb}
+.btn-ghost{background:var(--surface);color:var(--muted2);border:1px solid var(--border)}
+.btn-ghost:hover{color:var(--text);background:rgba(255,255,255,0.08)}
+.btn-green{background:rgba(34,197,94,0.15);color:var(--green);border:1px solid rgba(34,197,94,0.25)}
+.btn-red{background:rgba(244,63,94,0.12);color:var(--red);border:1px solid rgba(244,63,94,0.2)}
+.btn-sm{padding:5px 11px;font-size:12px;border-radius:6px}
+
+/* ─── Filters bar ────────────────────────────────────────────────────────── */
+.filter-bar{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;align-items:center}
+.filter-btn{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:none;color:var(--muted2);font-size:12px;cursor:pointer;transition:all .15s}
+.filter-btn:hover,.filter-btn.active{background:rgba(59,130,246,0.12);border-color:rgba(59,130,246,0.3);color:var(--blue)}
+.search-input{margin-left:auto;padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:13px;width:220px;outline:none}
+.search-input::placeholder{color:var(--muted)}
+.search-input:focus{border-color:rgba(59,130,246,0.4)}
+
+/* ─── Match detail panel ─────────────────────────────────────────────────── */
+.detail-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:100;display:none;align-items:flex-start;justify-content:flex-end;backdrop-filter:blur(4px)}
+.detail-overlay.open{display:flex}
+.detail-panel{width:560px;height:100vh;background:var(--bg2);border-left:1px solid var(--border);overflow-y:auto;padding:28px}
+.detail-close{position:absolute;top:20px;right:20px;background:var(--surface);border:1px solid var(--border);color:var(--muted2);border-radius:8px;padding:6px 10px;cursor:pointer;font-size:13px}
+.detail-section{margin-bottom:24px}
+.detail-section-title{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
+.detail-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+.detail-row:last-child{border-bottom:none}
+.detail-key{font-size:13px;color:var(--muted2)}
+.detail-val{font-size:13px;color:var(--text);font-weight:500;text-align:right}
+
+/* ─── Line comparison table ──────────────────────────────────────────────── */
+.line-table th{background:rgba(255,255,255,0.03)}
+.variance-pos{color:var(--red)}
+.variance-neg{color:var(--green)}
+.variance-zero{color:var(--muted)}
+
+/* ─── Progress / score bar ───────────────────────────────────────────────── */
+.score-bar{height:6px;border-radius:3px;background:rgba(255,255,255,0.08);overflow:hidden}
+.score-fill{height:100%;border-radius:3px;transition:width .5s}
+
+/* ─── Upload zone ────────────────────────────────────────────────────────── */
+.upload-zone{border:2px dashed var(--border);border-radius:12px;padding:40px;text-align:center;cursor:pointer;transition:all .2s}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--blue);background:rgba(59,130,246,0.04)}
+.upload-icon{font-size:32px;margin-bottom:12px}
+.upload-label{font-size:14px;font-weight:500;margin-bottom:4px}
+.upload-sub{font-size:13px;color:var(--muted)}
+#fileInput{display:none}
+
+/* ─── Alert strip ────────────────────────────────────────────────────────── */
+.alert{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:10px;margin-bottom:16px}
+.alert-red{background:rgba(244,63,94,0.08);border:1px solid rgba(244,63,94,0.2)}
+.alert-amber{background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2)}
+.alert-green{background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2)}
+.alert-icon{font-size:16px;margin-top:1px}
+.alert-body{flex:1}
+.alert-title{font-weight:600;font-size:13px;margin-bottom:2px}
+.alert-text{font-size:12px;color:var(--muted2)}
+
+/* ─── Config form ────────────────────────────────────────────────────────── */
+.form-group{margin-bottom:18px}
+.form-label{display:block;font-size:12px;font-weight:600;color:var(--muted2);margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em}
+.form-input,.form-select{width:100%;padding:9px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:13px;outline:none;transition:border-color .15s}
+.form-input:focus,.form-select:focus{border-color:rgba(59,130,246,0.4)}
+.form-select option{background:var(--bg2)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.toggle-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+.toggle-label{font-size:13px;color:var(--text)}
+.toggle-sub{font-size:12px;color:var(--muted)}
+.toggle{position:relative;width:40px;height:22px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;inset:0;background:rgba(255,255,255,0.15);border-radius:11px;cursor:pointer;transition:.3s}
+.toggle-slider::before{content:'';position:absolute;width:16px;height:16px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.3s}
+.toggle input:checked+.toggle-slider{background:var(--blue)}
+.toggle input:checked+.toggle-slider::before{transform:translateX(18px)}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ─── Topbar ─────────────────────────────────────────────────────────── -->
+  <header class="topbar">
+    <div class="topbar-logo">Backbone AI</div>
+    <div class="topbar-divider"></div>
+    <div class="topbar-module">3-Way PO Matching</div>
+    <div class="topbar-right">
+      <div class="topbar-client" id="clientLabel">Whitfield Logistics Ltd</div>
+      <div class="live-badge"><div class="live-dot"></div>Synced 2 min ago</div>
+    </div>
+  </header>
+
+  <!-- ─── Sidebar ───────────────────────────────────────────────────────── -->
+  <nav class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Overview</div>
+      <button class="nav-btn active" onclick="showPage('dashboard',this)">
+        <span class="nav-icon">▦</span> Dashboard
+      </button>
+      <button class="nav-btn" onclick="showPage('queue',this)">
+        <span class="nav-icon">⏳</span> Review Queue
+        <span class="nav-badge" id="badge-queue">4</span>
+      </button>
+      <button class="nav-btn" onclick="showPage('exceptions',this)">
+        <span class="nav-icon">⚠</span> Exceptions
+        <span class="nav-badge amber" id="badge-exceptions">7</span>
+      </button>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Documents</div>
+      <button class="nav-btn" onclick="showPage('invoices',this)">
+        <span class="nav-icon">🧾</span> Invoices
+      </button>
+      <button class="nav-btn" onclick="showPage('purchase-orders',this)">
+        <span class="nav-icon">📋</span> Purchase Orders
+      </button>
+      <button class="nav-btn" onclick="showPage('grns',this)">
+        <span class="nav-icon">📦</span> Goods Receipts
+      </button>
+      <button class="nav-btn" onclick="showPage('upload',this)">
+        <span class="nav-icon">⬆</span> Upload Invoice
+      </button>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Analytics</div>
+      <button class="nav-btn" onclick="showPage('reports',this)">
+        <span class="nav-icon">📊</span> Reports
+      </button>
+      <button class="nav-btn" onclick="showPage('suppliers',this)">
+        <span class="nav-icon">🏭</span> Supplier Scores
+      </button>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">System</div>
+      <button class="nav-btn" onclick="showPage('connectors',this)">
+        <span class="nav-icon">🔗</span> Connections
+        <span class="nav-badge green" id="badge-connectors">3</span>
+      </button>
+      <button class="nav-btn" onclick="showPage('config',this)">
+        <span class="nav-icon">⚙</span> Configuration
+      </button>
+    </div>
+  </nav>
+
+  <!-- ─── Main content ──────────────────────────────────────────────────── -->
+  <main class="main">
+
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <div class="page-header">
+        <div class="page-title">Overview</div>
+        <div class="page-sub">Month to date — March 2026</div>
+      </div>
+
+      <div class="grid-4" style="margin-bottom:20px">
+        <div class="kpi-tile kpi-green">
+          <div class="kpi-label">Match Rate</div>
+          <div class="kpi-value" style="color:var(--green)">91.4%</div>
+          <div class="kpi-sub">Invoices auto-resolved</div>
+        </div>
+        <div class="kpi-tile kpi-blue">
+          <div class="kpi-label">Invoices Processed</div>
+          <div class="kpi-value">127</div>
+          <div class="kpi-sub">This month</div>
+        </div>
+        <div class="kpi-tile kpi-amber">
+          <div class="kpi-label">Open Exceptions</div>
+          <div class="kpi-value" style="color:var(--amber)">11</div>
+          <div class="kpi-sub">Require human review</div>
+        </div>
+        <div class="kpi-tile kpi-red">
+          <div class="kpi-label">£ Exposure</div>
+          <div class="kpi-value" style="color:var(--red)">£4,820</div>
+          <div class="kpi-sub">Unresolved discrepancies</div>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-bottom:20px">
+        <div class="card">
+          <div class="card-title">Match Outcomes — Last 30 Days</div>
+          <canvas id="matchChart" height="180"></canvas>
+        </div>
+        <div class="card">
+          <div class="card-title">Top Exceptions by Value</div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Supplier</th><th>Type</th><th>Exposure</th><th></th></tr></thead>
+              <tbody>
+                <tr>
+                  <td class="primary">Midlands Steel</td>
+                  <td><span class="badge badge-red">Price Over</span></td>
+                  <td style="color:var(--red)">£1,240</td>
+                  <td><button class="btn btn-ghost btn-sm" onclick="openDetail('ex1')">Review</button></td>
+                </tr>
+                <tr>
+                  <td class="primary">Northern Freight</td>
+                  <td><span class="badge badge-amber">Qty Over</span></td>
+                  <td style="color:var(--amber)">£980</td>
+                  <td><button class="btn btn-ghost btn-sm" onclick="openDetail('ex2')">Review</button></td>
+                </tr>
+                <tr>
+                  <td class="primary">Acme Packaging</td>
+                  <td><span class="badge badge-red">No PO Found</span></td>
+                  <td style="color:var(--red)">£740</td>
+                  <td><button class="btn btn-ghost btn-sm" onclick="openDetail('ex3')">Review</button></td>
+                </tr>
+                <tr>
+                  <td class="primary">Thames Logistics</td>
+                  <td><span class="badge badge-amber">Price Over</span></td>
+                  <td style="color:var(--amber)">£610</td>
+                  <td><button class="btn btn-ghost btn-sm" onclick="openDetail('ex4')">Review</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Recent Activity</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Time</th><th>Invoice</th><th>Supplier</th><th>Total</th><th>Result</th><th>Action</th></tr></thead>
+            <tbody id="activityFeed"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- REVIEW QUEUE -->
+    <div class="page" id="page-queue">
+      <div class="page-header">
+        <div class="page-title">Review Queue</div>
+        <div class="page-sub">Invoices matched with minor discrepancies — require AP approval</div>
+      </div>
+      <div class="filter-bar">
+        <button class="filter-btn active" onclick="filterQueue('all',this)">All</button>
+        <button class="filter-btn" onclick="filterQueue('partial_match',this)">Partial Match</button>
+        <button class="filter-btn" onclick="filterQueue('price_discrepancy',this)">Price Issue</button>
+        <input class="search-input" type="text" placeholder="Search supplier or invoice…" oninput="searchQueue(this.value)">
+      </div>
+      <div class="card" style="padding:0">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Invoice</th><th>Supplier</th><th>Invoice Date</th><th>Total</th><th>Status</th><th>Discrepancy</th><th>Score</th><th>Actions</th></tr></thead>
+            <tbody id="queueTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXCEPTIONS -->
+    <div class="page" id="page-exceptions">
+      <div class="page-header">
+        <div class="page-title">Exceptions</div>
+        <div class="page-sub">High-priority issues requiring AP manager resolution</div>
+      </div>
+      <div class="alert alert-red" style="margin-bottom:20px">
+        <div class="alert-icon">🚨</div>
+        <div class="alert-body">
+          <div class="alert-title">£4,820 total financial exposure across 11 open exceptions</div>
+          <div class="alert-text">7 are price discrepancies &gt;5%, 3 have no matching purchase order, 1 has fraud flags</div>
+        </div>
+      </div>
+      <div class="card" style="padding:0">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Invoice</th><th>Supplier</th><th>Total</th><th>Exception Type</th><th>Exposure</th><th>Flags</th><th>Age</th><th>Actions</th></tr></thead>
+            <tbody id="exceptionsTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- INVOICES -->
+    <div class="page" id="page-invoices">
+      <div class="page-header">
+        <div class="page-title">All Invoices</div>
+        <div class="page-sub">Complete invoice history for this client</div>
+      </div>
+      <div class="filter-bar">
+        <button class="filter-btn active" onclick="filterInvoices('all',this)">All</button>
+        <button class="filter-btn" onclick="filterInvoices('approved',this)">Approved</button>
+        <button class="filter-btn" onclick="filterInvoices('matched',this)">Matched</button>
+        <button class="filter-btn" onclick="filterInvoices('exception',this)">Exception</button>
+        <button class="filter-btn" onclick="filterInvoices('pending_extraction',this)">Pending</button>
+        <input class="search-input" type="text" placeholder="Invoice number or supplier…">
+      </div>
+      <div class="card" style="padding:0">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Invoice #</th><th>Supplier</th><th>Date</th><th>Total</th><th>VAT</th><th>AI Confidence</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="invoicesTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- PURCHASE ORDERS -->
+    <div class="page" id="page-purchase-orders">
+      <div class="page-header">
+        <div class="page-title">Purchase Orders</div>
+        <div class="page-sub">Synced from Sage 200 — updated every 15 minutes</div>
+      </div>
+      <div class="filter-bar">
+        <button class="filter-btn active">All</button>
+        <button class="filter-btn">Issued</button>
+        <button class="filter-btn">Partially Received</button>
+        <button class="filter-btn">Fully Received</button>
+        <input class="search-input" type="text" placeholder="PO number or supplier…">
+      </div>
+      <div class="card" style="padding:0">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>PO Number</th><th>Supplier</th><th>Issued</th><th>Expected Delivery</th><th>Lines</th><th>Total</th><th>Status</th></tr></thead>
+            <tbody id="posTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- GOODS RECEIPTS -->
+    <div class="page" id="page-grns">
+      <div class="page-header">
+        <div class="page-title">Goods Receipts</div>
+        <div class="page-sub">All GRNs synced from the ERP — updated every 15 minutes</div>
+      </div>
+      <div class="card" style="padding:0">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>GRN Number</th><th>PO Ref</th><th>Supplier</th><th>Received</th><th>Received By</th><th>Lines</th><th>Discrepancies</th></tr></thead>
+            <tbody id="grnsTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- UPLOAD -->
+    <div class="page" id="page-upload">
+      <div class="page-header">
+        <div class="page-title">Upload Invoice</div>
+        <div class="page-sub">Upload a supplier invoice PDF. AI extraction and matching runs automatically.</div>
+      </div>
+      <div class="grid-2">
+        <div>
+          <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropFile(event)">
+            <div class="upload-icon">📄</div>
+            <div class="upload-label">Drop invoice PDF here</div>
+            <div class="upload-sub">or click to browse — max 20 MB</div>
+          </div>
+          <input type="file" id="fileInput" accept="application/pdf" onchange="handleFile(this.files[0])">
+          <div id="uploadStatus" style="margin-top:16px;display:none"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">What happens next</div>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div style="display:flex;gap:12px;align-items:flex-start">
+              <div style="width:24px;height:24px;border-radius:50%;background:rgba(59,130,246,0.15);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">1</div>
+              <div><div style="font-size:13px;font-weight:600;margin-bottom:2px">AI Extraction</div><div style="font-size:12px;color:var(--muted2)">Claude reads the PDF and extracts supplier, line items, prices, quantities and totals. Takes ~30 seconds.</div></div>
+            </div>
+            <div style="display:flex;gap:12px;align-items:flex-start">
+              <div style="width:24px;height:24px;border-radius:50%;background:rgba(59,130,246,0.15);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">2</div>
+              <div><div style="font-size:13px;font-weight:600;margin-bottom:2px">PO + GRN Match</div><div style="font-size:12px;color:var(--muted2)">The system finds the matching PO from Sage 200 and the GRN from the warehouse, then compares all three documents line by line.</div></div>
+            </div>
+            <div style="display:flex;gap:12px;align-items:flex-start">
+              <div style="width:24px;height:24px;border-radius:50%;background:rgba(59,130,246,0.15);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">3</div>
+              <div><div style="font-size:13px;font-weight:600;margin-bottom:2px">Decision</div><div style="font-size:12px;color:var(--muted2)">Full matches below your approval limit are auto-approved. Discrepancies route to the review queue or exceptions list.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REPORTS -->
+    <div class="page" id="page-reports">
+      <div class="page-header">
+        <div class="page-title">Reports</div>
+        <div class="page-sub">Financial performance of the matching system</div>
+      </div>
+      <div class="grid-3" style="margin-bottom:20px">
+        <div class="kpi-tile kpi-green">
+          <div class="kpi-label">Discrepancies Found (MTD)</div>
+          <div class="kpi-value" style="color:var(--green)">£12,840</div>
+          <div class="kpi-sub">Across 127 invoices</div>
+        </div>
+        <div class="kpi-tile kpi-blue">
+          <div class="kpi-label">AP Hours Saved (MTD)</div>
+          <div class="kpi-value">38 hrs</div>
+          <div class="kpi-sub">Estimated vs manual process</div>
+        </div>
+        <div class="kpi-tile kpi-amber">
+          <div class="kpi-label">Recovered This Month</div>
+          <div class="kpi-value" style="color:var(--amber)">£8,020</div>
+          <div class="kpi-sub">Credit notes & price corrections</div>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">Weekly Match Volume</div>
+          <canvas id="volumeChart" height="200"></canvas>
+        </div>
+        <div class="card">
+          <div class="card-title">Discrepancy by Type</div>
+          <canvas id="discrepancyChart" height="200"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUPPLIERS -->
+    <div class="page" id="page-suppliers">
+      <div class="page-header">
+        <div class="page-title">Supplier Scorecards</div>
+        <div class="page-sub">Invoice accuracy and pricing compliance per supplier</div>
+      </div>
+      <div class="card" style="padding:0">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Supplier</th><th>Invoices (MTD)</th><th>Match Rate</th><th>Avg Price Variance</th><th>Total Exposure</th><th>Score</th></tr></thead>
+            <tbody id="suppliersTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONNECTORS -->
+    <div class="page" id="page-connectors">
+      <div class="page-header">
+        <div class="page-title">System Connections</div>
+        <div class="page-sub">All connections are managed by Backbone AI — no re-authentication required</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px" id="connectorList"></div>
+    </div>
+
+    <!-- CONFIGURATION -->
+    <div class="page" id="page-config">
+      <div class="page-header">
+        <div class="page-title">Configuration</div>
+        <div class="page-sub">Matching tolerances and auto-approval rules</div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">Matching Tolerances</div>
+          <div class="form-group">
+            <label class="form-label">Price Tolerance (%)</label>
+            <input class="form-input" type="number" value="2" min="0" max="10" step="0.5" id="priceTol">
+            <div style="font-size:12px;color:var(--muted);margin-top:4px">Variances within this range auto-approve. Currently: 2% (£0.97 on a £48.50 unit)</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Quantity Tolerance (%)</label>
+            <input class="form-input" type="number" value="0" min="0" max="5" step="0.5" id="qtyTol">
+            <div style="font-size:12px;color:var(--muted);margin-top:4px">0% recommended — any quantity discrepancy should be reviewed</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Auto-Approval Limit (£)</label>
+            <input class="form-input" type="number" value="5000" min="0" id="approvalLimit">
+            <div style="font-size:12px;color:var(--muted);margin-top:4px">Full matches above this value route to the review queue regardless</div>
+          </div>
+          <button class="btn btn-primary" onclick="saveConfig(this)">Save Changes</button>
+        </div>
+        <div class="card">
+          <div class="card-title">Auto-Approval Rules</div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">Auto-approve full matches</div><div class="toggle-sub">Invoices with 100% line match and no flags</div></div>
+            <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">Require full match for auto-approval</div><div class="toggle-sub">Partial matches always go to review queue</div></div>
+            <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">Alert on major discrepancy</div><div class="toggle-sub">Email AP manager when variance &gt;5%</div></div>
+            <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">Block duplicate invoices</div><div class="toggle-sub">Hold if invoice number already processed for supplier</div></div>
+            <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">Fraud flag auto-hold</div><div class="toggle-sub">Any fraud signal prevents auto-approval</div></div>
+            <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ─── Match Detail Panel ─────────────────────────────────────────────────── -->
+<div class="detail-overlay" id="detailOverlay" onclick="closeDetailOutside(event)">
+  <div class="detail-panel" id="detailPanel">
+    <button class="detail-close" onclick="closeDetail()">✕ Close</button>
+    <div id="detailContent"></div>
+  </div>
+</div>
+
+<script>
+// ─── Demo Data ─────────────────────────────────────────────────────────────
+
+const INVOICES = [
+  { id:'INV-2026-0441', supplier:'Midlands Steel Supplies Ltd', date:'2026-03-05', total:1164.00, vat:194.00, confidence:0.98, status:'exception' },
+  { id:'INV-2026-0440', supplier:'Thornton Fixings Co', date:'2026-03-05', total:480.00, vat:80.00, confidence:0.97, status:'approved' },
+  { id:'INV-2026-0439', supplier:'Northern Freight Solutions', date:'2026-03-04', total:2280.00, vat:380.00, confidence:0.94, status:'exception' },
+  { id:'INV-2026-0438', supplier:'Acme Packaging Ltd', date:'2026-03-04', total:888.00, vat:148.00, confidence:0.96, status:'exception' },
+  { id:'INV-2026-0437', supplier:'Thames Logistics', date:'2026-03-03', total:3120.00, vat:520.00, confidence:0.99, status:'approved' },
+  { id:'INV-2026-0436', supplier:'Midlands Steel Supplies Ltd', date:'2026-03-03', total:582.00, vat:97.00, confidence:0.95, status:'approved' },
+  { id:'INV-2026-0435', supplier:'Alpha Components', date:'2026-03-02', total:1440.00, vat:240.00, confidence:0.91, status:'matched' },
+  { id:'INV-2026-0434', supplier:'B&Q Industrial', date:'2026-03-01', total:330.00, vat:55.00, confidence:0.88, status:'approved' },
+];
+
+const QUEUE = [
+  { id:'INV-2026-0435', supplier:'Alpha Components', date:'2026-03-02', total:1440.00, status:'partial_match', discrepancy:86.40, score:0.88 },
+  { id:'INV-2026-0433', supplier:'Coventry Steel Works', date:'2026-02-28', total:620.00, status:'price_discrepancy', discrepancy:31.00, score:0.81 },
+  { id:'INV-2026-0431', supplier:'Thames Logistics', date:'2026-02-27', total:980.00, status:'partial_match', discrepancy:19.60, score:0.94 },
+  { id:'INV-2026-0430', supplier:'Apex Chemicals', date:'2026-02-26', total:2100.00, status:'partial_match', discrepancy:42.00, score:0.91 },
+];
+
+const EXCEPTIONS = [
+  { id:'INV-2026-0441', supplier:'Midlands Steel Supplies Ltd', total:1164.00, type:'price_discrepancy', exposure:1240, flags:[], age:'2d' },
+  { id:'INV-2026-0439', supplier:'Northern Freight Solutions', total:2280.00, type:'qty_discrepancy', exposure:980, flags:[], age:'3d' },
+  { id:'INV-2026-0438', supplier:'Acme Packaging Ltd', total:888.00, type:'no_po_found', exposure:740, flags:['bank_details_present'], age:'3d' },
+  { id:'INV-2026-0429', supplier:'Thames Logistics', total:3120.00, type:'price_discrepancy', exposure:610, flags:[], age:'5d' },
+  { id:'INV-2026-0427', supplier:'Midlands Steel Supplies Ltd', total:582.00, type:'supplier_mismatch', exposure:490, flags:[], age:'6d' },
+  { id:'INV-2026-0425', supplier:'Alpha Components', total:1440.00, type:'price_discrepancy', exposure:380, flags:[], age:'7d' },
+  { id:'INV-2026-0422', supplier:'B&Q Industrial', total:330.00, type:'no_po_found', exposure:330, flags:['subtotal_mismatch_with_lines'], age:'9d' },
+];
+
+const POS = [
+  { number:'PO-2026-0441', supplier:'Midlands Steel Supplies Ltd', issued:'2026-03-01', delivery:'2026-03-07', lines:3, total:970.00, status:'issued' },
+  { number:'PO-2026-0440', supplier:'Thornton Fixings Co', issued:'2026-03-01', delivery:'2026-03-06', lines:2, total:400.00, status:'fully_received' },
+  { number:'PO-2026-0439', supplier:'Northern Freight Solutions', issued:'2026-02-28', delivery:'2026-03-05', lines:4, total:1900.00, status:'partially_received' },
+  { number:'PO-2026-0438', supplier:'Thames Logistics', issued:'2026-02-27', delivery:'2026-03-04', lines:1, total:2600.00, status:'fully_received' },
+  { number:'PO-2026-0437', supplier:'Alpha Components', issued:'2026-02-25', delivery:'2026-03-03', lines:5, total:1200.00, status:'partially_received' },
+];
+
+const GRNS = [
+  { number:'GRN-2026-0321', po:'PO-2026-0440', supplier:'Thornton Fixings Co', received:'2026-03-05', by:'J. Hawkins', lines:2, discrepancies:0 },
+  { number:'GRN-2026-0320', po:'PO-2026-0439', supplier:'Northern Freight Solutions', received:'2026-03-04', by:'D. Patel', lines:4, discrepancies:1 },
+  { number:'GRN-2026-0319', po:'PO-2026-0438', supplier:'Thames Logistics', received:'2026-03-03', by:'J. Hawkins', lines:1, discrepancies:0 },
+  { number:'GRN-2026-0318', po:'PO-2026-0437', supplier:'Alpha Components', received:'2026-03-02', by:'S. Lee', lines:3, discrepancies:0 },
+];
+
+const SUPPLIERS_DATA = [
+  { name:'Midlands Steel Supplies Ltd', invoices:14, matchRate:78, avgVar:3.8, exposure:1730, score:64 },
+  { name:'Thornton Fixings Co', invoices:22, matchRate:96, avgVar:0.4, exposure:0, score:98 },
+  { name:'Northern Freight Solutions', invoices:18, matchRate:83, avgVar:2.1, exposure:980, score:79 },
+  { name:'Thames Logistics', invoices:11, matchRate:91, avgVar:1.2, exposure:610, score:88 },
+  { name:'Alpha Components', invoices:9, matchRate:89, avgVar:1.8, exposure:380, score:85 },
+  { name:'Acme Packaging Ltd', invoices:6, matchRate:67, avgVar:5.4, exposure:740, score:58 },
+];
+
+const ACTIVITY = [
+  { time:'09:47', id:'INV-2026-0441', supplier:'Midlands Steel Supplies Ltd', total:'£1,164', result:'price_discrepancy' },
+  { time:'09:31', id:'INV-2026-0440', supplier:'Thornton Fixings Co', total:'£480', result:'full_match' },
+  { time:'08:55', id:'INV-2026-0439', supplier:'Northern Freight Solutions', total:'£2,280', result:'qty_discrepancy' },
+  { time:'08:42', id:'INV-2026-0438', supplier:'Acme Packaging Ltd', total:'£888', result:'no_po_found' },
+  { time:'08:21', id:'INV-2026-0437', supplier:'Thames Logistics', total:'£3,120', result:'full_match' },
+  { time:'07:58', id:'INV-2026-0436', supplier:'Midlands Steel Supplies Ltd', total:'£582', result:'full_match' },
+];
+
+const MATCH_DETAIL = {
+  ex1: {
+    invoice: 'INV-2026-0441',
+    supplier: 'Midlands Steel Supplies Ltd',
+    invoiceDate: '2026-03-05',
+    poRef: 'PO-2026-0441',
+    grnRef: 'GRN-2026-0319',
+    total: '£1,164.00',
+    status: 'price_discrepancy',
+    score: 0.74,
+    confidence: 0.98,
+    fraudFlags: [],
+    lines: [
+      { desc:'Mild Steel Sheet 3mm 2500x1250mm', poPrice:48.50, invPrice:54.20, poQty:20, grnQty:20, invQty:20, status:'price_over' },
+      { desc:'Steel Bar 40x40mm 3m', poPrice:12.80, invPrice:12.80, poQty:10, grnQty:10, invQty:10, status:'matched' },
+      { desc:'Cutting & Handling', poPrice:150.00, invPrice:160.00, poQty:1, grnQty:1, invQty:1, status:'price_over' },
+    ]
+  }
+};
+
+// ─── Navigation ──────────────────────────────────────────────────────────────
+
+function showPage(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+
+  // Lazy render page content
+  const renderers = {
+    queue: renderQueue, exceptions: renderExceptions,
+    invoices: renderInvoices, 'purchase-orders': renderPOs,
+    grns: renderGRNs, suppliers: renderSuppliers,
+    connectors: renderConnectors, reports: renderReports,
+  };
+  if (renderers[id]) renderers[id]();
+}
+
+// ─── Status helpers ────────────────────────────────────────────────────────
+
+function statusBadge(status) {
+  const map = {
+    full_match:        ['badge-green', '✓ Full Match'],
+    partial_match:     ['badge-amber', '~ Partial'],
+    price_discrepancy: ['badge-red',   '↑ Price Issue'],
+    qty_discrepancy:   ['badge-amber', '⚠ Qty Issue'],
+    no_po_found:       ['badge-red',   '✗ No PO'],
+    no_grn_found:      ['badge-amber', '⚠ No GRN'],
+    supplier_mismatch: ['badge-red',   '✗ Supplier'],
+    approved:          ['badge-green', '✓ Approved'],
+    matched:           ['badge-blue',  '↻ Matched'],
+    exception:         ['badge-red',   '⚠ Exception'],
+    pending_extraction:['badge-muted', '⟳ Pending'],
+  };
+  const [cls, label] = map[status] || ['badge-muted', status];
+  return `<span class="badge ${cls}">${label}</span>`;
+}
+
+function scoreBar(score) {
+  const pct = Math.round(score * 100);
+  const col = pct >= 90 ? 'var(--green)' : pct >= 70 ? 'var(--amber)' : 'var(--red)';
+  return `<div style="display:flex;align-items:center;gap:8px">
+    <div class="score-bar" style="width:60px"><div class="score-fill" style="width:${pct}%;background:${col}"></div></div>
+    <span style="font-size:12px;color:${col}">${pct}%</span>
+  </div>`;
+}
+
+// ─── Render: Activity Feed ─────────────────────────────────────────────────
+
+function renderActivity() {
+  const tbody = document.getElementById('activityFeed');
+  tbody.innerHTML = ACTIVITY.map(a => `<tr>
+    <td style="color:var(--muted);font-size:12px">${a.time}</td>
+    <td class="primary">${a.id}</td>
+    <td>${a.supplier}</td>
+    <td style="color:var(--text)">${a.total}</td>
+    <td>${statusBadge(a.result)}</td>
+    <td><button class="btn btn-ghost btn-sm" onclick="openDetail('ex1')">View</button></td>
+  </tr>`).join('');
+}
+
+// ─── Render: Review Queue ─────────────────────────────────────────────────
+
+function renderQueue() {
+  const tbody = document.getElementById('queueTable');
+  tbody.innerHTML = QUEUE.map(q => `<tr data-status="${q.status}">
+    <td class="primary">${q.id}</td>
+    <td>${q.supplier}</td>
+    <td>${q.date}</td>
+    <td style="color:var(--text)">£${q.total.toLocaleString('en-GB',{minimumFractionDigits:2})}</td>
+    <td>${statusBadge(q.status)}</td>
+    <td style="color:var(--amber)">£${q.discrepancy.toFixed(2)}</td>
+    <td>${scoreBar(q.score)}</td>
+    <td style="display:flex;gap:6px">
+      <button class="btn btn-ghost btn-sm" onclick="openDetail('ex1')">Detail</button>
+      <button class="btn btn-green btn-sm" onclick="approveMatch(this,'${q.id}')">Approve</button>
+    </td>
+  </tr>`).join('');
+}
+
+function filterQueue(type, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#queueTable tr').forEach(tr => {
+    tr.style.display = (type === 'all' || tr.dataset.status === type) ? '' : 'none';
+  });
+}
+
+function searchQueue(val) {
+  const q = val.toLowerCase();
+  document.querySelectorAll('#queueTable tr').forEach(tr => {
+    tr.style.display = tr.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+
+// ─── Render: Exceptions ──────────────────────────────────────────────────
+
+function renderExceptions() {
+  const tbody = document.getElementById('exceptionsTable');
+  tbody.innerHTML = EXCEPTIONS.map(e => {
+    const flags = e.flags.map(f => `<span class="badge badge-red" style="font-size:10px">${f.replace(/_/g,' ')}</span>`).join(' ');
+    return `<tr>
+      <td class="primary">${e.id}</td>
+      <td>${e.supplier}</td>
+      <td style="color:var(--text)">£${e.total.toLocaleString('en-GB',{minimumFractionDigits:2})}</td>
+      <td>${statusBadge(e.type)}</td>
+      <td style="color:var(--red);font-weight:600">£${e.exposure.toLocaleString()}</td>
+      <td>${flags || '<span style="color:var(--muted);font-size:12px">None</span>'}</td>
+      <td style="color:var(--muted)">${e.age}</td>
+      <td style="display:flex;gap:6px">
+        <button class="btn btn-ghost btn-sm" onclick="openDetail('ex1')">Detail</button>
+        <button class="btn btn-ghost btn-sm" style="color:var(--red)" onclick="rejectMatch(this,'${e.id}')">Reject</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// ─── Render: Invoices ────────────────────────────────────────────────────
+
+function renderInvoices() {
+  const tbody = document.getElementById('invoicesTable');
+  tbody.innerHTML = INVOICES.map(inv => {
+    const confPct = Math.round(inv.confidence * 100);
+    const confCol = confPct >= 90 ? 'var(--green)' : confPct >= 80 ? 'var(--amber)' : 'var(--red)';
+    return `<tr data-status="${inv.status}">
+      <td class="primary">${inv.id}</td>
+      <td>${inv.supplier}</td>
+      <td>${inv.date}</td>
+      <td style="color:var(--text)">£${inv.total.toLocaleString('en-GB',{minimumFractionDigits:2})}</td>
+      <td>£${inv.vat.toLocaleString('en-GB',{minimumFractionDigits:2})}</td>
+      <td><span style="color:${confCol};font-weight:600">${confPct}%</span></td>
+      <td>${statusBadge(inv.status)}</td>
+      <td><button class="btn btn-ghost btn-sm" onclick="openDetail('ex1')">View</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function filterInvoices(status, btn) {
+  document.querySelectorAll('#invoicesTable').forEach(() => {});
+  const btns = document.querySelectorAll('#page-invoices .filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#invoicesTable tr').forEach(tr => {
+    tr.style.display = (status === 'all' || tr.dataset.status === status) ? '' : 'none';
+  });
+}
+
+// ─── Render: POs ─────────────────────────────────────────────────────────
+
+function renderPOs() {
+  const map = { issued:'badge-blue', partially_received:'badge-amber', fully_received:'badge-green' };
+  const labels = { issued:'Issued', partially_received:'Part Received', fully_received:'Fully Received' };
+  const tbody = document.getElementById('posTable');
+  tbody.innerHTML = POS.map(po => `<tr>
+    <td class="primary">${po.number}</td>
+    <td>${po.supplier}</td>
+    <td>${po.issued}</td>
+    <td>${po.delivery}</td>
+    <td style="color:var(--muted2)">${po.lines}</td>
+    <td style="color:var(--text)">£${po.total.toLocaleString('en-GB',{minimumFractionDigits:2})}</td>
+    <td><span class="badge ${map[po.status]}">${labels[po.status]}</span></td>
+  </tr>`).join('');
+}
+
+// ─── Render: GRNs ────────────────────────────────────────────────────────
+
+function renderGRNs() {
+  const tbody = document.getElementById('grnsTable');
+  tbody.innerHTML = GRNS.map(g => `<tr>
+    <td class="primary">${g.number}</td>
+    <td style="color:var(--blue)">${g.po}</td>
+    <td>${g.supplier}</td>
+    <td>${g.received}</td>
+    <td>${g.by}</td>
+    <td style="color:var(--muted2)">${g.lines}</td>
+    <td>${g.discrepancies > 0 ? `<span class="badge badge-amber">⚠ ${g.discrepancies} discrepancy</span>` : '<span class="badge badge-green">✓ None</span>'}</td>
+  </tr>`).join('');
+}
+
+// ─── Render: Suppliers ────────────────────────────────────────────────────
+
+function renderSuppliers() {
+  const tbody = document.getElementById('suppliersTable');
+  tbody.innerHTML = SUPPLIERS_DATA.map(s => {
+    const scoreCol = s.score >= 90 ? 'var(--green)' : s.score >= 75 ? 'var(--amber)' : 'var(--red)';
+    return `<tr>
+      <td class="primary">${s.name}</td>
+      <td>${s.invoices}</td>
+      <td>${scoreBar(s.matchRate / 100)}</td>
+      <td style="color:${s.avgVar > 3 ? 'var(--red)' : s.avgVar > 1 ? 'var(--amber)' : 'var(--green)'}">${s.avgVar}%</td>
+      <td style="color:${s.exposure > 0 ? 'var(--red)' : 'var(--muted2)'}">£${s.exposure.toLocaleString()}</td>
+      <td><span style="font-size:16px;font-weight:700;color:${scoreCol}">${s.score}</span><span style="color:var(--muted);font-size:12px">/100</span></td>
+    </tr>`;
+  }).join('');
+}
+
+// ─── Render: Connectors ──────────────────────────────────────────────────
+
+function renderConnectors() {
+  const connectors = [
+    { name:'Sage 200 Cloud', type:'ERP', status:'connected', lastSync:'2 minutes ago', detail:'Syncing POs, GRNs, Suppliers · Every 15 minutes · Token auto-renewing', icon:'🟢' },
+    { name:'Invoice Inbox (IMAP)', type:'Email', status:'connected', lastSync:'Just now', detail:'monitoring invoices@whitfieldlogistics.co.uk · Microsoft 365 · IDLE push connection', icon:'🟢' },
+    { name:'Xero', type:'Finance', status:'not_configured', lastSync:'—', detail:'Not connected — add Xero credentials in setup', icon:'⚪' },
+  ];
+  document.getElementById('connectorList').innerHTML = connectors.map(c => `
+    <div class="card" style="display:flex;align-items:center;gap:20px;padding:20px">
+      <div style="font-size:24px">${c.icon}</div>
+      <div style="flex:1">
+        <div style="font-weight:600;margin-bottom:2px">${c.name} <span class="badge badge-muted" style="margin-left:8px">${c.type}</span></div>
+        <div style="font-size:12px;color:var(--muted2)">${c.detail}</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div style="font-size:12px;color:var(--muted);margin-bottom:6px">Last sync: ${c.lastSync}</div>
+        ${c.status === 'connected'
+          ? '<span class="badge badge-green">Connected</span>'
+          : '<button class="btn btn-ghost btn-sm">Configure</button>'}
+      </div>
+    </div>`).join('');
+}
+
+// ─── Render: Reports Charts ───────────────────────────────────────────────
+
+function renderReports() {
+  setTimeout(() => {
+    if (document.getElementById('volumeChart')._chart) return;
+    const vCtx = document.getElementById('volumeChart').getContext('2d');
+    const vc = new Chart(vCtx, {
+      type: 'bar',
+      data: {
+        labels: ['W1 Feb','W2 Feb','W3 Feb','W4 Feb','W1 Mar'],
+        datasets: [
+          { label:'Full Match', data:[18,22,19,25,28], backgroundColor:'rgba(34,197,94,0.7)' },
+          { label:'Partial/Exception', data:[4,3,5,4,6], backgroundColor:'rgba(249,115,22,0.7)' },
+        ]
+      },
+      options: chartOpts()
+    });
+    document.getElementById('volumeChart')._chart = vc;
+
+    const dCtx = document.getElementById('discrepancyChart').getContext('2d');
+    new Chart(dCtx, {
+      type: 'doughnut',
+      data: {
+        labels:['Price Over', 'Qty Discrepancy', 'No PO Found', 'Supplier Mismatch'],
+        datasets:[{ data:[48,24,18,10], backgroundColor:['rgba(244,63,94,0.8)','rgba(245,158,11,0.8)','rgba(139,92,246,0.8)','rgba(59,130,246,0.8)'] }]
+      },
+      options: { responsive:true, plugins:{ legend:{ labels:{ color:'#94a3b8', font:{size:12} } } } }
+    });
+  }, 50);
+}
+
+// ─── Match Detail Panel ───────────────────────────────────────────────────
+
+function openDetail(key) {
+  const d = MATCH_DETAIL[key] || MATCH_DETAIL.ex1;
+  const scoreCol = d.score >= 0.9 ? 'var(--green)' : d.score >= 0.7 ? 'var(--amber)' : 'var(--red)';
+  const confPct = Math.round(d.confidence * 100);
+
+  const fraudSection = d.fraudFlags.length ? `
+    <div class="alert alert-red" style="margin-bottom:16px">
+      <div class="alert-icon">🚨</div>
+      <div class="alert-body"><div class="alert-title">Fraud flags detected</div>
+      <div class="alert-text">${d.fraudFlags.join(', ')}</div></div>
+    </div>` : '';
+
+  const linesHtml = d.lines.map(ln => {
+    const pv = ln.invPrice - ln.poPrice;
+    const pvPct = ((pv / ln.poPrice) * 100).toFixed(1);
+    const pvClass = pv > 0 ? 'variance-pos' : pv < 0 ? 'variance-neg' : 'variance-zero';
+    return `<tr>
+      <td class="primary" style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${ln.desc}</td>
+      <td>£${ln.poPrice.toFixed(2)}</td>
+      <td>£${ln.invPrice.toFixed(2)}</td>
+      <td class="${pvClass}">${pv > 0 ? '+' : ''}£${pv.toFixed(2)}<br><span style="font-size:11px">(${pvPct}%)</span></td>
+      <td>${ln.poQty}</td>
+      <td>${ln.grnQty}</td>
+      <td>${ln.invQty}</td>
+      <td>${statusBadge(ln.status)}</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('detailContent').innerHTML = `
+    <div style="margin-bottom:24px">
+      <div style="font-size:18px;font-weight:700;margin-bottom:4px">${d.invoice}</div>
+      <div style="color:var(--muted2)">${d.supplier}</div>
+    </div>
+    ${fraudSection}
+    <div class="detail-section">
+      <div class="detail-section-title">Match Summary</div>
+      <div class="detail-row"><span class="detail-key">Status</span><span class="detail-val">${statusBadge(d.status)}</span></div>
+      <div class="detail-row"><span class="detail-key">Match Score</span><span class="detail-val" style="color:${scoreCol}">${Math.round(d.score*100)}%</span></div>
+      <div class="detail-row"><span class="detail-key">AI Confidence</span><span class="detail-val">${confPct}%</span></div>
+      <div class="detail-row"><span class="detail-key">Invoice Total</span><span class="detail-val">${d.total}</span></div>
+      <div class="detail-row"><span class="detail-key">PO Reference</span><span class="detail-val" style="color:var(--blue)">${d.poRef}</span></div>
+      <div class="detail-row"><span class="detail-key">GRN Reference</span><span class="detail-val" style="color:var(--blue)">${d.grnRef}</span></div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-section-title">Line Comparison</div>
+      <div class="table-wrap">
+        <table class="line-table" style="font-size:12px">
+          <thead><tr><th>Description</th><th>PO Price</th><th>Inv Price</th><th>Variance</th><th>PO Qty</th><th>GRN Qty</th><th>Inv Qty</th><th>Status</th></tr></thead>
+          <tbody>${linesHtml}</tbody>
+        </table>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:24px">
+      <button class="btn btn-green" onclick="approveMatch(this,'${d.invoice}')">Approve Invoice</button>
+      <button class="btn btn-ghost" onclick="overrideMatch(this,'${d.invoice}')">Override</button>
+      <button class="btn btn-red" onclick="rejectMatch(this,'${d.invoice}')">Reject</button>
+    </div>`;
+
+  document.getElementById('detailOverlay').classList.add('open');
+}
+
+function closeDetail() {
+  document.getElementById('detailOverlay').classList.remove('open');
+}
+
+function closeDetailOutside(e) {
+  if (e.target === document.getElementById('detailOverlay')) closeDetail();
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDetail(); });
+
+// ─── Actions ──────────────────────────────────────────────────────────────
+
+function approveMatch(btn, id) {
+  const orig = btn.textContent;
+  btn.textContent = 'Approved ✓';
+  btn.style.background = 'rgba(34,197,94,0.2)';
+  btn.style.color = 'var(--green)';
+  btn.disabled = true;
+  setTimeout(() => closeDetail(), 800);
+}
+
+function rejectMatch(btn, id) {
+  const reason = prompt('Rejection reason (will be logged in audit trail):');
+  if (!reason) return;
+  btn.textContent = 'Rejected';
+  btn.style.background = 'rgba(244,63,94,0.15)';
+  btn.disabled = true;
+  setTimeout(() => closeDetail(), 600);
+}
+
+function overrideMatch(btn, id) {
+  const reason = prompt('Override reason (required for audit trail):');
+  if (!reason) return;
+  btn.textContent = 'Overridden ✓';
+  btn.style.background = 'rgba(139,92,246,0.15)';
+  btn.style.color = 'var(--purple)';
+  btn.disabled = true;
+  setTimeout(() => closeDetail(), 600);
+}
+
+function saveConfig(btn) {
+  const orig = btn.textContent;
+  btn.textContent = 'Saved ✓';
+  btn.style.background = 'rgba(34,197,94,0.15)';
+  btn.style.color = 'var(--green)';
+  setTimeout(() => { btn.textContent = orig; btn.style.background = ''; btn.style.color = ''; }, 2000);
+}
+
+// ─── Upload ───────────────────────────────────────────────────────────────
+
+function dragOver(e) { e.preventDefault(); document.getElementById('uploadZone').classList.add('drag'); }
+function dragLeave() { document.getElementById('uploadZone').classList.remove('drag'); }
+function dropFile(e) { e.preventDefault(); dragLeave(); if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]); }
+
+function handleFile(file) {
+  if (!file || file.type !== 'application/pdf') {
+    alert('Please upload a PDF file.');
+    return;
+  }
+  const status = document.getElementById('uploadStatus');
+  status.style.display = 'block';
+  status.innerHTML = `<div class="alert alert-blue" style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.2)">
+    <div class="alert-icon">⟳</div>
+    <div class="alert-body"><div class="alert-title">Processing ${file.name}</div>
+    <div class="alert-text">Claude AI is extracting invoice data… this takes ~30 seconds</div></div>
+  </div>`;
+  setTimeout(() => {
+    status.innerHTML = `<div class="alert alert-green">
+      <div class="alert-icon">✓</div>
+      <div class="alert-body"><div class="alert-title">Extraction complete — Full Match found</div>
+      <div class="alert-text">INV-2026-0442 · Thornton Fixings Co · £576.00 · Matched to PO-2026-0442 · Auto-approved (within tolerance)</div></div>
+    </div>`;
+  }, 2800);
+}
+
+// ─── Dashboard Chart ──────────────────────────────────────────────────────
+
+function chartOpts() {
+  return {
+    responsive: true,
+    plugins: { legend: { labels: { color: '#94a3b8', font: { size: 12 } } } },
+    scales: {
+      x: { ticks: { color: '#64748b' }, grid: { color: 'rgba(255,255,255,0.04)' } },
+      y: { ticks: { color: '#64748b' }, grid: { color: 'rgba(255,255,255,0.04)' } },
+    }
+  };
+}
+
+// ─── Init ─────────────────────────────────────────────────────────────────
+
+window.addEventListener('DOMContentLoaded', () => {
+  renderActivity();
+
+  // Dashboard match outcome chart
+  setTimeout(() => {
+    const ctx = document.getElementById('matchChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['W1','W2','W3','W4','W5 (MTD)'],
+        datasets: [
+          { label:'Full Match', data:[22,28,19,24,34], backgroundColor:'rgba(34,197,94,0.7)', borderRadius:4 },
+          { label:'Partial Match', data:[3,4,3,5,4], backgroundColor:'rgba(59,130,246,0.6)', borderRadius:4 },
+          { label:'Exception', data:[2,1,3,2,3], backgroundColor:'rgba(244,63,94,0.6)', borderRadius:4 },
+        ]
+      },
+      options: { ...chartOpts(), scales: { x: { stacked:true, ticks:{color:'#64748b'}, grid:{color:'rgba(255,255,255,0.04)'} }, y: { stacked:true, ticks:{color:'#64748b'}, grid:{color:'rgba(255,255,255,0.04)'} } } }
+    });
+  }, 100);
+});
+</script>
+</body>
+</html>
