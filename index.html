@@ -3,10 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Backbone AI — Managed AI Operations for British Business</title>
+
+  <!-- Primary SEO -->
+  <title>Backbone AI — Operational Intelligence for UK Manufacturing &amp; Logistics</title>
+  <meta name="description" content="Backbone AI connects your operational data, surfaces hidden cost leaks, and automates the root causes — for UK manufacturing and logistics businesses. Paid on results." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://backboneai.co.uk/" />
+
+  <!-- Favicon -->
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://backboneai.co.uk/" />
+  <meta property="og:title" content="Backbone AI — Operational Intelligence for UK Manufacturing &amp; Logistics" />
+  <meta property="og:description" content="We surface hidden cost leaks, automate the root causes, and run the AI systems permanently. Paid on results — retainer plus performance share." />
+  <meta property="og:site_name" content="Backbone AI" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Backbone AI — Operational Intelligence for UK Manufacturing &amp; Logistics" />
+  <meta name="twitter:description" content="We surface hidden cost leaks, automate the root causes, and run the AI systems permanently. Paid on results." />
+
+  <!-- Google Fonts — loaded non-blocking to avoid render delay -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" />
+  <link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" /></noscript>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -114,6 +138,7 @@
       position: absolute; border-radius: 50%;
       filter: blur(120px); opacity: 0.15;
       animation: drift 8s ease-in-out infinite alternate;
+      will-change: transform;
     }
     .hero-orb-1 {
       width: 600px; height: 600px;
@@ -721,6 +746,8 @@
     }
 
     .auto-card {
+      display: block;
+      text-decoration: none; color: inherit;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 18px; overflow: hidden;
@@ -1146,6 +1173,24 @@
       footer { padding: 32px 24px; }
     }
   </style>
+
+  <!-- Structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "Backbone AI",
+    "url": "https://backboneai.co.uk",
+    "description": "Managed operational intelligence service for UK manufacturing and logistics businesses. We connect operational data, surface hidden inefficiencies, and automate the root causes — paid on results.",
+    "areaServed": {
+      "@type": "Country",
+      "name": "United Kingdom"
+    },
+    "knowsAbout": ["AI automation", "Operational intelligence", "Manufacturing", "Logistics", "Invoice processing", "Route optimisation", "Compliance automation"],
+    "priceRange": "£££",
+    "serviceType": "Managed AI Operations"
+  }
+  </script>
 </head>
 <body>
 
@@ -1351,7 +1396,7 @@
 
       <div class="automation-grid">
 
-        <div class="auto-card reveal reveal-delay-1" onclick="window.location.href='dashboard.html'">
+        <a class="auto-card reveal reveal-delay-1" href="dashboard.html">
           <div class="auto-card-header">
             <div class="auto-card-icon" style="background:rgba(59,130,246,0.12);">🧾</div>
             <div>
@@ -1379,9 +1424,9 @@
             <span class="auto-payback">Pays back in <strong>&lt; 2 months</strong></span>
             <span class="auto-see-more">See live demo →</span>
           </div>
-        </div>
+        </a>
 
-        <div class="auto-card reveal reveal-delay-2" onclick="window.location.href='dashboard.html'">
+        <a class="auto-card reveal reveal-delay-2" href="dashboard.html">
           <div class="auto-card-header">
             <div class="auto-card-icon" style="background:rgba(6,182,212,0.12);">📋</div>
             <div>
@@ -1409,9 +1454,9 @@
             <span class="auto-payback">Pays back in <strong>&lt; 2 months</strong></span>
             <span class="auto-see-more">See live demo →</span>
           </div>
-        </div>
+        </a>
 
-        <div class="auto-card reveal reveal-delay-3" onclick="window.location.href='dashboard.html'">
+        <a class="auto-card reveal reveal-delay-3" href="dashboard.html">
           <div class="auto-card-header">
             <div class="auto-card-icon" style="background:rgba(139,92,246,0.12);">🚚</div>
             <div>
@@ -1439,9 +1484,9 @@
             <span class="auto-payback">Pays back in <strong>&lt; 1 month</strong></span>
             <span class="auto-see-more">See live demo →</span>
           </div>
-        </div>
+        </a>
 
-        <div class="auto-card reveal reveal-delay-1" onclick="window.location.href='dashboard.html'">
+        <a class="auto-card reveal reveal-delay-1" href="dashboard.html">
           <div class="auto-card-header">
             <div class="auto-card-icon" style="background:rgba(251,146,60,0.12);">📊</div>
             <div>
@@ -1469,9 +1514,9 @@
             <span class="auto-payback">Pays back in <strong>&lt; 3 months</strong></span>
             <span class="auto-see-more">See live demo →</span>
           </div>
-        </div>
+        </a>
 
-        <div class="auto-card reveal reveal-delay-2" onclick="window.location.href='dashboard.html'">
+        <a class="auto-card reveal reveal-delay-2" href="dashboard.html">
           <div class="auto-card-header">
             <div class="auto-card-icon" style="background:rgba(34,197,94,0.12);">🛡️</div>
             <div>
@@ -1499,9 +1544,9 @@
             <span class="auto-payback">Pays back in <strong>&lt; 2 months</strong></span>
             <span class="auto-see-more">See live demo →</span>
           </div>
-        </div>
+        </a>
 
-        <div class="auto-card reveal reveal-delay-3" onclick="window.location.href='dashboard.html'">
+        <a class="auto-card reveal reveal-delay-3" href="dashboard.html">
           <div class="auto-card-header">
             <div class="auto-card-icon" style="background:rgba(244,63,94,0.12);">📦</div>
             <div>
@@ -1529,7 +1574,7 @@
             <span class="auto-payback">Pays back in <strong>&lt; 1 month</strong></span>
             <span class="auto-see-more">See live demo →</span>
           </div>
-        </div>
+        </a>
 
       </div>
 
@@ -1783,7 +1828,7 @@
           </div>
           <div style="display: inline-block; background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.25); color: var(--blue-bright); font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 100px; margin-bottom: 16px; letter-spacing: 1px; text-transform: uppercase;">Current focus</div>
           <h3>Manufacturing &amp; Logistics</h3>
-          <p>Two of Britain's most operationally complex, paper-heavy, and AI-underserved sectors. 83% of firms have no AI in place — yet the use cases are consistent, high-value, and immediately deployable across every site and fleet.</p>
+          <p>Two of Britain's most operationally complex, paper-heavy, and AI-underserved sectors. Only 5% of UK manufacturers currently use AI (ONS, 2025) — yet the use cases are consistent, high-value, and immediately deployable across every site and fleet.</p>
 
           <div style="font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; margin-top: 24px;">Manufacturing</div>
           <div class="use-cases" style="margin-bottom: 20px;">
@@ -1910,35 +1955,35 @@
           <div class="form-fields">
             <div class="form-row">
               <div class="form-group" style="margin-bottom:0">
-                <label class="form-label">First name</label>
-                <input class="form-input" type="text" placeholder="James" />
+                <label class="form-label" for="f-first">First name</label>
+                <input class="form-input" id="f-first" type="text" placeholder="James" autocomplete="given-name" />
               </div>
               <div class="form-group" style="margin-bottom:0">
-                <label class="form-label">Last name</label>
-                <input class="form-input" type="text" placeholder="Whitfield" />
+                <label class="form-label" for="f-last">Last name</label>
+                <input class="form-input" id="f-last" type="text" placeholder="Whitfield" autocomplete="family-name" />
               </div>
             </div>
 
             <div class="form-group">
-              <label class="form-label">Business name</label>
-              <input class="form-input" type="text" placeholder="Whitfield Manufacturing Ltd" />
+              <label class="form-label" for="f-business">Business name</label>
+              <input class="form-input" id="f-business" type="text" placeholder="Whitfield Manufacturing Ltd" autocomplete="organization" />
             </div>
 
             <div class="form-row">
               <div class="form-group" style="margin-bottom:0">
-                <label class="form-label">Work email</label>
-                <input class="form-input" type="email" placeholder="james@whitfield.co.uk" />
+                <label class="form-label" for="f-email">Work email</label>
+                <input class="form-input" id="f-email" type="email" placeholder="james@whitfield.co.uk" autocomplete="email" />
               </div>
               <div class="form-group" style="margin-bottom:0">
-                <label class="form-label">Phone number</label>
-                <input class="form-input" type="tel" placeholder="+44 7700 000000" />
+                <label class="form-label" for="f-phone">Phone number</label>
+                <input class="form-input" id="f-phone" type="tel" placeholder="+44 7700 000000" autocomplete="tel" />
               </div>
             </div>
 
             <div class="form-row">
               <div class="form-group" style="margin-bottom:0">
-                <label class="form-label">Sector</label>
-                <select class="form-select">
+                <label class="form-label" for="f-sector">Sector</label>
+                <select class="form-select" id="f-sector">
                   <option value="" disabled selected>Select your sector</option>
                   <option>Manufacturing</option>
                   <option>Logistics &amp; Distribution</option>
@@ -1950,8 +1995,8 @@
                 </select>
               </div>
               <div class="form-group" style="margin-bottom:0">
-                <label class="form-label">Company size</label>
-                <select class="form-select">
+                <label class="form-label" for="f-size">Company size</label>
+                <select class="form-select" id="f-size">
                   <option value="" disabled selected>No. of employees</option>
                   <option>1–10</option>
                   <option>11–50</option>
@@ -1963,14 +2008,14 @@
             </div>
 
             <div class="form-group">
-              <label class="form-label">What software does your team currently use?</label>
-              <input class="form-input" type="text" placeholder="e.g. SAP, Sage, Excel, Xero, custom spreadsheets, paper-based..." />
+              <label class="form-label" for="f-software">What software does your team currently use?</label>
+              <input class="form-input" id="f-software" type="text" placeholder="e.g. SAP, Sage, Excel, Xero, custom spreadsheets, paper-based..." />
             </div>
 
             <div class="form-row">
               <div class="form-group" style="margin-bottom:0">
-                <label class="form-label">Hours/week spent on manual admin</label>
-                <select class="form-select">
+                <label class="form-label" for="f-hours">Hours/week spent on manual admin</label>
+                <select class="form-select" id="f-hours">
                   <option value="" disabled selected>Estimate across your team</option>
                   <option>Less than 5 hours</option>
                   <option>5–15 hours</option>
@@ -1980,8 +2025,8 @@
                 </select>
               </div>
               <div class="form-group" style="margin-bottom:0">
-                <label class="form-label">Annual turnover (approx)</label>
-                <select class="form-select">
+                <label class="form-label" for="f-turnover">Annual turnover (approx)</label>
+                <select class="form-select" id="f-turnover">
                   <option value="" disabled selected>Select range</option>
                   <option>Under £500k</option>
                   <option>£500k – £2m</option>
@@ -1993,8 +2038,8 @@
             </div>
 
             <div class="form-group">
-              <label class="form-label">What's your biggest operational headache right now?</label>
-              <textarea class="form-textarea" placeholder="e.g. Our quality control reports take 4 hours a day to compile manually. We also struggle to keep on top of supplier invoices..."></textarea>
+              <label class="form-label" for="f-headache">What's your biggest operational headache right now?</label>
+              <textarea class="form-textarea" id="f-headache" placeholder="e.g. Our quality control reports take 4 hours a day to compile manually. We also struggle to keep on top of supplier invoices..."></textarea>
             </div>
 
             <!-- Upload zone -->
@@ -2158,15 +2203,18 @@
     }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
     reveals.forEach(el => observer.observe(el));
 
-    // Nav scroll effect
+    // Nav scroll effect — passive listener + RAF throttle for performance
     const nav = document.querySelector('nav');
+    let scrollTicking = false;
     window.addEventListener('scroll', () => {
-      if (window.scrollY > 50) {
-        nav.style.borderBottomColor = 'rgba(255,255,255,0.12)';
-      } else {
-        nav.style.borderBottomColor = 'rgba(255,255,255,0.08)';
+      if (!scrollTicking) {
+        requestAnimationFrame(() => {
+          nav.style.borderBottomColor = window.scrollY > 50 ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.08)';
+          scrollTicking = false;
+        });
+        scrollTicking = true;
       }
-    });
+    }, { passive: true });
 
     // Smooth scroll for nav links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
