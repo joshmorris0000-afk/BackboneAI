@@ -1075,6 +1075,79 @@
       .intake-form { padding: 28px 24px; }
     }
 
+    /* ─── SERVICES ─── */
+    .services-section { background: var(--bg2); }
+
+    .services-tier-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+      margin-top: 64px;
+    }
+
+    .svc-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 20px; padding: 36px;
+      position: relative; overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s;
+      display: flex; flex-direction: column;
+    }
+    .svc-card:hover { border-color: rgba(59,130,246,0.3); transform: translateY(-4px); }
+
+    .svc-card-top-bar {
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    }
+    .svc-card-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; margin-bottom: 20px;
+    }
+    .svc-card-tier { font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+    .svc-card h3 { font-size: 19px; font-weight: 900; letter-spacing: -0.5px; margin-bottom: 10px; }
+    .svc-card p { font-size: 14px; color: var(--muted2); line-height: 1.7; margin-bottom: 20px; }
+
+    .svc-list { display: flex; flex-direction: column; gap: 9px; flex: 1; }
+    .svc-list li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 13px; color: var(--muted2); list-style: none;
+    }
+    .svc-list li::before {
+      content: '';
+      width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 5px;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+    }
+    .svc-cta-link {
+      display: inline-block; margin-top: 24px;
+      font-size: 13px; font-weight: 700; color: var(--blue-bright);
+      text-decoration: none;
+    }
+    .svc-cta-link:hover { text-decoration: underline; }
+
+    .svc-addons-label {
+      font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+      color: var(--muted); margin: 64px 0 24px;
+    }
+    .svc-addons-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+    }
+    .svc-addon {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 14px; padding: 22px;
+      transition: border-color 0.3s;
+    }
+    .svc-addon:hover { border-color: rgba(59,130,246,0.2); }
+    .svc-addon-name { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+    .svc-addon-desc { font-size: 13px; color: var(--muted2); line-height: 1.5; margin-bottom: 10px; }
+    .svc-addon-who { font-size: 11px; color: var(--muted); font-style: italic; }
+
+    @media (max-width: 900px) {
+      .services-tier-grid { grid-template-columns: 1fr; }
+      .svc-addons-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      .svc-addons-grid { grid-template-columns: 1fr; }
+    }
+
     /* ─── CTA ─── */
     .cta-section { text-align: center; position: relative; overflow: hidden; }
 
@@ -1204,6 +1277,7 @@
       <li><a href="#problem">The Problem</a></li>
       <li><a href="#what">What We Do</a></li>
       <li><a href="#how">How It Works</a></li>
+      <li><a href="#services">Services</a></li>
       <li><a href="#pricing">Pricing</a></li>
       <li><a href="#intake">Work With Us</a></li>
       <li><a href="client.html" style="color:var(--muted2);">Client Login</a></li>
@@ -1742,6 +1816,108 @@
     </div>
   </section>
 
+  <!-- ─── SERVICES ─── -->
+  <section class="services-section" id="services">
+    <div class="container">
+      <div class="section-label reveal">What You Get</div>
+      <h2 class="section-heading reveal">Clear deliverables.<br />No ambiguity.</h2>
+      <p class="section-sub reveal">Every engagement starts with a defined scope. Here's exactly what's included in the core retainer, what you can add, and what we can build for you on a project basis.</p>
+
+      <div class="services-tier-grid">
+
+        <!-- Core Retainer -->
+        <div class="svc-card reveal reveal-delay-1">
+          <div class="svc-card-top-bar" style="background:linear-gradient(90deg,var(--blue),var(--cyan));"></div>
+          <div class="svc-card-icon" style="background:rgba(59,130,246,0.12);">📡</div>
+          <div class="svc-card-tier">Core retainer</div>
+          <h3>Managed Intelligence</h3>
+          <p>The foundation of every engagement. We connect your systems, run the AI permanently, and surface the insight — you focus on the business.</p>
+          <ul class="svc-list">
+            <li>System integration &amp; ongoing data pipeline</li>
+            <li>Live KPI dashboard with real-time updates</li>
+            <li>Weekly automated insight reports</li>
+            <li>Monthly performance review call</li>
+            <li>Anomaly alerts (cost spikes, SLA misses, stock gaps)</li>
+            <li>Dedicated UK-based account manager</li>
+            <li>UK GDPR &amp; ICO compliance built in</li>
+          </ul>
+          <a href="#pricing" class="svc-cta-link">See pricing plans →</a>
+        </div>
+
+        <!-- Add-Ons -->
+        <div class="svc-card reveal reveal-delay-2">
+          <div class="svc-card-top-bar" style="background:linear-gradient(90deg,#8b5cf6,#06b6d4);"></div>
+          <div class="svc-card-icon" style="background:rgba(139,92,246,0.12);">⚡</div>
+          <div class="svc-card-tier">Billable add-ons</div>
+          <h3>Specialist Modules</h3>
+          <p>Targeted analysis for specific pain points. Added on top of any retainer plan when you need deeper coverage in a particular area.</p>
+          <ul class="svc-list">
+            <li>Supplier scorecard — ranked by on-time delivery, invoice accuracy, price drift</li>
+            <li>Fleet efficiency audit — idle time, out-of-route mileage, fuel analysis</li>
+            <li>Labour productivity report — output-per-shift, overtime patterns</li>
+            <li>Cash flow visibility — AP/AR timing vs stock commitments</li>
+            <li>Carbon baseline — Scope 1 &amp; 2 from fleet &amp; utilities data</li>
+            <li>Custom KPI dashboards for board reporting</li>
+          </ul>
+          <a href="services.html" class="svc-cta-link">See all modules →</a>
+        </div>
+
+        <!-- Project Work -->
+        <div class="svc-card reveal reveal-delay-3">
+          <div class="svc-card-top-bar" style="background:linear-gradient(90deg,#f97316,#f59e0b);"></div>
+          <div class="svc-card-icon" style="background:rgba(249,115,22,0.12);">🛠</div>
+          <div class="svc-card-tier">Project work</div>
+          <h3>One-Off Engagements</h3>
+          <p>Structured projects with a defined deliverable. Fixed price, fixed scope, no scope creep. Natural entry point if you want to test us before committing to a retainer.</p>
+          <ul class="svc-list">
+            <li>Process efficiency audit — map operational flows, identify top leaks, prioritised action plan</li>
+            <li>ERP &amp; system selection — spec, evaluate vendors, manage data migration</li>
+            <li>Custom integration build — connect any system not in our standard library</li>
+            <li>Data quality audit — clean, standardise, and document your operational data</li>
+          </ul>
+          <a href="services.html#projects" class="svc-cta-link">View project options →</a>
+        </div>
+
+      </div>
+
+      <!-- Add-on spotlight -->
+      <div class="svc-addons-label reveal">What our clients add most</div>
+      <div class="svc-addons-grid">
+        <div class="svc-addon reveal reveal-delay-1">
+          <div class="svc-addon-name">Supplier Scorecard</div>
+          <div class="svc-addon-desc">Ranked supplier performance by on-time %, invoice accuracy, and price drift vs market. Delivered monthly.</div>
+          <div class="svc-addon-who">Added by 70% of logistics clients</div>
+        </div>
+        <div class="svc-addon reveal reveal-delay-2">
+          <div class="svc-addon-name">Fleet Efficiency Audit</div>
+          <div class="svc-addon-desc">Idle time, out-of-route mileage, and driver behaviour scoring across your entire fleet. Identifies fuel savings in week 1.</div>
+          <div class="svc-addon-who">Added by 85% of transport clients</div>
+        </div>
+        <div class="svc-addon reveal reveal-delay-3">
+          <div class="svc-addon-name">Carbon Baseline Report</div>
+          <div class="svc-addon-desc">Scope 1 &amp; 2 emissions from fleet and utility data you're already sharing with us. Ready for ESG reporting in 48 hours.</div>
+          <div class="svc-addon-who">Increasingly required by large-customer contracts</div>
+        </div>
+        <div class="svc-addon reveal reveal-delay-1">
+          <div class="svc-addon-name">Labour Productivity Report</div>
+          <div class="svc-addon-desc">Output-per-shift, overtime patterns, and agency vs permanent cost split. Updated weekly.</div>
+          <div class="svc-addon-who">Manufacturing &amp; warehousing clients</div>
+        </div>
+        <div class="svc-addon reveal reveal-delay-2">
+          <div class="svc-addon-name">Cash Flow Visibility</div>
+          <div class="svc-addon-desc">AP/AR timing overlaid with stock commitments — shows real liquidity vs nominal P&amp;L. Flags gaps 6 weeks ahead.</div>
+          <div class="svc-addon-who">Finance directors &amp; owner-managers</div>
+        </div>
+        <div class="svc-addon reveal reveal-delay-3">
+          <div class="svc-addon-name">Board Reporting Pack</div>
+          <div class="svc-addon-desc">Auto-generated monthly management report combining all KPIs, trends, and recommended actions. Ready for your board meeting.</div>
+          <div class="svc-addon-who">Scale &amp; Backbone clients</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
   <!-- ─── PRICING ─── -->
   <section id="pricing" style="background: var(--bg2);">
     <div class="container">
@@ -2113,6 +2289,8 @@
       <a href="#problem">The Problem</a>
       <a href="#what">What We Do</a>
       <a href="#how">How It Works</a>
+      <a href="#services">Services</a>
+      <a href="services.html">Full Service Guide</a>
       <a href="#pricing">Pricing</a>
       <a href="#industries">Industries</a>
       <a href="#contact">Contact</a>
