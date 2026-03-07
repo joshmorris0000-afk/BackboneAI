@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Monthly Operations Report — March 2026 — Whitfield Logistics Ltd</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue: #3b82f6;
+      --cyan: #06b6d4;
+      --green: #16a34a;
+      --orange: #ea580c;
+      --red: #dc2626;
+      --text: #0f172a;
+      --muted: #64748b;
+      --muted2: #94a3b8;
+      --border: #e2e8f0;
+      --bg-light: #f8fafc;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background: #fff;
+      font-size: 11pt;
+      line-height: 1.5;
+    }
+
+    /* ─── PRINT CONTROLS (screen only) ─── */
+    .print-bar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: #1e293b; padding: 12px 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      print-color-adjust: exact;
+    }
+    .print-bar-logo {
+      display: flex; align-items: center; gap: 10px;
+      color: #f1f5f9; font-size: 15px; font-weight: 700;
+    }
+    .print-bar-logo-icon {
+      width: 28px; height: 28px;
+      background: linear-gradient(135deg, #3b82f6, #06b6d4);
+      border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 900; color: #fff;
+    }
+    .print-bar-actions { display: flex; gap: 10px; }
+    .print-btn {
+      padding: 8px 20px; border-radius: 7px;
+      font-size: 13px; font-weight: 700; cursor: pointer;
+      font-family: 'Inter', sans-serif; border: none;
+    }
+    .print-btn-primary { background: #3b82f6; color: #fff; }
+    .print-btn-ghost { background: rgba(255,255,255,0.08); color: #94a3b8; }
+    .print-btn:hover { opacity: 0.85; }
+
+    /* ─── PAGE WRAPPER ─── */
+    .page {
+      max-width: 800px;
+      margin: 80px auto 60px;
+      padding: 0 40px;
+    }
+
+    /* ─── HEADER ─── */
+    .report-header {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      padding-bottom: 24px;
+      border-bottom: 3px solid var(--blue);
+      margin-bottom: 32px;
+    }
+    .report-brand {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .report-brand-icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, #3b82f6, #06b6d4);
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 900; color: #fff;
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
+    .report-brand-name { font-size: 16px; font-weight: 800; color: var(--text); }
+    .report-brand-tag  { font-size: 10px; color: var(--muted); font-weight: 500; }
+    .report-meta { text-align: right; }
+    .report-meta-title { font-size: 18px; font-weight: 900; color: var(--text); letter-spacing: -0.5px; }
+    .report-meta-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+    .report-meta-client { font-size: 12px; font-weight: 700; color: var(--blue); margin-top: 2px; }
+
+    /* ─── SECTIONS ─── */
+    .section { margin-bottom: 32px; }
+    .section-title {
+      font-size: 10pt; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 1px; color: var(--blue);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 6px; margin-bottom: 14px;
+    }
+
+    /* ─── KPI ROW ─── */
+    .kpi-row {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+      margin-bottom: 8px;
+    }
+    .kpi-box {
+      background: var(--bg-light); border: 1px solid var(--border);
+      border-radius: 8px; padding: 14px 16px;
+      print-color-adjust: exact; -webkit-print-color-adjust: exact;
+    }
+    .kpi-label { font-size: 9pt; color: var(--muted); margin-bottom: 4px; }
+    .kpi-value { font-size: 20pt; font-weight: 900; letter-spacing: -0.5px; }
+    .kpi-change { font-size: 9pt; margin-top: 2px; font-weight: 600; }
+    .up   { color: var(--green); }
+    .down { color: var(--red); }
+
+    /* ─── SUMMARY TABLE ─── */
+    table {
+      width: 100%; border-collapse: collapse; font-size: 10pt;
+    }
+    thead th {
+      background: var(--bg-light); text-align: left;
+      padding: 8px 12px; font-size: 9pt; font-weight: 700;
+      color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px;
+      border-bottom: 1px solid var(--border);
+      print-color-adjust: exact; -webkit-print-color-adjust: exact;
+    }
+    tbody td {
+      padding: 9px 12px; border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    tbody tr:last-child td { border-bottom: none; }
+    .td-name { font-weight: 700; }
+    .td-muted { color: var(--muted); font-size: 9pt; }
+    .status-live {
+      display: inline-block; background: #dcfce7; color: var(--green);
+      font-size: 9pt; font-weight: 700; padding: 2px 8px; border-radius: 4px;
+      print-color-adjust: exact; -webkit-print-color-adjust: exact;
+    }
+    .status-setup {
+      display: inline-block; background: #eff6ff; color: var(--blue);
+      font-size: 9pt; font-weight: 700; padding: 2px 8px; border-radius: 4px;
+      print-color-adjust: exact; -webkit-print-color-adjust: exact;
+    }
+    .saving { font-weight: 700; color: var(--green); }
+
+    /* ─── ANOMALIES ─── */
+    .anomaly-list { display: flex; flex-direction: column; gap: 10px; }
+    .anomaly-item {
+      display: flex; gap: 12px; align-items: flex-start;
+      background: var(--bg-light); border: 1px solid var(--border);
+      border-left: 3px solid var(--orange);
+      border-radius: 0 8px 8px 0; padding: 12px 14px;
+      print-color-adjust: exact; -webkit-print-color-adjust: exact;
+    }
+    .anomaly-item.resolved { border-left-color: var(--green); }
+    .anomaly-icon { font-size: 14pt; flex-shrink: 0; margin-top: 1px; }
+    .anomaly-title { font-size: 10pt; font-weight: 700; margin-bottom: 3px; }
+    .anomaly-desc  { font-size: 9pt; color: var(--muted); line-height: 1.5; }
+    .anomaly-status { font-size: 9pt; font-weight: 700; margin-top: 4px; }
+    .anomaly-status.open     { color: var(--orange); }
+    .anomaly-status.actioned { color: var(--green); }
+
+    /* ─── SUPPLIER TABLE ─── */
+    .pct-bar-wrap { background: var(--border); border-radius: 4px; height: 6px; width: 80px; display: inline-block; vertical-align: middle; margin-right: 6px; }
+    .pct-bar { height: 6px; border-radius: 4px; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+
+    /* ─── RECOMMENDATIONS ─── */
+    .rec-list { display: flex; flex-direction: column; gap: 10px; }
+    .rec-item {
+      display: flex; gap: 12px; align-items: flex-start;
+    }
+    .rec-num {
+      width: 22px; height: 22px; background: var(--blue); color: #fff;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 9pt; font-weight: 900; flex-shrink: 0; margin-top: 1px;
+      print-color-adjust: exact; -webkit-print-color-adjust: exact;
+    }
+    .rec-title { font-size: 10pt; font-weight: 700; margin-bottom: 2px; }
+    .rec-body  { font-size: 9pt; color: var(--muted); line-height: 1.5; }
+
+    /* ─── FOOTER ─── */
+    .report-footer {
+      margin-top: 40px; padding-top: 16px;
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between;
+      font-size: 9pt; color: var(--muted);
+    }
+
+    /* ─── PRINT STYLES ─── */
+    @media print {
+      .print-bar { display: none; }
+      .page { margin-top: 20px; }
+      body { font-size: 10pt; }
+      @page { margin: 18mm 16mm; }
+    }
+    @media screen {
+      body { background: #e2e8f0; }
+      .page {
+        background: #fff;
+        box-shadow: 0 4px 40px rgba(0,0,0,0.12);
+        border-radius: 4px;
+        padding: 48px 56px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Screen-only print bar -->
+  <div class="print-bar">
+    <div class="print-bar-logo">
+      <div class="print-bar-logo-icon">B</div>
+      Backbone AI
+    </div>
+    <div class="print-bar-actions">
+      <button class="print-btn print-btn-ghost" onclick="window.close()">Close</button>
+      <button class="print-btn print-btn-primary" onclick="window.print()">Save as PDF</button>
+    </div>
+  </div>
+
+  <div class="page">
+
+    <!-- HEADER -->
+    <div class="report-header">
+      <div class="report-brand">
+        <div class="report-brand-icon">B</div>
+        <div>
+          <div class="report-brand-name">Backbone AI</div>
+          <div class="report-brand-tag">Operational Intelligence</div>
+        </div>
+      </div>
+      <div class="report-meta">
+        <div class="report-meta-title">Monthly Operations Report</div>
+        <div class="report-meta-sub">Period: 1 March 2026 – 31 March 2026 · Generated: 1 April 2026</div>
+        <div class="report-meta-client">Whitfield Logistics Ltd · Scale Plan</div>
+      </div>
+    </div>
+
+    <!-- EXECUTIVE SUMMARY KPIs -->
+    <div class="section">
+      <div class="section-title">Executive Summary</div>
+      <div class="kpi-row">
+        <div class="kpi-box">
+          <div class="kpi-label">Total Cost Saved</div>
+          <div class="kpi-value" style="color:var(--green);">£13,100</div>
+          <div class="kpi-change up">↑ +18% vs February</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">Hours Saved</div>
+          <div class="kpi-value" style="color:var(--blue);">192h</div>
+          <div class="kpi-change up">↑ +12% vs February</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">Items Automated</div>
+          <div class="kpi-value" style="color:#7c3aed;">1,847</div>
+          <div class="kpi-change up">↑ +24% vs February</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">Monthly ROI</div>
+          <div class="kpi-value" style="color:var(--green);">3.7×</div>
+          <div class="kpi-change up">↑ vs 2.8× February</div>
+        </div>
+      </div>
+      <p style="font-size:9.5pt;color:var(--muted);margin-top:10px;line-height:1.7;">March was the strongest month since go-live. All five automations are now fully operational, with invoice processing and route optimisation delivering above-forecast savings. The ROI of 3.7× on the monthly retainer represents a net gain of £9,475 after all Backbone AI fees are deducted.</p>
+    </div>
+
+    <!-- AUTOMATION PERFORMANCE -->
+    <div class="section">
+      <div class="section-title">Automation Performance — March 2026</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Automation</th>
+            <th>Status</th>
+            <th>Volume</th>
+            <th>Hours Saved</th>
+            <th>Cost Saved</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="td-name">Invoice Processing</div>
+              <div class="td-muted">AI extraction, PO matching &amp; anomaly detection</div>
+            </td>
+            <td><span class="status-live">Live</span></td>
+            <td>312 invoices</td>
+            <td>47h</td>
+            <td class="saving">£2,100</td>
+          </tr>
+          <tr>
+            <td>
+              <div class="td-name">Route Optimisation</div>
+              <div class="td-muted">Dynamic daily replanning · 20 vehicles</div>
+            </td>
+            <td><span class="status-live">Live</span></td>
+            <td>1,840 miles saved</td>
+            <td>60h</td>
+            <td class="saving">£3,800</td>
+          </tr>
+          <tr>
+            <td>
+              <div class="td-name">Supplier Intelligence</div>
+              <div class="td-muted">Live scorecards · 14 suppliers tracked</div>
+            </td>
+            <td><span class="status-live">Live</span></td>
+            <td>3 alerts raised</td>
+            <td>28h</td>
+            <td class="saving">£1,400</td>
+          </tr>
+          <tr>
+            <td>
+              <div class="td-name">Compliance Documentation</div>
+              <div class="td-muted">Auto-drafted from operational data</div>
+            </td>
+            <td><span class="status-live">Live</span></td>
+            <td>4 reports</td>
+            <td>38h</td>
+            <td class="saving">£1,600</td>
+          </tr>
+          <tr>
+            <td>
+              <div class="td-name">Inventory &amp; Demand Forecasting</div>
+              <div class="td-muted">AI demand planning from order history</div>
+            </td>
+            <td><span class="status-live">Live</span></td>
+            <td>0 stockouts</td>
+            <td>19h</td>
+            <td class="saving">£4,200</td>
+          </tr>
+          <tr>
+            <td>
+              <div class="td-name">Driver Comms &amp; POD Automation</div>
+              <div class="td-muted">Proof-of-delivery matching &amp; driver communication</div>
+            </td>
+            <td><span class="status-setup">In Setup</span></td>
+            <td colspan="2" style="color:var(--muted);font-size:9pt;">Live in ~2 weeks. Estimated saving: £900/mo</td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ANOMALIES & FINDINGS -->
+    <div class="section">
+      <div class="section-title">Anomalies &amp; Findings — March 2026</div>
+      <div class="anomaly-list">
+        <div class="anomaly-item">
+          <div class="anomaly-icon">⚠️</div>
+          <div>
+            <div class="anomaly-title">Midlands Freight Co — reliability declined to 72%</div>
+            <div class="anomaly-desc">4 late deliveries in 30 days. On-time rate has fallen from 91% last quarter to 72% this month — a third consecutive monthly decline. At this trajectory, SLA obligations to end customers may be at risk within 60 days.</div>
+            <div class="anomaly-status open">Action required — recommend reviewing contract terms or sourcing alternative</div>
+          </div>
+        </div>
+        <div class="anomaly-item">
+          <div class="anomaly-icon">⚠️</div>
+          <div>
+            <div class="anomaly-title">Tuesday afternoon delivery slot — 34% higher failed-drop rate</div>
+            <div class="anomaly-desc">Identified across 12 weeks of data. Three specific postcodes account for 80% of failures in this window. Reattempt cost estimated at £280/month. Shifting those postcodes to Wednesday morning would eliminate the majority.</div>
+            <div class="anomaly-status open">Action required — postcode reallocation recommended</div>
+          </div>
+        </div>
+        <div class="anomaly-item resolved">
+          <div class="anomaly-icon">✅</div>
+          <div>
+            <div class="anomaly-title">Invoice #INV-4820 — £120 discrepancy vs purchase order</div>
+            <div class="anomaly-desc">Discrepancy between City Haulage invoice and PO-3338 identified and flagged automatically before payment was authorised. Supplier notified. Credit note received.</div>
+            <div class="anomaly-status actioned">Resolved — credit note received 4 March 2026</div>
+          </div>
+        </div>
+        <div class="anomaly-item resolved">
+          <div class="anomaly-icon">✅</div>
+          <div>
+            <div class="anomaly-title">Duplicate invoice detected — Evans Logistics INV-4812</div>
+            <div class="anomaly-desc">Duplicate invoice (£340) detected and blocked before reaching accounts payable queue. This is the second duplicate from this supplier in 90 days.</div>
+            <div class="anomaly-status actioned">Resolved — blocked automatically, supplier notified</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUPPLIER SCORECARD -->
+    <div class="section">
+      <div class="section-title">Supplier Performance Snapshot</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Supplier</th>
+            <th>On-Time Rate</th>
+            <th>Invoice Accuracy</th>
+            <th>Trend</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="td-name">Northern Fuel</td>
+            <td>
+              <span class="pct-bar-wrap"><span class="pct-bar" style="width:96%;background:var(--green);"></span></span>96%
+            </td>
+            <td>100%</td>
+            <td style="color:var(--green);font-weight:700;">↑ Improving</td>
+            <td style="color:var(--green);font-weight:700;">Good</td>
+          </tr>
+          <tr>
+            <td class="td-name">Hargreaves Transport</td>
+            <td>
+              <span class="pct-bar-wrap"><span class="pct-bar" style="width:91%;background:var(--green);"></span></span>91%
+            </td>
+            <td>99%</td>
+            <td style="color:var(--muted);font-weight:700;">→ Stable</td>
+            <td style="color:var(--green);font-weight:700;">Good</td>
+          </tr>
+          <tr>
+            <td class="td-name">City Haulage</td>
+            <td>
+              <span class="pct-bar-wrap"><span class="pct-bar" style="width:84%;background:var(--blue);"></span></span>84%
+            </td>
+            <td>94%</td>
+            <td style="color:var(--muted);font-weight:700;">→ Stable</td>
+            <td style="color:var(--orange);font-weight:700;">Monitor</td>
+          </tr>
+          <tr>
+            <td class="td-name">Evans Logistics</td>
+            <td>
+              <span class="pct-bar-wrap"><span class="pct-bar" style="width:78%;background:var(--orange);"></span></span>78%
+            </td>
+            <td>91%</td>
+            <td style="color:var(--orange);font-weight:700;">↓ Declining</td>
+            <td style="color:var(--orange);font-weight:700;">Monitor</td>
+          </tr>
+          <tr>
+            <td class="td-name">Midlands Freight Co</td>
+            <td>
+              <span class="pct-bar-wrap"><span class="pct-bar" style="width:72%;background:var(--red);"></span></span>72%
+            </td>
+            <td>96%</td>
+            <td style="color:var(--red);font-weight:700;">↓ Declining</td>
+            <td style="color:var(--red);font-weight:700;">Action Required</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- RECOMMENDATIONS -->
+    <div class="section">
+      <div class="section-title">Recommended Actions — April 2026</div>
+      <div class="rec-list">
+        <div class="rec-item">
+          <div class="rec-num">1</div>
+          <div>
+            <div class="rec-title">Review Midlands Freight Co contract terms</div>
+            <div class="rec-body">Three consecutive months of decline. Recommend a formal performance review meeting, issuing a written notice against SLA terms, and initiating a parallel sourcing process to identify an alternative for the affected routes.</div>
+          </div>
+        </div>
+        <div class="rec-item">
+          <div class="rec-num">2</div>
+          <div>
+            <div class="rec-title">Reallocate 3 Tuesday afternoon postcodes to Wednesday morning</div>
+            <div class="rec-body">The route optimisation system has identified the specific postcodes and proposed the revised schedule. Implementing this change will eliminate an estimated £280/month in reattempt costs and improve customer satisfaction in those areas.</div>
+          </div>
+        </div>
+        <div class="rec-item">
+          <div class="rec-num">3</div>
+          <div>
+            <div class="rec-title">Confirm packing material reorder</div>
+            <div class="rec-body">Current stock covers 17 days at current consumption. Lead time is 10–14 days. The inventory system has raised a reorder recommendation — please confirm to proceed to maintain comfortable cover without emergency procurement.</div>
+          </div>
+        </div>
+        <div class="rec-item">
+          <div class="rec-num">4</div>
+          <div>
+            <div class="rec-title">Issue PO reference format guidance to City Haulage and Evans Logistics</div>
+            <div class="rec-body">Both suppliers are generating the majority of invoice discrepancies due to PO reference formatting errors. A clear written specification of the required format, sent this week, would eliminate most future manual review requirements for these accounts.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FINANCIAL SUMMARY -->
+    <div class="section">
+      <div class="section-title">Financial Summary — March 2026</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th style="text-align:right;">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Total documented savings this month</td>
+            <td style="text-align:right;font-weight:700;color:var(--green);">£13,100</td>
+          </tr>
+          <tr>
+            <td class="td-muted">Monthly retainer (Scale plan)</td>
+            <td style="text-align:right;color:var(--muted);">−£3,500</td>
+          </tr>
+          <tr>
+            <td class="td-muted">Performance share (15% of £13,100)</td>
+            <td style="text-align:right;color:var(--muted);">−£1,965</td>
+          </tr>
+          <tr style="background:var(--bg-light);">
+            <td style="font-weight:800;">Net gain to Whitfield Logistics Ltd</td>
+            <td style="text-align:right;font-weight:900;color:var(--green);font-size:13pt;">£7,635</td>
+          </tr>
+          <tr>
+            <td class="td-muted">Cumulative savings since go-live (January 2026)</td>
+            <td style="text-align:right;color:var(--muted);">£47,200</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- NEXT MONTH -->
+    <div class="section">
+      <div class="section-title">April 2026 — What's Coming</div>
+      <p style="font-size:10pt;color:var(--muted);line-height:1.7;margin-bottom:12px;">The following items are in progress or scheduled for April:</p>
+      <table>
+        <tbody>
+          <tr>
+            <td style="width:40%;"><strong>Driver Comms &amp; POD Automation</strong></td>
+            <td class="td-muted">Go-live in first 2 weeks of April. Expected saving: £900/month</td>
+          </tr>
+          <tr>
+            <td><strong>Supplier Price Drift Analysis</strong></td>
+            <td class="td-muted">First run scheduled for 7 April. Will compare all invoice line prices against contracted rates for the last 6 months</td>
+          </tr>
+          <tr>
+            <td><strong>April Compliance Report</strong></td>
+            <td class="td-muted">Auto-generated on 1 May. Sarah will notify you 48 hours before for your 2-minute review</td>
+          </tr>
+          <tr>
+            <td><strong>Quarterly Business Review</strong></td>
+            <td class="td-muted">Scheduled for 22 April — Sarah Chen will send a calendar invite this week</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="report-footer">
+      <div>
+        <strong>Backbone AI Ltd</strong> · Registered in England &amp; Wales<br />
+        Account Manager: Sarah Chen · sarah.chen@backboneai.co.uk
+      </div>
+      <div style="text-align:right;">
+        Whitfield Logistics Ltd · Scale Plan<br />
+        Report generated: 1 April 2026 · Confidential
+      </div>
+    </div>
+
+  </div><!-- /page -->
+
+  <script>
+    // Auto-trigger print dialog if opened via the download button
+    if (window.opener || new URLSearchParams(location.search).has('print')) {
+      window.addEventListener('load', () => {
+        setTimeout(() => window.print(), 600);
+      });
+    }
+  </script>
+
+</body>
+</html>
