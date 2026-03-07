@@ -1,0 +1,156 @@
+# Changelog
+
+All notable changes to the Backbone AI platform are documented here.
+
+This project follows [Semantic Versioning](https://semver.org/):
+- **MAJOR** version — breaking changes
+- **MINOR** version — new features, backwards compatible
+- **PATCH** version — bug fixes and minor improvements
+
+---
+
+## [0.1.0] — 2026-03-07
+
+### Initial Release
+
+First complete version of the Backbone AI platform, encompassing the marketing site, client portal, and operational dashboard.
+
+---
+
+### Added — Marketing Site (`index.html`)
+
+**Hero Section**
+- Full-screen hero with animated background grid, floating gradient orbs, and entrance animations
+- Core value proposition: "See what your operation is actually costing you"
+- Three sourced statistics: £4bn admin waste (YouGov), 7.7 weeks/year in low-value tasks (YouGov), 5% manufacturing AI adoption (ONS)
+- Animated counter effect on hero statistics when scrolled into view
+- Primary CTA: "Book a Free Audit" / Secondary CTA: "See how it works"
+
+**The Problem Section**
+- Six data-backed statistic cards with sources attributed
+- Narrative reframe: "British manufacturers are flying blind"
+- All statistics independently sourced and attributed (ONS, YouGov/SafetyCulture, ResultSense, TechUK, Consultancy.uk)
+
+**What We Do Section**
+- Three service pillars repositioned around operational intelligence:
+  1. Surface What's Hidden — data connection and pattern surfacing
+  2. Automate the Root Causes — AI-powered workflow automation
+  3. Paid on Results — outcome-based pricing model
+- Hover glow effects on pillar cards
+
+**Investment Case Section**
+- ROI calculation example (logistics firm, Scale plan): £3,500/month retainer generating £4,900/month net gain
+- Six automation cards with before/after comparisons and monthly saving figures:
+  1. Invoice Processing — £2,100/month, pays back in <2 months
+  2. Quality Control Reporting — £1,800/month, pays back in <2 months
+  3. Route & Schedule Optimisation — £3,800/month, pays back in <1 month
+  4. Supplier Intelligence — £1,400/month, pays back in <3 months
+  5. Compliance Documentation — £1,600/month, pays back in <2 months
+  6. Inventory & Demand Forecasting — £4,200/month, pays back in <1 month
+- Link through to live client dashboard demo
+
+**How It Works Section**
+- Five-step engagement process with week-by-week timeline
+- Client results metrics panel: 12–18 hours/week saved, 60–85% error reduction, 3–8x ROI in 90 days
+
+**Comparison Table**
+- Side-by-side comparison: Backbone AI vs typical consultants and agencies
+- Six key differentiators: data quality first, outcome-based pricing, ongoing operations, UK compliance, vertical specialisation, skin in the game
+
+**Pricing Section**
+- Three tiers: Pilot (£1,500/month), Scale (£3,500/month + 15% performance), Backbone (£6,500/month + 20% performance)
+- One-off setup fees: £5,000 / £10,000 / £15,000
+- Featured card highlight on Scale tier
+
+**Industries Section**
+- Manufacturing and Logistics positioned as current focus (dual sector)
+- Ten specific use cases across both sectors
+- Coming-soon pipeline: Construction (Q3), Legal (Q3), Healthcare (Q4), Real Estate (Q4), Retail (2027)
+
+**Client Intake Form**
+- Seven data capture fields: name, business name, email, phone, sector, company size, software stack
+- Two ROI-calculation fields: hours/week on admin, annual turnover
+- Free-text: "biggest operational headache" — the most valuable pre-sales intelligence field
+- Drag-and-drop file upload with multi-file support, per-file icons, size formatting, individual removal
+- Success state animation on form submission
+
+---
+
+### Added — Client Portal (`client.html`)
+
+**Authentication System**
+- 9-digit access code input with auto-tab between digits
+- Paste support (pastes across all digit fields)
+- Enter key submission
+- 1.8-second verification animation with spinner
+- Animated transition from login to authenticated app
+- Three demo client codes pre-loaded
+- Logout returns to login screen with cleared state
+
+**Dashboard Page (default)**
+- Four animated KPI cards: total cost saved, hours saved, tasks automated, monthly ROI
+- Cubic ease-out counter animation on all KPI values
+- 6-month dual-axis trend chart (cost saved in £, hours saved) via Chart.js
+- Live activity feed: 5 most recent AI actions with timestamps and savings
+- Six automation module cards with status indicators
+- Click-through modal system: each module expands to show 4 KPIs, monthly savings bar chart, and timestamped activity log
+- Escape key and click-outside to close modals
+- Operational insights section: 3 AI-generated patterns surfaced from client data
+
+**Data Upload Page**
+- Data completeness score with animated progress bar (73% demo state)
+- Four collapsible upload categories: Operational Data, Financial & Invoices, Process Documents, Compliance
+- Expand/collapse toggle with chevron animation
+- Per-file status tags: Processed (green), Processing (blue), Pending (grey)
+- "Still required" items highlighted in orange with explanations of why they're needed
+- Drag-and-drop upload zones within each category
+- Upload sidebar: outstanding items list, security information (AES-256, UK GDPR, ICO), post-upload process explanation
+
+**Project Tracker Page**
+- Five-phase project timeline: Onboarding, Data Foundation, AI Build & Go-live, Optimise & Expand, Advanced Intelligence
+- Phase status indicators: Complete (green), In Progress (blue), Planned (grey)
+- Individual task cards with: status tag, description, completion date or ETA
+- Progress bar on in-progress tasks (65% demo state)
+- Mini timeline sidebar showing recent events chronologically
+- Project overview sidebar: plan, start date, task counts, account manager name
+- Action-required callout with direct link to Data Upload page
+
+---
+
+### Added — Dashboard Demo (`dashboard.html`)
+
+- Standalone version of client dashboard for sales demonstrations
+- Accessible without login
+- Full sidebar navigation, topbar, all five automation modules
+- Identical functionality to client portal dashboard tab
+- Linked from marketing site Investment Case section
+
+---
+
+### Added — Project Infrastructure
+
+- `README.md` — comprehensive technical and business documentation
+- `CHANGELOG.md` — this file
+- `package.json` — project metadata, run scripts
+- `.gitignore` — OS, editor, environment, and build exclusions
+- `docs/ARCHITECTURE.md` — full technical architecture reference
+- `docs/CLIENT_PORTAL.md` — client portal feature specification
+- `docs/BUSINESS_MODEL.md` — commercial model documentation
+- `docs/ROADMAP.md` — product development roadmap
+
+---
+
+### Technical Decisions
+
+| Decision | Rationale |
+|---|---|
+| No JavaScript framework | Eliminates build complexity, reduces dependencies, maximises portability |
+| CSS custom properties | Enables consistent theming and future white-labelling without search/replace |
+| Chart.js via CDN | Avoids npm setup for a static project, industry-standard library |
+| Single-file pages | Simplifies deployment — pages can be hosted on any static host without a build step |
+| Client-side routing | No server required for page navigation, all state managed in JavaScript |
+| Python http.server | Available on any development machine with Python installed, zero config |
+
+---
+
+*For unreleased changes, see the `main` branch commit history.*
