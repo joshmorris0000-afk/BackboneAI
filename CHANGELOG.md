@@ -9,6 +9,25 @@ This project follows [Semantic Versioning](https://semver.org/):
 
 ---
 
+## [0.2.1] — 2026-03-07
+
+### Added — Sample Report (`sample-report.html`)
+
+- Print-optimised operations report for Whitfield Logistics Ltd (March 2026)
+- Sections: Executive Summary KPIs, Automation Performance table, Anomalies & Findings, Supplier Scorecard with visual bars, Recommendations list, Financial Summary, April preview
+- Fixed print bar at top of screen with "Save as PDF" button triggering `window.print()`
+- `@media print` hides the print bar and sets `@page` margins for clean output
+- `print-color-adjust: exact` on all coloured elements so backgrounds survive the print pipeline
+- Auto-triggers print dialog if `?print` query param is present (used by the dashboard download button)
+
+### Fixed — Dashboard Demo (`dashboard.html`)
+
+- `downloadReport()` now opens `sample-report.html?print` in a new tab, which immediately triggers the browser Save as PDF dialog — previously was a cosmetic-only toast
+- "Last 30 days" static label replaced with a functional `<select>` dropdown offering 30 / 60 / 90 / 180 / 365 day periods
+- `setDateRange()` function updates the trend chart labels and datasets live on selection; chart stored as `window._dashChart` to make it globally accessible
+
+---
+
 ## [0.2.0] — 2026-03-07
 
 ### Added — Admin Panel (`admin.html`)

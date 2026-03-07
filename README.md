@@ -36,6 +36,7 @@ The codebase contains six distinct applications:
 | Admin Panel | `admin.html` | Internal Backbone AI team panel (amber theme) |
 | Service Guide | `services.html` | Full breakdown of all service tiers and add-ons |
 | Audit Landing | `audit.html` | Free 2-week operations audit application page |
+| Sample Report | `sample-report.html` | Print-optimised PDF report opened by the dashboard download button |
 
 All are built as self-contained HTML files with no external backend dependency — making them fast to deploy, easy to demonstrate, and simple to hand off.
 
@@ -127,6 +128,16 @@ The authenticated client-facing platform. Three internal pages:
 
 A standalone version of the client dashboard for sales demonstrations. Does not require login. Used in the marketing site's "Investment Case" section as a live link.
 
+All sidebar navigation items are fully built out:
+
+- **Dashboard** — KPI counters, 6-month trend chart, activity feed, module cards with modals
+- **Insights** — AI-surfaced operational findings with severity badges, filterable by type, mark-as-actioned
+- **Reports** — report cards with inline preview modal; "Download PDF" opens `sample-report.html` which auto-triggers the browser Save as PDF dialog
+- **Settings** — editable account form, notification toggles, portal access code reveal, data export request
+- **Automation detail pages** — each module card links to a dedicated page showing KPIs, a monthly bar chart, and timestamped activity log
+
+The date range selector in the topbar (30 / 60 / 90 / 180 / 365 days) updates the trend chart labels and data live.
+
 ---
 
 ## Technical Stack
@@ -178,6 +189,7 @@ backbone-ai/
 ├── admin.html              # Internal admin panel (amber theme, team-only)
 ├── services.html           # Full service guide — all tiers and add-ons
 ├── audit.html              # Free operations audit application page
+├── sample-report.html      # Print-optimised PDF report (opened by dashboard download button)
 ├── favicon.svg             # Brand SVG favicon (blue→cyan gradient)
 │
 ├── docs/
@@ -377,4 +389,4 @@ This is a private commercial codebase. All contributions require prior approval 
 ---
 
 *Built by Backbone AI Ltd. Registered in England & Wales.*
-*Last updated: March 2026 — v0.2.0*
+*Last updated: March 2026 — v0.2.1*
