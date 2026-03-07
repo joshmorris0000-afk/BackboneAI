@@ -575,11 +575,166 @@
     .log-text{flex:1;}
     .log-save{color:var(--green);font-weight:700;flex-shrink:0;font-size:11px;}
 
+    /* ─── SYSTEM CONNECTIONS ─── */
+    .sys-section-label{
+      font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+      color:var(--muted);margin-bottom:12px;
+      display:flex;align-items:center;gap:10px;
+    }
+    .sys-section-label::after{content:'';flex:1;height:1px;background:var(--border);}
+    .sys-grid{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px;
+    }
+    .sys-card{
+      background:var(--surface);border:1px solid var(--border);
+      border-radius:12px;padding:14px 16px;
+      display:flex;flex-direction:column;gap:6px;
+      transition:border-color 0.2s;
+    }
+    .sys-card.sc-connected{border-color:rgba(34,197,94,0.25);background:rgba(34,197,94,0.03);}
+    .sys-card.sc-pending{border-color:rgba(249,115,22,0.25);background:rgba(249,115,22,0.03);}
+    .sys-card-top{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+    .sys-card-name{font-size:13px;font-weight:700;line-height:1.3;}
+    .sys-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px;white-space:nowrap;flex-shrink:0;}
+    .sb-connected{background:rgba(34,197,94,0.12);color:#4ade80;}
+    .sb-pending{background:rgba(249,115,22,0.12);color:var(--orange);}
+    .sb-none{background:rgba(255,255,255,0.06);color:var(--muted);}
+    .sys-card-desc{font-size:11px;color:var(--muted);line-height:1.5;}
+    .sys-card-btn{
+      font-size:11px;font-weight:700;padding:5px 10px;border-radius:6px;
+      border:1px solid var(--border);background:none;cursor:pointer;
+      font-family:inherit;margin-top:4px;width:fit-content;transition:background 0.2s;
+    }
+    .sys-card-btn.scb-manage{color:#4ade80;border-color:rgba(34,197,94,0.25);}
+    .sys-card-btn.scb-manage:hover{background:rgba(34,197,94,0.08);}
+    .sys-card-btn.scb-pending{color:var(--orange);border-color:rgba(249,115,22,0.25);}
+    .sys-card-btn.scb-pending:hover{background:rgba(249,115,22,0.08);}
+    .sys-card-btn.scb-request{color:var(--blue-bright);border-color:rgba(59,130,246,0.2);}
+    .sys-card-btn.scb-request:hover{background:rgba(59,130,246,0.08);}
+    .sys-connections-header{
+      display:flex;align-items:center;justify-content:space-between;
+      margin-bottom:20px;
+    }
+    .sys-connections-title{font-size:16px;font-weight:800;letter-spacing:-0.3px;}
+    .sys-connections-sub{font-size:12px;color:var(--muted);margin-top:2px;}
+    .sys-score-pills{display:flex;gap:8px;flex-wrap:wrap;}
+    .sys-score-pill{font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;}
+    .ssp-connected{background:rgba(34,197,94,0.1);color:#4ade80;}
+    .ssp-pending{background:rgba(249,115,22,0.1);color:var(--orange);}
+    .ssp-none{background:rgba(255,255,255,0.05);color:var(--muted);}
+    .add-sys-btn{
+      background:linear-gradient(135deg,var(--blue),#1d4ed8);
+      color:#fff;border:none;border-radius:8px;
+      padding:9px 18px;font-size:13px;font-weight:700;
+      cursor:pointer;font-family:inherit;white-space:nowrap;
+      transition:opacity 0.2s,transform 0.1s;flex-shrink:0;
+    }
+    .add-sys-btn:hover{opacity:0.9;transform:translateY(-1px);}
+    .active-sys-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+    .active-sys-card{
+      background:var(--surface);border:1px solid var(--border);
+      border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;
+      position:relative;
+    }
+    .active-sys-card.sc-connected{border-color:rgba(34,197,94,0.25);background:rgba(34,197,94,0.03);}
+    .active-sys-card.sc-pending{border-color:rgba(249,115,22,0.25);background:rgba(249,115,22,0.03);}
+    .sys-remove-btn{
+      position:absolute;top:10px;right:10px;
+      background:none;border:none;cursor:pointer;
+      color:var(--muted);font-size:14px;width:22px;height:22px;
+      border-radius:5px;display:flex;align-items:center;justify-content:center;
+      transition:background 0.2s,color 0.2s;
+    }
+    .sys-remove-btn:hover{background:rgba(244,63,94,0.12);color:#f43f5e;}
+    .sys-empty-state{
+      border:2px dashed var(--border);border-radius:12px;
+      padding:32px;text-align:center;color:var(--muted);font-size:13px;
+    }
+    /* System picker modal */
+    .sys-modal-overlay{
+      position:fixed;inset:0;z-index:400;
+      background:rgba(0,0,0,0.75);backdrop-filter:blur(8px);
+      display:flex;align-items:center;justify-content:center;
+      opacity:0;pointer-events:none;transition:opacity 0.2s;
+    }
+    .sys-modal-overlay.open{opacity:1;pointer-events:all;}
+    .sys-modal{
+      background:var(--bg2);border:1px solid var(--border);
+      border-radius:20px;width:700px;max-width:95vw;max-height:88vh;
+      overflow-y:auto;
+      transform:translateY(16px) scale(0.98);transition:transform 0.2s;
+    }
+    .sys-modal-overlay.open .sys-modal{transform:translateY(0) scale(1);}
+    .sys-modal-header{
+      position:sticky;top:0;z-index:1;
+      background:var(--bg2);border-bottom:1px solid var(--border);
+      padding:20px 24px;display:flex;align-items:center;justify-content:space-between;
+    }
+    .sys-modal-title{font-size:17px;font-weight:800;letter-spacing:-0.3px;}
+    .sys-modal-close{
+      width:30px;height:30px;background:var(--surface);border:1px solid var(--border);
+      border-radius:7px;color:var(--muted2);cursor:pointer;font-size:16px;
+      display:flex;align-items:center;justify-content:center;transition:background 0.2s;
+    }
+    .sys-modal-close:hover{background:var(--surface2);color:var(--text);}
+    .sys-modal-body{padding:20px 24px;display:flex;flex-direction:column;gap:20px;}
+    .sys-picker-group-label{
+      font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+      color:var(--muted);margin-bottom:8px;
+      display:flex;align-items:center;gap:8px;
+    }
+    .sys-picker-group-label::after{content:'';flex:1;height:1px;background:var(--border);}
+    .sys-picker-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+    .sys-picker-item{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      background:var(--surface);border:1px solid var(--border);
+      border-radius:10px;padding:12px 14px;
+      transition:border-color 0.2s;
+    }
+    .sys-picker-item.spi-active{
+      border-color:rgba(34,197,94,0.3);background:rgba(34,197,94,0.04);
+      pointer-events:none;
+    }
+    .sys-picker-item-info{flex:1;min-width:0;}
+    .sys-picker-name{font-size:13px;font-weight:700;margin-bottom:2px;}
+    .sys-picker-desc{font-size:11px;color:var(--muted);line-height:1.4;}
+    .sys-add-btn{
+      font-size:11px;font-weight:700;padding:5px 12px;border-radius:6px;
+      background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.25);
+      color:var(--blue-bright);cursor:pointer;white-space:nowrap;flex-shrink:0;
+      font-family:inherit;transition:background 0.2s;
+    }
+    .sys-add-btn:hover{background:rgba(59,130,246,0.2);}
+    .sys-add-btn.added{background:rgba(34,197,94,0.1);border-color:rgba(34,197,94,0.25);color:#4ade80;cursor:default;}
+    .sys-request-card{
+      background:rgba(139,92,246,0.06);border:1px solid rgba(139,92,246,0.2);
+      border-radius:12px;padding:18px;
+    }
+    .sys-request-title{font-size:14px;font-weight:800;margin-bottom:4px;}
+    .sys-request-sub{font-size:12px;color:var(--muted2);margin-bottom:12px;line-height:1.5;}
+    .sys-request-row{display:flex;gap:8px;}
+    .sys-request-input{
+      flex:1;background:rgba(255,255,255,0.04);border:1px solid var(--border);
+      border-radius:8px;padding:9px 13px;color:var(--text);font-size:13px;
+      font-family:inherit;outline:none;transition:border-color 0.2s;
+    }
+    .sys-request-input:focus{border-color:rgba(139,92,246,0.5);}
+    .sys-request-input::placeholder{color:var(--muted);}
+    .sys-request-send{
+      background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.3);
+      color:#a78bfa;padding:9px 16px;border-radius:8px;font-size:13px;
+      font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;
+      transition:background 0.2s;
+    }
+    .sys-request-send:hover{background:rgba(139,92,246,0.25);}
+    .sys-request-success{font-size:12px;color:#4ade80;margin-top:8px;display:none;}
+
     @media(max-width:1100px){
       .dash-grid,.upload-page-grid,.tracker-grid{grid-template-columns:1fr;}
       .module-grid{grid-template-columns:1fr 1fr;}
       .kpi-row{grid-template-columns:1fr 1fr;}
       .modal-kpis{grid-template-columns:1fr 1fr;}
+      .sys-grid{grid-template-columns:1fr 1fr;}
     }
   </style>
 </head>
@@ -620,6 +775,33 @@
       Verifying your access code…
     </div>
     <div class="login-back">← <a href="index.html">Return to Backbone AI</a></div>
+  </div>
+</div>
+
+<!-- ═══════ SYSTEM PICKER MODAL ═══════ -->
+<div id="sysModalOverlay" class="sys-modal-overlay">
+  <div class="sys-modal">
+    <div class="sys-modal-header">
+      <div>
+        <div class="sys-modal-title">Add a System Connection</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px;">Select the systems your business uses. We'll set up each connection within 24 hours.</div>
+      </div>
+      <button class="sys-modal-close" onclick="closeSysModal()">✕</button>
+    </div>
+    <div class="sys-modal-body" id="sysModalBody">
+      <!-- Populated by JS -->
+    </div>
+    <div style="padding:0 24px 24px;">
+      <div class="sys-request-card">
+        <div class="sys-request-title">Don't see your system?</div>
+        <div class="sys-request-sub">We build custom connectors for any platform with an API or regular export. Tell us what you use and we'll confirm if we can connect it — usually within 24 hours.</div>
+        <div class="sys-request-row">
+          <input class="sys-request-input" id="reqSysInput" type="text" placeholder="e.g. Kerridge Commercial Systems, Proteus, our custom ERP…" />
+          <button class="sys-request-send" onclick="sendSystemRequest()">Send request →</button>
+        </div>
+        <div class="sys-request-success" id="reqSysSuccess"></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -834,19 +1016,43 @@
 
       <!-- ══════ PAGE 2: DATA UPLOAD ══════ -->
       <div class="page" id="page-upload">
-        <div class="section-title">Data Upload Centre</div>
-        <div class="section-sub">Upload the documents and data we need to build, train, and improve your AI systems. All files are encrypted in transit and at rest.</div>
+        <div class="section-title">Data &amp; System Access</div>
+        <div class="section-sub">Connect your existing systems for automatic data sync, or upload files manually. The more we can access, the more accurately your AI systems operate.</div>
 
         <div class="completeness-card">
           <div class="completeness-header">
             <div>
-              <div class="completeness-title">Data Completeness Score</div>
-              <div style="font-size:12px;color:var(--muted);margin-top:3px;">2 items still needed to complete your setup</div>
+              <div class="completeness-title">Setup Completeness</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:3px;">3 systems connected · 2 file uploads still needed</div>
             </div>
             <div class="completeness-pct">73%</div>
           </div>
           <div class="completeness-bar-wrap"><div class="completeness-bar" style="width:73%"></div></div>
-          <div class="completeness-note">Upload the remaining items below to unlock full system capability and improve forecast accuracy.</div>
+          <div class="completeness-note">Connect additional systems or upload the remaining files below to improve AI accuracy and unlock full automation capability.</div>
+        </div>
+
+        <!-- ── SYSTEM CONNECTIONS ── -->
+        <div style="margin-bottom:28px;">
+          <div class="sys-connections-header">
+            <div>
+              <div class="sys-connections-title">System Connections</div>
+              <div class="sys-connections-sub">Live integrations pull data automatically — no exports needed. Add the systems you use, remove ones you don't.</div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+              <div id="sysPills" class="sys-score-pills"></div>
+              <button class="add-sys-btn" onclick="openSysModal()">+ Add a system</button>
+            </div>
+          </div>
+          <div class="active-sys-grid" id="activeSysList"></div>
+          <div class="sys-empty-state" id="sysEmptyState" style="display:none;">
+            No systems connected yet. Click <strong>+ Add a system</strong> to get started.
+          </div>
+        </div>
+
+        <!-- ── MANUAL FILE UPLOADS ── -->
+        <div style="margin-bottom:16px;">
+          <div style="font-size:16px;font-weight:800;letter-spacing:-0.3px;margin-bottom:4px;">Document Uploads</div>
+          <div style="font-size:12px;color:var(--muted);">For documents not available through a system connection — sample files, historical records, compliance certificates.</div>
         </div>
 
         <div class="upload-page-grid">
@@ -857,7 +1063,7 @@
               <div class="upload-cat-header" onclick="toggleCat('cat-ops')">
                 <div class="upload-cat-left">
                   <div class="upload-cat-icon">📊</div>
-                  <div><div class="upload-cat-name">Operational Data</div><div class="upload-cat-desc">ERP exports, production logs, delivery records</div></div>
+                  <div><div class="upload-cat-name">Operational Data</div><div class="upload-cat-desc">ERP exports, production logs, delivery records, shift schedules</div></div>
                 </div>
                 <div class="upload-cat-right">
                   <div class="upload-cat-status us-complete">Complete</div>
@@ -882,7 +1088,7 @@
               <div class="upload-cat-header" onclick="toggleCat('cat-fin')">
                 <div class="upload-cat-left">
                   <div class="upload-cat-icon">🧾</div>
-                  <div><div class="upload-cat-name">Financial & Invoice Data</div><div class="upload-cat-desc">Sample invoices, supplier statements, PO records</div></div>
+                  <div><div class="upload-cat-name">Financial &amp; Invoice Data</div><div class="upload-cat-desc">Sample supplier invoices, purchase orders, statements</div></div>
                 </div>
                 <div class="upload-cat-right">
                   <div class="upload-cat-status us-partial">1 item needed</div>
@@ -895,7 +1101,7 @@
                   <div class="file-item"><div class="file-icon">📊</div><div class="file-name">Purchase_Orders_2025.xlsx</div><div class="file-size">1.8 MB</div><div class="file-status fs-processed">Processed</div></div>
                 </div>
                 <div class="required-items">
-                  <div class="required-item"><div class="req-icon">⚠️</div>Supplier statement from Midlands Freight Co (last 3 months) — needed for dispute tracking</div>
+                  <div class="required-item"><div class="req-icon">⚠️</div>Supplier statement from Midlands Freight Co (last 3 months) — needed to calibrate dispute tracking thresholds</div>
                 </div>
                 <div class="drop-zone" id="dz-fin">
                   <input type="file" multiple onchange="handleUpload(event,'fin')" />
@@ -909,7 +1115,7 @@
               <div class="upload-cat-header" onclick="toggleCat('cat-proc')">
                 <div class="upload-cat-left">
                   <div class="upload-cat-icon">📋</div>
-                  <div><div class="upload-cat-name">Process Documents</div><div class="upload-cat-desc">SOPs, workflows, driver handbooks, checklists</div></div>
+                  <div><div class="upload-cat-name">Process Documents</div><div class="upload-cat-desc">SOPs, driver handbooks, quality checklists, workflow diagrams</div></div>
                 </div>
                 <div class="upload-cat-right">
                   <div class="upload-cat-status us-partial">1 item needed</div>
@@ -921,7 +1127,7 @@
                   <div class="file-item"><div class="file-icon">📄</div><div class="file-name">Driver_Operations_Handbook_v3.pdf</div><div class="file-size">3.2 MB</div><div class="file-status fs-processed">Processed</div></div>
                 </div>
                 <div class="required-items">
-                  <div class="required-item"><div class="req-icon">⚠️</div>Proof of Delivery (POD) process document — needed for driver comms automation build</div>
+                  <div class="required-item"><div class="req-icon">⚠️</div>Proof of Delivery (POD) process document — required before driver comms automation can go live</div>
                 </div>
                 <div class="drop-zone" id="dz-proc">
                   <input type="file" multiple onchange="handleUpload(event,'proc')" />
@@ -935,7 +1141,7 @@
               <div class="upload-cat-header" onclick="toggleCat('cat-comp')">
                 <div class="upload-cat-left">
                   <div class="upload-cat-icon">🛡️</div>
-                  <div><div class="upload-cat-name">Compliance & Regulatory</div><div class="upload-cat-desc">Operator licences, insurance, audit records, HSE docs</div></div>
+                  <div><div class="upload-cat-name">Compliance &amp; Regulatory</div><div class="upload-cat-desc">Operator licences, insurance certificates, ISO records, HSE assessments</div></div>
                 </div>
                 <div class="upload-cat-right">
                   <div class="upload-cat-status us-complete">Complete</div>
@@ -960,26 +1166,27 @@
           <!-- Upload Sidebar -->
           <div>
             <div class="upload-sidebar-card">
-              <div class="upload-sidebar-title">Still needed (2 items)</div>
+              <div class="upload-sidebar-title">Action required</div>
               <div class="still-needed">
-                <div class="still-item"><div class="still-dot"></div>Midlands Freight Co supplier statement — last 3 months</div>
-                <div class="still-item"><div class="still-dot"></div>Proof of Delivery (POD) process document</div>
+                <div class="still-item"><div class="still-dot" style="background:var(--orange)"></div>BigChange — awaiting API credentials from your ops team</div>
+                <div class="still-item"><div class="still-dot" style="background:var(--orange)"></div>Midlands Freight Co supplier statement (last 3 months)</div>
+                <div class="still-item"><div class="still-dot" style="background:var(--orange)"></div>Proof of Delivery (POD) process document</div>
               </div>
             </div>
             <div class="upload-sidebar-card">
               <div class="upload-sidebar-title">Data Security</div>
               <div class="security-note">
-                <strong>Your data is fully protected.</strong> All uploads are encrypted with AES-256 in transit and at rest. Files are stored in UK-based servers, never shared with third parties, and deleted upon request.<br /><br />
+                <strong>Your data is fully protected.</strong> All connections and uploads are encrypted with AES-256 in transit and at rest. Data is stored in UK-based servers only, never shared with third parties, and deleted upon request.<br /><br />
                 We are compliant with UK GDPR and the ICO Data Protection Framework.
               </div>
             </div>
             <div class="upload-sidebar-card">
               <div class="upload-sidebar-title">What happens next?</div>
               <div style="display:flex;flex-direction:column;gap:10px;">
-                <div style="display:flex;gap:10px;font-size:12px;color:var(--muted2);align-items:flex-start;"><span style="color:var(--blue-bright);font-weight:700;flex-shrink:0;">1.</span>We review your upload within 24 hours.</div>
-                <div style="display:flex;gap:10px;font-size:12px;color:var(--muted2);align-items:flex-start;"><span style="color:var(--blue-bright);font-weight:700;flex-shrink:0;">2.</span>Our team processes and structures the data.</div>
-                <div style="display:flex;gap:10px;font-size:12px;color:var(--muted2);align-items:flex-start;"><span style="color:var(--blue-bright);font-weight:700;flex-shrink:0;">3.</span>It's fed into your AI systems to improve accuracy.</div>
-                <div style="display:flex;gap:10px;font-size:12px;color:var(--muted2);align-items:flex-start;"><span style="color:var(--blue-bright);font-weight:700;flex-shrink:0;">4.</span>You'll see the impact in your dashboard within 48 hrs.</div>
+                <div style="display:flex;gap:10px;font-size:12px;color:var(--muted2);align-items:flex-start;"><span style="color:var(--blue-bright);font-weight:700;flex-shrink:0;">1.</span>New uploads reviewed by our team within 24 hours.</div>
+                <div style="display:flex;gap:10px;font-size:12px;color:var(--muted2);align-items:flex-start;"><span style="color:var(--blue-bright);font-weight:700;flex-shrink:0;">2.</span>System connections are verified and mapped to your data layer.</div>
+                <div style="display:flex;gap:10px;font-size:12px;color:var(--muted2);align-items:flex-start;"><span style="color:var(--blue-bright);font-weight:700;flex-shrink:0;">3.</span>Data is fed into your AI systems to improve accuracy.</div>
+                <div style="display:flex;gap:10px;font-size:12px;color:var(--muted2);align-items:flex-start;"><span style="color:var(--blue-bright);font-weight:700;flex-shrink:0;">4.</span>Impact visible in your dashboard within 48 hours.</div>
               </div>
             </div>
           </div>
@@ -1504,6 +1711,153 @@
       if (files.length) alert(`${files.length} file(s) uploaded successfully. Our team will review within 24 hours.`);
     });
   });
+
+  /* ═══ SYSTEM CONNECTIONS ═══ */
+  const SYSTEMS_LIBRARY = [
+    { id:'sage',    name:'Sage 50 / Sage 200',      cat:'Accounting & Finance',        desc:'Purchase orders, supplier invoices, nominal ledger. Auto-syncs nightly.' },
+    { id:'xero',    name:'Xero',                    cat:'Accounting & Finance',        desc:'Invoices, bills, bank reconciliation, supplier contacts.' },
+    { id:'qbooks',  name:'QuickBooks',              cat:'Accounting & Finance',        desc:'Expense data, purchase records, payroll summaries for cost analysis.' },
+    { id:'sap-fi',  name:'SAP (Finance modules)',   cat:'Accounting & Finance',        desc:'AP/AR ledger, cost centre data, procurement records via SAP export API.' },
+    { id:'hmrc',    name:'HMRC Making Tax Digital', cat:'Accounting & Finance',        desc:'VAT submissions, PAYE data, compliance deadlines automatically tracked.' },
+    { id:'webfleet',name:'Webfleet (TomTom)',       cat:'Fleet & Transport',           desc:'Live vehicle locations, trip history, driver behaviour, fuel data.' },
+    { id:'bigchange',name:'BigChange',              cat:'Fleet & Transport',           desc:'Job scheduling, mobile workforce data, job cards, POD.' },
+    { id:'samsara', name:'Samsara',                 cat:'Fleet & Transport',           desc:'GPS tracking, HOS compliance logs, vehicle diagnostics, safety events.' },
+    { id:'mandata', name:'Mandata TMS',             cat:'Fleet & Transport',           desc:'Load planning, driver allocations, POD records, customer delivery data.' },
+    { id:'navman',  name:'Teletrac Navman',         cat:'Fleet & Transport',           desc:'Fleet tracking, driver performance, fuel monitoring, compliance reports.' },
+    { id:'dynamics',name:'Microsoft Dynamics 365', cat:'ERP & Manufacturing',         desc:'Production orders, stock levels, BOM data, quality inspection records.' },
+    { id:'epicor',  name:'Epicor',                  cat:'ERP & Manufacturing',         desc:'Job costing, shop floor data, MRP, production scheduling.' },
+    { id:'syspro',  name:'SYSPRO',                  cat:'ERP & Manufacturing',         desc:'Inventory movements, WIP, supplier lead times, quality data.' },
+    { id:'infor',   name:'Infor (LN / M3)',         cat:'ERP & Manufacturing',         desc:'Production planning, warehouse, distribution, and financial modules.' },
+    { id:'jobBoss', name:'JobBOSS²',               cat:'ERP & Manufacturing',         desc:'Estimating, job tracking, scheduling, quality management for job shops.' },
+    { id:'mintsoft',name:'Mintsoft',                cat:'Warehouse & Inventory',       desc:'Order management, pick/pack, 3PL operations, stock movements.' },
+    { id:'pvox',    name:'Peoplevox',               cat:'Warehouse & Inventory',       desc:'Real-time inventory, warehouse workflows, fulfilment efficiency data.' },
+    { id:'gsheets', name:'Google Sheets',           cat:'Spreadsheets & Productivity', desc:'Operational logs, shift schedules, stock trackers. Live Sheets API sync.' },
+    { id:'excel',   name:'Microsoft Excel / OneDrive', cat:'Spreadsheets & Productivity', desc:'Shared workbooks synced automatically — no manual file exports needed.' },
+  ];
+
+  // Active systems for this demo client (ids from SYSTEMS_LIBRARY)
+  let activeSystems = [
+    { id:'sage',     status:'connected', note:'Pulling: purchase orders, supplier invoices, nominal ledger.' },
+    { id:'webfleet', status:'connected', note:'Pulling: vehicle locations, trip history, driver behaviour, fuel.' },
+    { id:'bigchange',status:'pending',   note:'Awaiting API credentials from your operations team.' },
+    { id:'gsheets',  status:'connected', note:'Pulling: operational logs, shift schedules, stock trackers.' },
+  ];
+
+  function getSystemById(id) { return SYSTEMS_LIBRARY.find(s => s.id === id); }
+
+  function renderActiveSystems() {
+    const list = document.getElementById('activeSysList');
+    const empty = document.getElementById('sysEmptyState');
+    const pills = document.getElementById('sysPills');
+    list.innerHTML = '';
+    const connected = activeSystems.filter(s => s.status === 'connected').length;
+    const pending   = activeSystems.filter(s => s.status === 'pending').length;
+    pills.innerHTML = '';
+    if (connected) pills.innerHTML += `<div class="sys-score-pill ssp-connected">${connected} connected</div>`;
+    if (pending)   pills.innerHTML += `<div class="sys-score-pill ssp-pending">${pending} awaiting</div>`;
+    if (!activeSystems.length) { empty.style.display = 'block'; return; }
+    empty.style.display = 'none';
+    activeSystems.forEach(active => {
+      const sys = getSystemById(active.id);
+      if (!sys) return;
+      const cls = active.status === 'connected' ? 'sc-connected' : active.status === 'pending' ? 'sc-pending' : '';
+      const badge = active.status === 'connected'
+        ? '<div class="sys-badge sb-connected">Connected</div>'
+        : active.status === 'pending'
+        ? '<div class="sys-badge sb-pending">Awaiting setup</div>'
+        : '<div class="sys-badge sb-none">Not connected</div>';
+      const actionBtn = active.status === 'connected'
+        ? '<button class="sys-card-btn scb-manage">Manage →</button>'
+        : active.status === 'pending'
+        ? '<button class="sys-card-btn scb-pending">Complete setup →</button>'
+        : '';
+      const card = document.createElement('div');
+      card.className = `active-sys-card ${cls}`;
+      card.innerHTML = `
+        <button class="sys-remove-btn" onclick="removeSystem('${active.id}')" title="Remove">✕</button>
+        <div class="sys-card-top" style="padding-right:22px;">${badge}</div>
+        <div class="sys-card-name">${sys.name}</div>
+        <div class="sys-card-desc">${active.note || sys.desc}</div>
+        ${actionBtn}
+      `;
+      list.appendChild(card);
+    });
+    // Refresh picker buttons
+    document.querySelectorAll('.sys-add-btn').forEach(btn => {
+      const id = btn.dataset.id;
+      if (activeSystems.find(s => s.id === id)) {
+        btn.textContent = 'Added ✓'; btn.classList.add('added');
+      } else {
+        btn.textContent = 'Add'; btn.classList.remove('added');
+      }
+    });
+  }
+
+  function removeSystem(id) {
+    activeSystems = activeSystems.filter(s => s.id !== id);
+    renderActiveSystems();
+  }
+
+  function addSystem(id) {
+    if (activeSystems.find(s => s.id === id)) return;
+    activeSystems.push({ id, status: 'pending', note: 'Our team will be in touch within 24 hours to set up this connection.' });
+    renderActiveSystems();
+  }
+
+  function openSysModal() {
+    const cats = [...new Set(SYSTEMS_LIBRARY.map(s => s.cat))];
+    const body = document.getElementById('sysModalBody');
+    body.innerHTML = '';
+    cats.forEach(cat => {
+      const items = SYSTEMS_LIBRARY.filter(s => s.cat === cat);
+      const group = document.createElement('div');
+      group.innerHTML = `<div class="sys-picker-group-label">${cat}</div><div class="sys-picker-grid">${
+        items.map(sys => {
+          const active = activeSystems.find(s => s.id === sys.id);
+          return `<div class="sys-picker-item${active ? ' spi-active' : ''}">
+            <div class="sys-picker-item-info">
+              <div class="sys-picker-name">${sys.name}</div>
+              <div class="sys-picker-desc">${sys.desc}</div>
+            </div>
+            <button class="sys-add-btn${active ? ' added' : ''}" data-id="${sys.id}" onclick="addSystem('${sys.id}');renderActiveSystems();">${active ? 'Added ✓' : 'Add'}</button>
+          </div>`;
+        }).join('')
+      }</div>`;
+      body.appendChild(group);
+    });
+    document.getElementById('sysModalOverlay').classList.add('open');
+  }
+
+  function closeSysModal() {
+    document.getElementById('sysModalOverlay').classList.remove('open');
+  }
+
+  function sendSystemRequest() {
+    const input = document.getElementById('reqSysInput');
+    const success = document.getElementById('reqSysSuccess');
+    if (!input.value.trim()) return;
+    success.textContent = `Request sent for "${input.value.trim()}" — our team will confirm within 24 hours.`;
+    success.style.display = 'block';
+    input.value = '';
+    setTimeout(() => { success.style.display = 'none'; }, 5000);
+  }
+
+  document.getElementById('sysModalOverlay').addEventListener('click', e => {
+    if (e.target === document.getElementById('sysModalOverlay')) closeSysModal();
+  });
+
+  renderActiveSystems();
+
+  /* ═══ DEMO AUTO-LOGIN (?demo in URL skips login screen) ═══ */
+  if (new URLSearchParams(location.search).has('demo')) {
+    const client = CLIENTS['123456789'];
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('sidebarClientName').textContent = client.name;
+    document.getElementById('sidebarPlan').textContent = client.plan;
+    document.getElementById('appShell').classList.add('show');
+    initCharts();
+    animateKPIs();
+  }
 </script>
 </body>
 </html>
