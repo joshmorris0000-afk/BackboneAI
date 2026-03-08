@@ -9,6 +9,67 @@ This project follows [Semantic Versioning](https://semver.org/):
 
 ---
 
+## [0.3.6] — 2026-03-08
+
+### Added — Client Portal: Inventory Forecast detail section (Feature 7)
+
+- `autoDetail` for `inventory` module: 12-SKU Stock Watch table
+- Columns: SKU, Item, Current Stock, Daily Usage, Days Remaining (colour-coded), Action
+- Colour coding: <7 days remaining `.dt-critical` (red), 7–14 days `.dt-warn` (orange), 14+ days `.dt-ok` (green)
+- SKUs include corrugated boxes, stretch wrap, thermal labels, tape, foam protectors, bubble wrap, cardboard boxes, cable ties, label pouches, silica gel sachets, Line 4 consumables, anti-static bags
+- 3 stat cards: zero stockouts this month, 97% forecast accuracy, £4,200 capital freed from overstock
+
+---
+
+## [0.3.5] — 2026-03-08
+
+### Added — Client Portal: Compliance Docs detail section (Feature 6)
+
+- `autoDetail` for `compliance` module: 8-document Document Library table
+- Columns: Document Name, Type, Period, Generated date, Review Time, Status badge, Download button
+- Status badges: Ready (green), Reviewed (blue), Scheduled (grey)
+- Download buttons call `downloadReport()` — opens `sample-report.html?print`
+- Documents: March ops report, March compliance pack, driver hours & WTD, February ops report, vehicle inspection, operator licence check, annual audit pack, HSE risk assessment
+- Upcoming section: 3 next scheduled auto-drafts with dates
+
+---
+
+## [0.3.4] — 2026-03-08
+
+### Added — Client Portal: Supplier Intelligence detail section (Feature 5)
+
+- `autoDetail` for `suppliers` module: 14-row Supplier Scorecards table
+- Columns: Supplier Name, On-Time %, Invoice Accuracy, Reliability Trend (↑↓→), Status badge
+- Status badges: Good (green), Watch (orange), At Risk (red)
+- Midlands Freight Co highlighted as At Risk at 72% on-time
+- City Haulage Ltd and Direct Logistics Co flagged as Watch
+- 3 active alert cards below the table with specific context and recommended actions
+
+---
+
+## [0.3.3] — 2026-03-08
+
+### Added — Client Portal: Route Optimisation detail section (Feature 4)
+
+- `autoDetail` for `routes` module: 10-row This Week's Routes table
+- Columns: Vehicle, Route (origin → destinations), Original Miles, Optimised Miles, Saving £, Status
+- Status badges: Completed (green), In Progress (blue)
+- 3 stat cards: 94% on-time this week, 447 miles saved this week, 20 vehicles actively optimised
+
+---
+
+## [0.3.2] — 2026-03-08
+
+### Added — Client Portal: Invoice Processing detail section (Feature 3)
+
+- `autoDetail` property on `invoices` MODULES entry containing enriched detail HTML
+- `<div id="autoDetailSection">` added to `page-automation` template; `loadAutoPage()` now injects `m.autoDetail || ''` into this element
+- 10-row Recent Invoices table: Invoice #, Supplier, Amount, PO Match, Status badge (Approved/Flagged/Pending), Time Saved
+- Status badges: `.dt-approved` (green), `.dt-flagged` (red), `.dt-pending` (grey)
+- 3 stat cards below the table: Avg processing time 2.3 min, Duplicate invoices blocked 3, Error recovery rate 100%
+
+---
+
 ## [0.3.1] — 2026-03-08
 
 ### Added — Client Portal: Reports Page (`client.html`)

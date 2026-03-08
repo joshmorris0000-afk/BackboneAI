@@ -128,7 +128,12 @@ The authenticated client-facing platform. Seven internal pages (sidebar nav):
 #### Automation Detail Pages (Invoice Processing, Route Optimisation, Supplier Intel, Compliance Docs, Inventory Forecast)
 - Shared template (`page-automation`) loaded dynamically via `loadAutoPage(key)`
 - Each page shows: 4 KPI cards, 6-month savings bar chart, live activity log
-- Enriched detail table below the chart (specific to each module — see features 3–7)
+- Enriched detail section below the chart, specific to each module:
+  - **Invoice Processing** — 10-row recent invoices table (Invoice #, Supplier, Amount, PO Match, Status, Time Saved) + 3 stat cards (avg 2.3 min processing, 3 duplicates blocked, 100% error recovery)
+  - **Route Optimisation** — 10-row weekly routes table (Vehicle, Route, Original/Optimised Miles, Saving, Status) + 3 stat cards (94% on-time, 447 miles saved, 20 vehicles)
+  - **Supplier Intelligence** — 14-supplier scorecard table (On-Time %, Invoice Accuracy, Trend, Status) with Midlands Freight at 72% flagged At Risk + 3 active alert cards
+  - **Compliance Docs** — 8-document library table with download buttons and status badges + 3 upcoming auto-draft entries
+  - **Inventory Forecast** — 12-SKU Stock Watch table with colour-coded days remaining (red <7, orange 7–14, green 14+) + 3 stat cards
 
 #### Data Upload
 - Data completeness score (percentage + progress bar)
@@ -407,4 +412,4 @@ This is a private commercial codebase. All contributions require prior approval 
 ---
 
 *Built by Backbone AI Ltd. Registered in England & Wales.*
-*Last updated: March 2026 — v0.3.1*
+*Last updated: March 2026 — v0.3.6*
