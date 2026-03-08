@@ -759,12 +759,183 @@
     .sys-request-send:hover{background:rgba(139,92,246,0.25);}
     .sys-request-success{font-size:12px;color:#4ade80;margin-top:8px;display:none;}
 
+    /* ═══════════════════════════════
+       PAGE — INSIGHTS
+    ═══════════════════════════════ */
+    .ifilter-row{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;}
+    .ifilter{
+      font-size:12px;font-weight:600;padding:6px 14px;border-radius:7px;
+      border:1px solid var(--border);background:none;color:var(--muted2);
+      cursor:pointer;font-family:inherit;transition:background 0.2s,color 0.2s,border-color 0.2s;
+    }
+    .ifilter:hover{background:var(--surface);color:var(--text);}
+    .ifilter.active{background:var(--blue-dim);color:var(--blue-bright);border-color:rgba(59,130,246,0.3);}
+    .insights-full-list{display:flex;flex-direction:column;gap:12px;}
+    .insight-card{
+      background:var(--surface);border:1px solid var(--border);
+      border-radius:14px;padding:18px 20px;
+      display:flex;gap:14px;align-items:flex-start;
+      transition:border-color 0.2s;
+    }
+    .insight-card.done{opacity:0.45;}
+    .sev-warning .insight-card,.insight-card.sev-warning{border-left:3px solid var(--orange);}
+    .sev-opportunity .insight-card,.insight-card.sev-opportunity{border-left:3px solid var(--blue);}
+    .sev-positive .insight-card,.insight-card.sev-positive{border-left:3px solid var(--green);}
+    .insight-severity{
+      font-size:9px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;
+      padding:2px 8px;border-radius:4px;white-space:nowrap;
+    }
+    .sev-warning .insight-severity,.insight-card.sev-warning .insight-severity{background:rgba(249,115,22,0.12);color:var(--orange);}
+    .sev-opportunity .insight-severity,.insight-card.sev-opportunity .insight-severity{background:rgba(59,130,246,0.12);color:var(--blue-bright);}
+    .sev-positive .insight-severity,.insight-card.sev-positive .insight-severity{background:rgba(34,197,94,0.12);color:var(--green);}
+    .insight-card-icon{font-size:20px;flex-shrink:0;margin-top:2px;}
+    .insight-card-body{flex:1;}
+    .insight-card-title{font-size:13px;font-weight:700;margin-bottom:5px;}
+    .insight-card-text{font-size:12px;color:var(--muted2);line-height:1.6;margin-bottom:10px;}
+    .insight-card-footer{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+    .insight-source{font-size:10px;color:var(--muted);background:var(--bg2);padding:2px 8px;border-radius:4px;}
+    .insight-action-btn{
+      font-size:11px;font-weight:700;padding:4px 12px;border-radius:6px;
+      background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.2);
+      color:var(--blue-bright);cursor:pointer;font-family:inherit;
+      transition:background 0.2s;
+    }
+    .insight-action-btn:hover{background:rgba(59,130,246,0.16);}
+    .insight-action-btn.actioned{background:rgba(34,197,94,0.08);border-color:rgba(34,197,94,0.2);color:var(--green);cursor:default;}
+
+    /* ═══════════════════════════════
+       PAGE — REPORTS
+    ═══════════════════════════════ */
+    .reports-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px;}
+    .report-card{
+      background:var(--surface);border:1px solid var(--border);
+      border-radius:14px;overflow:hidden;
+      display:flex;flex-direction:column;
+    }
+    .report-card-top{
+      padding:18px 18px 12px;display:flex;gap:12px;align-items:flex-start;
+    }
+    .report-icon{
+      width:40px;height:40px;border-radius:10px;
+      display:flex;align-items:center;justify-content:center;
+      font-size:18px;flex-shrink:0;
+    }
+    .report-status-badge{
+      font-size:9px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;
+      padding:2px 8px;border-radius:4px;margin-left:auto;flex-shrink:0;
+    }
+    .rbadge-ready{background:rgba(34,197,94,0.12);color:var(--green);border:1px solid rgba(34,197,94,0.2);}
+    .rbadge-sent{background:rgba(59,130,246,0.1);color:var(--blue-bright);border:1px solid rgba(59,130,246,0.2);}
+    .rbadge-scheduled{background:rgba(100,116,139,0.1);color:var(--muted2);border:1px solid var(--border);}
+    .report-name{font-size:13px;font-weight:800;margin-bottom:3px;}
+    .report-desc{font-size:11px;color:var(--muted);line-height:1.5;}
+    .report-meta{
+      padding:0 18px 12px;font-size:11px;color:var(--muted);
+      border-bottom:1px solid var(--border);
+    }
+    .report-actions{
+      padding:12px 18px;display:flex;gap:8px;
+    }
+    .report-btn{
+      font-size:11px;font-weight:700;padding:6px 12px;border-radius:6px;
+      cursor:pointer;font-family:inherit;border:1px solid var(--border);
+      background:none;transition:background 0.2s;
+    }
+    .report-btn-primary{background:rgba(59,130,246,0.1);border-color:rgba(59,130,246,0.25);color:var(--blue-bright);}
+    .report-btn-primary:hover{background:rgba(59,130,246,0.2);}
+    .report-btn-ghost{color:var(--muted2);}
+    .report-btn-ghost:hover{background:var(--surface2);color:var(--text);}
+    /* Preview modal */
+    .report-preview-overlay{
+      position:fixed;inset:0;z-index:500;
+      background:rgba(0,0,0,0.75);backdrop-filter:blur(8px);
+      display:flex;align-items:center;justify-content:center;
+      opacity:0;pointer-events:none;transition:opacity 0.2s;
+    }
+    .report-preview-overlay.open{opacity:1;pointer-events:all;}
+    .report-preview-modal{
+      background:var(--bg2);border:1px solid var(--border);
+      border-radius:20px;width:620px;max-width:95vw;max-height:85vh;
+      overflow-y:auto;
+      transform:translateY(16px) scale(0.98);transition:transform 0.2s;
+    }
+    .report-preview-overlay.open .report-preview-modal{transform:translateY(0) scale(1);}
+    .report-preview-header{
+      padding:20px 24px;border-bottom:1px solid var(--border);
+      display:flex;align-items:center;justify-content:space-between;
+    }
+    .report-preview-body{padding:20px 24px;display:flex;flex-direction:column;gap:10px;}
+    .rps-item{
+      background:var(--surface);border:1px solid var(--border);
+      border-radius:10px;padding:14px 16px;
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+    }
+    .rps-label{font-size:12px;color:var(--muted2);}
+    .rps-value{font-size:13px;font-weight:700;}
+
+    /* ═══════════════════════════════
+       AUTOMATION DETAIL TABLES
+    ═══════════════════════════════ */
+    .auto-detail-section{margin-top:24px;}
+    .auto-detail-title{font-size:15px;font-weight:800;margin-bottom:14px;}
+    .data-table{width:100%;border-collapse:collapse;font-size:12px;}
+    .data-table th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--muted);padding:8px 12px;text-align:left;border-bottom:1px solid var(--border);}
+    .data-table td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--muted2);}
+    .data-table tr:last-child td{border-bottom:none;}
+    .data-table tr:hover td{background:rgba(255,255,255,0.02);}
+    .dt-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;}
+    .dt-approved{background:rgba(34,197,94,0.1);color:var(--green);}
+    .dt-flagged{background:rgba(244,63,94,0.1);color:var(--red);}
+    .dt-pending{background:rgba(100,116,139,0.1);color:var(--muted2);}
+    .dt-completed{background:rgba(34,197,94,0.1);color:var(--green);}
+    .dt-inprog{background:rgba(59,130,246,0.1);color:var(--blue-bright);}
+    .dt-good{background:rgba(34,197,94,0.1);color:var(--green);}
+    .dt-atrisk{background:rgba(244,63,94,0.1);color:var(--red);}
+    .dt-watch{background:rgba(249,115,22,0.1);color:var(--orange);}
+    .dt-ready{background:rgba(34,197,94,0.1);color:var(--green);}
+    .dt-reviewed{background:rgba(59,130,246,0.1);color:var(--blue-bright);}
+    .dt-scheduled{background:rgba(100,116,139,0.1);color:var(--muted2);}
+    .dt-critical{color:var(--red);font-weight:700;}
+    .dt-warn{color:var(--orange);font-weight:700;}
+    .dt-ok{color:var(--green);font-weight:700;}
+    .dt-download-btn{
+      font-size:10px;font-weight:700;padding:3px 9px;border-radius:5px;
+      background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.2);
+      color:var(--blue-bright);cursor:pointer;font-family:inherit;
+    }
+    .dt-download-btn:hover{background:rgba(59,130,246,0.15);}
+    .stat-cards-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px;}
+    .stat-card-sm{
+      background:var(--bg2);border:1px solid var(--border);
+      border-radius:10px;padding:14px;text-align:center;
+    }
+    .stat-card-sm-val{font-size:16px;font-weight:900;letter-spacing:-0.5px;margin-bottom:3px;}
+    .stat-card-sm-label{font-size:10px;color:var(--muted);}
+    .alert-cards-row{display:flex;flex-direction:column;gap:8px;margin-top:16px;}
+    .alert-card{
+      background:rgba(249,115,22,0.05);border:1px solid rgba(249,115,22,0.2);
+      border-radius:10px;padding:12px 14px;font-size:12px;color:var(--muted2);line-height:1.5;
+      display:flex;gap:10px;align-items:flex-start;
+    }
+    .alert-card-icon{flex-shrink:0;font-size:14px;}
+    .upcoming-section{margin-top:20px;}
+    .upcoming-title{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;}
+    .upcoming-list{display:flex;flex-direction:column;gap:6px;}
+    .upcoming-item{
+      background:var(--surface);border:1px solid var(--border);
+      border-radius:8px;padding:10px 14px;
+      display:flex;align-items:center;justify-content:space-between;
+      font-size:12px;color:var(--muted2);
+    }
+
     @media(max-width:1100px){
       .dash-grid,.upload-page-grid,.tracker-grid{grid-template-columns:1fr;}
       .module-grid{grid-template-columns:1fr 1fr;}
       .kpi-row{grid-template-columns:1fr 1fr;}
       .modal-kpis{grid-template-columns:1fr 1fr;}
       .sys-grid{grid-template-columns:1fr 1fr;}
+      .reports-grid{grid-template-columns:1fr 1fr;}
+      .stat-cards-row{grid-template-columns:1fr;}
     }
   </style>
 </head>
@@ -855,8 +1026,15 @@
     </div>
 
     <nav class="sidebar-nav">
+      <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:4px 10px 4px;">Overview</div>
       <button class="nav-item active" onclick="showPage('dashboard',this)">
         <span class="nav-item-icon">📊</span> Dashboard
+      </button>
+      <button class="nav-item" onclick="showPage('insights',this)">
+        <span class="nav-item-icon">💡</span> Insights
+      </button>
+      <button class="nav-item" onclick="showPage('reports',this)">
+        <span class="nav-item-icon">📈</span> Reports
       </button>
       <button class="nav-item" onclick="showPage('services',this)">
         <span class="nav-item-icon">✨</span> Services
@@ -1062,6 +1240,251 @@
               <div class="insight-item"><div class="insight-icon">💡</div><div class="insight-text"><strong>Tuesday afternoon slots have a 34% higher failed-drop rate</strong> — costing ~£280/month in reattempts. Shifting 3 postcodes to Wednesday morning would eliminate most of this.</div></div>
               <div class="insight-item"><div class="insight-icon">📈</div><div class="insight-text"><strong>86% of invoice discrepancies come from just 2 suppliers</strong> — both involve PO reference formatting. A single supplier communication this week would prevent most future errors.</div></div>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════ PAGE: INSIGHTS ══════ -->
+      <div class="page" id="page-insights">
+        <div class="section-title">Operational Insights</div>
+        <div class="section-sub">AI-surfaced patterns from your data this month — filtered from invoice, route, supplier, compliance, and inventory activity.</div>
+
+        <div class="ifilter-row">
+          <button class="ifilter active" onclick="filterInsights('all',this)">All insights</button>
+          <button class="ifilter" onclick="filterInsights('warning',this)">⚠ Warnings</button>
+          <button class="ifilter" onclick="filterInsights('opportunity',this)">💡 Opportunities</button>
+          <button class="ifilter" onclick="filterInsights('positive',this)">✅ Positives</button>
+        </div>
+
+        <div class="insights-full-list" id="insightsList">
+
+          <div class="insight-card sev-warning" data-type="warning">
+            <div class="insight-card-icon">⚠️</div>
+            <div class="insight-card-body">
+              <div class="insight-card-title">Midlands Freight Co reliability has dropped to 72% on-time</div>
+              <div class="insight-card-text">4 late deliveries recorded in the last 30 days, down from 91% last quarter. Continued decline increases exposure to missed customer SLAs and delays your daily routes. We recommend initiating a formal performance review with this supplier this week.</div>
+              <div class="insight-card-footer">
+                <span class="insight-severity">Warning</span>
+                <span class="insight-source">Supplier Intelligence · 8 Mar 2026</span>
+                <button class="insight-action-btn" onclick="markInsightDone(this)">Mark as actioned</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="insight-card sev-warning" data-type="warning">
+            <div class="insight-card-icon">🧾</div>
+            <div class="insight-card-body">
+              <div class="insight-card-title">86% of invoice discrepancies originate from 2 suppliers</div>
+              <div class="insight-card-text">City Haulage and Northern Fuel account for 6 of 7 flagged discrepancies this month — both related to inconsistent PO reference formatting. A single targeted communication to these suppliers would likely prevent the majority of future flags and save approximately 40 minutes of manual review per month.</div>
+              <div class="insight-card-footer">
+                <span class="insight-severity">Warning</span>
+                <span class="insight-source">Invoice Processing · 7 Mar 2026</span>
+                <button class="insight-action-btn" onclick="markInsightDone(this)">Mark as actioned</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="insight-card sev-opportunity" data-type="opportunity">
+            <div class="insight-card-icon">🚚</div>
+            <div class="insight-card-body">
+              <div class="insight-card-title">Tuesday afternoon slots have a 34% higher failed-drop rate</div>
+              <div class="insight-card-text">Analysis of the last 8 weeks shows that 3 specific postcodes — LS11, LS12, and WF6 — are responsible for most Tuesday afternoon failed drops. Shifting these to Wednesday morning would reduce reattempt costs by an estimated £280/month and improve overall on-time rate from 94% to approximately 96%.</div>
+              <div class="insight-card-footer">
+                <span class="insight-severity">Opportunity</span>
+                <span class="insight-source">Route Optimisation · 6 Mar 2026</span>
+                <button class="insight-action-btn" onclick="markInsightDone(this)">Mark as actioned</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="insight-card sev-opportunity" data-type="opportunity">
+            <div class="insight-card-icon">📦</div>
+            <div class="insight-card-body">
+              <div class="insight-card-title">Line 4 packing consumables are running 18 days ahead of reorder point</div>
+              <div class="insight-card-text">Current stock of corrugated inner boxes (SKU-0041) will reach minimum level in approximately 9 days based on current daily usage of 48 units. The standard lead time from your supplier is 7 days, leaving a 2-day buffer. We recommend raising a purchase order this week to maintain safe stock levels and avoid a potential stoppage.</div>
+              <div class="insight-card-footer">
+                <span class="insight-severity">Opportunity</span>
+                <span class="insight-source">Inventory Forecast · 8 Mar 2026</span>
+                <button class="insight-action-btn" onclick="markInsightDone(this)">Mark as actioned</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="insight-card sev-opportunity" data-type="opportunity">
+            <div class="insight-card-icon">💷</div>
+            <div class="insight-card-body">
+              <div class="insight-card-title">Vehicle 12 is running 14% more miles than comparable vehicles on similar routes</div>
+              <div class="insight-card-text">Over the past 6 weeks, Vehicle 12 has consistently logged higher mileage than Vehicles 8 and 15 covering equivalent delivery zones. The pattern suggests a routing inefficiency specific to that vehicle's daily plan. Reassigning 2 regular stops could reduce excess mileage by an estimated 60 miles/week, saving approximately £190/month in fuel and wear.</div>
+              <div class="insight-card-footer">
+                <span class="insight-severity">Opportunity</span>
+                <span class="insight-source">Route Optimisation · 5 Mar 2026</span>
+                <button class="insight-action-btn" onclick="markInsightDone(this)">Mark as actioned</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="insight-card sev-positive" data-type="positive">
+            <div class="insight-card-icon">✅</div>
+            <div class="insight-card-body">
+              <div class="insight-card-title">Northern Fuel on-time delivery rate has improved to 96%</div>
+              <div class="insight-card-text">Following an alert raised in February, Northern Fuel's delivery performance has improved from 81% to 96% over the past 4 weeks — the highest it has been in 6 months. Invoice accuracy from this supplier has also improved to 100% this month, down from 3 formatting discrepancies in January. No action required.</div>
+              <div class="insight-card-footer">
+                <span class="insight-severity">Positive</span>
+                <span class="insight-source">Supplier Intelligence · 4 Mar 2026</span>
+                <button class="insight-action-btn" onclick="markInsightDone(this)">Mark as actioned</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="insight-card sev-positive" data-type="positive">
+            <div class="insight-card-icon">📊</div>
+            <div class="insight-card-body">
+              <div class="insight-card-title">Invoice processing accuracy reached 98.7% — highest monthly rate recorded</div>
+              <div class="insight-card-text">312 invoices were processed this month with only 4 requiring manual review, compared to an average of 9 in the previous 3 months. The AI model has improved its handling of partial PO matches following last month's threshold adjustment. This month's 47 hours saved represents a 12% improvement on February's figure of 42 hours.</div>
+              <div class="insight-card-footer">
+                <span class="insight-severity">Positive</span>
+                <span class="insight-source">Invoice Processing · 3 Mar 2026</span>
+                <button class="insight-action-btn" onclick="markInsightDone(this)">Mark as actioned</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="insight-card sev-positive" data-type="positive">
+            <div class="insight-card-icon">🛡️</div>
+            <div class="insight-card-body">
+              <div class="insight-card-title">March compliance pack is ready — estimated 6 hours of manual work replaced</div>
+              <div class="insight-card-text">The March operational compliance report has been auto-drafted from your live data including driver hours, vehicle inspection records, and delivery performance. It covers the full reporting period and requires only a 2-minute review before sign-off. The document is available in Compliance Docs and will be filed automatically on your confirmation.</div>
+              <div class="insight-card-footer">
+                <span class="insight-severity">Positive</span>
+                <span class="insight-source">Compliance Docs · 1 Mar 2026</span>
+                <button class="insight-action-btn" onclick="markInsightDone(this)">Mark as actioned</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ══════ PAGE: REPORTS ══════ -->
+      <div class="page" id="page-reports">
+        <div class="section-title">Performance Reports</div>
+        <div class="section-sub">Monthly reports and downloadable summaries generated automatically from your operational data.</div>
+
+        <div class="reports-grid">
+
+          <div class="report-card">
+            <div class="report-card-top">
+              <div class="report-icon" style="background:rgba(34,197,94,0.1);">📊</div>
+              <div style="flex:1;">
+                <div class="report-name">March Operations Report</div>
+                <div class="report-desc">Full monthly overview — savings, automations, activity log, and KPIs.</div>
+              </div>
+              <div class="report-status-badge rbadge-ready">Ready</div>
+            </div>
+            <div class="report-meta">Generated 8 Mar 2026 · 11 pages · PDF</div>
+            <div class="report-actions">
+              <button class="report-btn report-btn-primary" onclick="downloadReport(this)">Download PDF</button>
+              <button class="report-btn report-btn-ghost" onclick="previewReport(this,'March Operations Report')">Preview</button>
+            </div>
+          </div>
+
+          <div class="report-card">
+            <div class="report-card-top">
+              <div class="report-icon" style="background:rgba(34,197,94,0.1);">🛡️</div>
+              <div style="flex:1;">
+                <div class="report-name">March Compliance Pack</div>
+                <div class="report-desc">Driver hours, vehicle inspections, delivery performance — audit-ready.</div>
+              </div>
+              <div class="report-status-badge rbadge-ready">Ready</div>
+            </div>
+            <div class="report-meta">Generated 1 Mar 2026 · 8 pages · PDF</div>
+            <div class="report-actions">
+              <button class="report-btn report-btn-primary" onclick="downloadReport(this)">Download PDF</button>
+              <button class="report-btn report-btn-ghost" onclick="previewReport(this,'March Compliance Pack')">Preview</button>
+            </div>
+          </div>
+
+          <div class="report-card">
+            <div class="report-card-top">
+              <div class="report-icon" style="background:rgba(249,115,22,0.1);">📋</div>
+              <div style="flex:1;">
+                <div class="report-name">February Supplier Scorecard</div>
+                <div class="report-desc">All 14 suppliers ranked by on-time %, invoice accuracy, and reliability trend.</div>
+              </div>
+              <div class="report-status-badge rbadge-sent">Sent</div>
+            </div>
+            <div class="report-meta">Generated 3 Mar 2026 · 6 pages · PDF</div>
+            <div class="report-actions">
+              <button class="report-btn report-btn-primary" onclick="downloadReport(this)">Download PDF</button>
+              <button class="report-btn report-btn-ghost" onclick="previewReport(this,'February Supplier Scorecard')">Preview</button>
+            </div>
+          </div>
+
+          <div class="report-card">
+            <div class="report-card-top">
+              <div class="report-icon" style="background:rgba(139,92,246,0.1);">🚚</div>
+              <div style="flex:1;">
+                <div class="report-name">February Fleet Efficiency</div>
+                <div class="report-desc">Miles saved, on-time rate, vehicle-by-vehicle performance breakdown.</div>
+              </div>
+              <div class="report-status-badge rbadge-sent">Sent</div>
+            </div>
+            <div class="report-meta">Generated 2 Mar 2026 · 9 pages · PDF</div>
+            <div class="report-actions">
+              <button class="report-btn report-btn-primary" onclick="downloadReport(this)">Download PDF</button>
+              <button class="report-btn report-btn-ghost" onclick="previewReport(this,'February Fleet Efficiency')">Preview</button>
+            </div>
+          </div>
+
+          <div class="report-card">
+            <div class="report-card-top">
+              <div class="report-icon" style="background:rgba(59,130,246,0.1);">📊</div>
+              <div style="flex:1;">
+                <div class="report-name">February Operations Report</div>
+                <div class="report-desc">Full monthly overview for February — all automations and savings recorded.</div>
+              </div>
+              <div class="report-status-badge rbadge-sent">Sent</div>
+            </div>
+            <div class="report-meta">Generated 3 Mar 2026 · 11 pages · PDF</div>
+            <div class="report-actions">
+              <button class="report-btn report-btn-primary" onclick="downloadReport(this)">Download PDF</button>
+              <button class="report-btn report-btn-ghost" onclick="previewReport(this,'February Operations Report')">Preview</button>
+            </div>
+          </div>
+
+          <div class="report-card" style="opacity:0.6;">
+            <div class="report-card-top">
+              <div class="report-icon" style="background:rgba(100,116,139,0.1);">📋</div>
+              <div style="flex:1;">
+                <div class="report-name">March Supplier Scorecard</div>
+                <div class="report-desc">All 14 suppliers ranked — auto-generates on 10 Apr once March data is complete.</div>
+              </div>
+              <div class="report-status-badge rbadge-scheduled">Scheduled</div>
+            </div>
+            <div class="report-meta">Scheduled for 10 Apr 2026 · Est. 6 pages · PDF</div>
+            <div class="report-actions">
+              <button class="report-btn report-btn-ghost" style="cursor:not-allowed;opacity:0.5;" disabled>Not yet available</button>
+            </div>
+          </div>
+
+        </div>
+
+        <div style="padding:16px 20px;background:rgba(59,130,246,0.05);border:1px solid rgba(59,130,246,0.15);border-radius:12px;font-size:13px;color:var(--muted2);line-height:1.6;">
+          <strong style="color:var(--text);">Reports are generated automatically</strong> at the end of each reporting period using your live operational data. No input required from your team. Reports are available for download here within 48 hours of generation and also sent to your account email. Contact <a href="mailto:sarah.chen@backboneai.co.uk" style="color:var(--blue-bright);">sarah.chen@backboneai.co.uk</a> to change delivery preferences.
+        </div>
+      </div>
+
+      <!-- Report Preview Modal -->
+      <div class="report-preview-overlay" id="reportPreviewOverlay" onclick="closeReportPreview(event)">
+        <div class="report-preview-modal">
+          <div class="report-preview-header">
+            <div>
+              <div style="font-size:16px;font-weight:800;" id="reportPreviewTitle">Report Preview</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:2px;">Summary of key sections — download for full detail</div>
+            </div>
+            <button class="modal-close" onclick="closeReportPreviewDirect()">×</button>
+          </div>
+          <div class="report-preview-body" id="reportPreviewBody">
           </div>
         </div>
       </div>
@@ -1715,6 +2138,8 @@
 
     const titles = {
       dashboard:  ['Operations Dashboard',       'Live view of your AI systems and savings'],
+      insights:   ['Operational Insights',        'AI-surfaced patterns from your data this month'],
+      reports:    ['Performance Reports',         'Monthly reports and downloadable summaries'],
       services:   ['Services Available to You',  'Add-ons that activate within 48 hours'],
       upload:     ['Data & System Access',        'Connect systems and upload files'],
       tracker:    ['Project Tracker',             'Progress on all work completed and planned'],
@@ -1815,6 +2240,96 @@
     });
   }
 
+  /* ═══ INSIGHTS ═══ */
+  function filterInsights(type, btn) {
+    document.querySelectorAll('.ifilter').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('#insightsList .insight-card').forEach(card => {
+      if (type === 'all' || card.dataset.type === type) {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  function markInsightDone(btn) {
+    btn.textContent = 'Actioned ✓';
+    btn.classList.add('actioned');
+    btn.disabled = true;
+    const card = btn.closest('.insight-card');
+    if (card) card.classList.add('done');
+  }
+
+  /* ═══ REPORTS ═══ */
+  const REPORT_PREVIEWS = {
+    'March Operations Report': [
+      { label: 'Total cost saved (March)', value: '£13,100' },
+      { label: 'Hours saved across automations', value: '192 hours' },
+      { label: 'Tasks automated', value: '1,847' },
+      { label: 'Monthly ROI', value: '3.7x retainer' },
+      { label: 'Top performing module', value: 'Invoice Processing (312 invoices)' },
+      { label: 'Active alerts raised', value: '3 (1 resolved)' },
+    ],
+    'March Compliance Pack': [
+      { label: 'Reporting period', value: '1–31 Mar 2026' },
+      { label: 'Driver hours checked', value: '20 drivers · 100% compliant' },
+      { label: 'Vehicle inspection records', value: '20 vehicles · all current' },
+      { label: 'Delivery performance', value: '94% on-time (threshold: 90%)' },
+      { label: 'Documents ready for sign-off', value: '4 documents' },
+      { label: 'Audit readiness status', value: '100% — no gaps identified' },
+    ],
+    'February Supplier Scorecard': [
+      { label: 'Suppliers tracked', value: '14' },
+      { label: 'Average on-time rate', value: '88%' },
+      { label: 'Highest performer', value: 'Northern Fuel — 96%' },
+      { label: 'Lowest performer', value: 'Midlands Freight Co — 72%' },
+      { label: 'Suppliers flagged for review', value: '1 (At Risk)' },
+      { label: 'Disputes avoided via early alerts', value: '£840 value' },
+    ],
+    'February Fleet Efficiency': [
+      { label: 'Vehicles optimised', value: '20' },
+      { label: 'Miles saved vs manual planning', value: '1,840 miles' },
+      { label: 'Driver hours saved', value: '60 hours' },
+      { label: 'On-time delivery rate', value: '94%' },
+      { label: 'Failed drops vs prior month', value: '3 (down from 9)' },
+      { label: 'Total cost saving', value: '£3,800' },
+    ],
+    'February Operations Report': [
+      { label: 'Total cost saved (February)', value: '£11,200' },
+      { label: 'Hours saved across automations', value: '168 hours' },
+      { label: 'Tasks automated', value: '1,610' },
+      { label: 'Monthly ROI', value: '3.2x retainer' },
+      { label: 'New automations live', value: 'Route Optimisation (17 Feb)' },
+      { label: 'Highlights', value: 'First full month of route AI data' },
+    ],
+  };
+
+  function previewReport(btn, title) {
+    document.getElementById('reportPreviewTitle').textContent = title;
+    const items = REPORT_PREVIEWS[title] || [];
+    document.getElementById('reportPreviewBody').innerHTML = items.map(item => `
+      <div class="rps-item">
+        <span class="rps-label">${item.label}</span>
+        <span class="rps-value">${item.value}</span>
+      </div>`).join('');
+    document.getElementById('reportPreviewOverlay').classList.add('open');
+  }
+
+  function closeReportPreview(e) {
+    if (e.target === document.getElementById('reportPreviewOverlay')) {
+      document.getElementById('reportPreviewOverlay').classList.remove('open');
+    }
+  }
+
+  function closeReportPreviewDirect() {
+    document.getElementById('reportPreviewOverlay').classList.remove('open');
+  }
+
+  function downloadReport(btn) {
+    window.open('sample-report.html?print', '_blank');
+  }
+
   /* ═══ MODULE MODAL DATA ═══ */
   const MODULES = {
     invoices: {
@@ -1902,7 +2417,12 @@
 
   function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
   function closeModalOnBg(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      closeModal();
+      closeReportPreviewDirect();
+    }
+  });
 
   /* ═══ UPLOAD CATEGORIES ═══ */
   function toggleCat(id) {
