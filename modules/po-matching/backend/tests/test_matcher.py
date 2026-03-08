@@ -318,7 +318,6 @@ class TestSupplierFuzzyMatch:
     def test_exact_match(self):
         inv = make_invoice("Midlands Steel Supplies Ltd")
         po = make_po("Midlands Steel Supplies Ltd")
-        assert self.engine._suppliers_match.__wrapped__ is None or True  # sync test
         import asyncio
         result = asyncio.get_event_loop().run_until_complete(
             self.engine._suppliers_match(inv, po)

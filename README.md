@@ -158,7 +158,7 @@ Detail sections per module:
 #### Data Upload
 - Data completeness score (percentage + progress bar)
 - Four categorised upload sections: Operational Data, Financial & Invoices, Process Documents, Compliance
-- Dynamic system connections with 19-system library, add/remove/request flow
+- Dynamic system connections with 20-system library, add/remove/request flow
 - Drag-and-drop upload zones with file type validation
 - Security information (AES-256 encryption, UK GDPR compliance, ICO framework)
 
@@ -244,7 +244,13 @@ backbone-ai/
 ├── README.md               # This file — primary project documentation
 ├── CHANGELOG.md            # Version history and release notes
 ├── package.json            # Project metadata and run scripts
+├── passcode.js             # Site-wide development access gate (password: DEVELOPMENT)
 └── .gitignore              # Files excluded from version control
+
+modules/
+├── po-matching/backend/            # FastAPI: 3-way PO matching engine (21 tests, all passing)
+├── supplier-price-drift/backend/   # FastAPI: supplier price drift detector (32 tests, all passing)
+└── supplier-statement-recon/backend/ # FastAPI: statement reconciliation engine (26 tests, all passing)
 ```
 
 ---
@@ -325,9 +331,11 @@ The portal uses a 9-digit access code system. In the current version, client cod
 
 ```javascript
 const CLIENTS = {
+  '000000000': { name: 'Whitfield Logistics Ltd', sector: 'Logistics & Distribution', plan: 'Scale' },
   '123456789': { name: 'Whitfield Logistics Ltd', sector: 'Logistics & Distribution', plan: 'Scale' },
   '987654321': { name: 'Thornton Manufacturing Co', sector: 'Manufacturing', plan: 'Backbone' },
   '456123789': { name: 'Northern Freight Solutions', sector: 'Logistics & Distribution', plan: 'Pilot' },
+  '111111111': { name: 'Your Business', sector: '—', plan: 'Scale', status: 'onboarding' },
 };
 ```
 
@@ -368,13 +376,17 @@ The modal is a single DOM element with content injected via JavaScript on open. 
 
 ## Client Portal — Access Codes
 
-For demonstration purposes, three client codes are pre-loaded:
+**Site gate password:** `DEVELOPMENT` (entered on first visit to any page)
 
-| Code | Client | Sector | Plan |
-|---|---|---|---|
-| `123-456-789` | Whitfield Logistics Ltd | Logistics & Distribution | Scale |
-| `987-654-321` | Thornton Manufacturing Co | Manufacturing | Backbone |
-| `456-123-789` | Northern Freight Solutions | Logistics & Distribution | Pilot |
+Five client codes are pre-loaded:
+
+| Code | Client | Notes |
+|---|---|---|
+| `000000000` | Whitfield Logistics Ltd | Primary demo — full live data, all 10 automations active |
+| `123456789` | Whitfield Logistics Ltd | Alternate code for same demo account |
+| `987654321` | Thornton Manufacturing Co | Manufacturing sector demo |
+| `456123789` | Northern Freight Solutions | Pilot tier demo |
+| `111111111` | (Onboarding blank portal) | Activates onboarding mode — empty state with setup steps |
 
 ---
 
@@ -432,4 +444,4 @@ This is a private commercial codebase. All contributions require prior approval 
 ---
 
 *Built by Backbone AI Ltd. Registered in England & Wales.*
-*Last updated: March 2026 — v0.4.5*
+*Last updated: March 2026 — v0.4.6*

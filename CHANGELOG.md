@@ -9,6 +9,27 @@ This project follows [Semantic Versioning](https://semver.org/):
 
 ---
 
+## [0.4.6] — 2026-03-08
+
+### Fixed — Full project QA audit
+
+**Backend (Python modules):**
+- Added `tests/conftest.py` to `po-matching/backend` — sets required env vars before import so pytest can collect tests without a live `.env` file
+- Added `from typing import Optional` to all six SQLAlchemy model files in `po-matching/backend` (`audit_log.py`, `client.py`, `documents.py`, `match.py`, `supplier.py`, `user.py`) — replaced all `Mapped[X | None]` annotations with `Mapped[Optional[X]]` for Python 3.9 compatibility
+- Added `from __future__ import annotations` to all non-model service and API files in `po-matching/backend` that used `X | None` type union syntax — fixes Python 3.9 import errors
+- Fixed broken `test_exact_match` in `test_matcher.py` — removed `assert self.engine._suppliers_match.__wrapped__ is None or True` which raised `AttributeError` because `__wrapped__` does not exist on a plain async method; assertion was dead code (the `or True` could never short-circuit past the attribute error)
+- All 79 backend tests now pass: PO Matching 21/21, Price Drift 32/32, Statement Recon 26/26
+
+**Frontend (client.html):**
+- Removed dead `<!-- SYSTEM PICKER MODAL -->` div (`sysModalOverlay` and all its contents, ~26 lines) — the modal was replaced with an inline system library in v0.2.0 but the old HTML was never cleaned up; its close button called `closeSysModal()` which no longer exists, which would throw a `ReferenceError` if the button were ever clicked
+- Removing the modal also eliminates a duplicate `id="reqSysInput"` and duplicate `id="reqSysSuccess"` — both IDs now appear exactly once in the live inline UI, so `sendSystemRequest()` correctly reads the visible input
+
+**Documentation:**
+- README: corrected system library count from 19 to 20; added `000000000` and `111111111` to CLIENTS map example and access codes table; added site gate password `DEVELOPMENT`; added backend modules to project structure; bumped version to v0.4.6
+- CHANGELOG v0.2.0: corrected system library from "19 systems" to "20 systems"; corrected demo state from "Sage 200" to "Sage 50" (matching actual `activeSystems` array)
+
+---
+
 ## [0.4.5] — 2026-03-08
 
 ### Added — Client Portal: Supplier Chaser Automation (System 9)
@@ -271,11 +292,11 @@ This project follows [Semantic Versioning](https://semver.org/):
 
 **System Connections (Data Upload page)**
 - Dynamic system connections replacing static list
-- `SYSTEMS_LIBRARY`: 19 systems across 5 categories (Finance, Fleet & Transport, Manufacturing ERPs, Productivity, Custom)
+- `SYSTEMS_LIBRARY`: 20 systems across 5 categories (Finance, Fleet & Transport, ERP & Manufacturing, Warehouse & Inventory, Spreadsheets & Productivity)
 - `activeSystems` state array — only connected/pending systems shown
 - Add system via categorised picker modal, remove system with confirmation
 - "Request a system" form with success message
-- Demo state: Sage 200, Webfleet, BigChange (pending), Google Sheets
+- Demo state: Sage 50, Webfleet, BigChange (pending), Google Sheets
 
 **Services Upsell (Dashboard page)**
 - Six add-on cards at the bottom of the dashboard: Supplier Scorecard, Carbon Baseline Report, Cash Flow Visibility, Labour Productivity Report, Board Reporting Pack, Process Efficiency Audit

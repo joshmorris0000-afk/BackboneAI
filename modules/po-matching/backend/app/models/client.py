@@ -1,3 +1,4 @@
+from typing import Optional
 import uuid
 from decimal import Decimal
 
@@ -42,13 +43,13 @@ class ClientConfig(Base):
     extraction_confidence_threshold: Mapped[Decimal] = mapped_column(Numeric(5, 4), default=Decimal("0.85"))
 
     # ERP
-    erp_system: Mapped[str | None] = mapped_column(String(20), nullable=True)  # sage200 | xero | sap_b1
+    erp_system: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)  # sage200 | xero | sap_b1
     currency: Mapped[str] = mapped_column(String(3), default="GBP")
     vat_registered: Mapped[bool] = mapped_column(Boolean, default=True)
     payment_terms_default: Mapped[int] = mapped_column(default=30)
 
     # Alerts
-    alert_email: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    alert_email: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     alert_on_major_discrepancy: Mapped[bool] = mapped_column(Boolean, default=True)
     major_discrepancy_threshold_gbp: Mapped[Decimal] = mapped_column(Numeric(12, 4), default=Decimal("500.00"))
 
@@ -75,22 +76,22 @@ class ConnectorCredential(Base):
     connector_type: Mapped[str] = mapped_column(String(30), nullable=False)  # sage200 | xero | sap_b1 | imap | sage200_sql
 
     # OAuth fields (Sage 200 Cloud, Xero)
-    access_token_enc: Mapped[str | None] = mapped_column(Text, nullable=True)   # encrypted
-    refresh_token_enc: Mapped[str | None] = mapped_column(Text, nullable=True)  # encrypted
-    token_expires_at: Mapped[DateTime | None] = mapped_column(DateTime(timezone=True), nullable=True)
-    tenant_id: Mapped[str | None] = mapped_column(String(100), nullable=True)   # Xero tenant, Sage subscription ID
+    access_token_enc: Mapped[Optional[str]] = mapped_column(Text, nullable=True)   # encrypted
+    refresh_token_enc: Mapped[Optional[str]] = mapped_column(Text, nullable=True)  # encrypted
+    token_expires_at: Mapped[Optional[DateTime]] = mapped_column(DateTime(timezone=True), nullable=True)
+    tenant_id: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)   # Xero tenant, Sage subscription ID
 
     # Generic key/value for non-OAuth connectors (SAP session, IMAP, SQL)
-    host: Mapped[str | None] = mapped_column(String(255), nullable=True)
-    port: Mapped[int | None] = mapped_column(nullable=True)
-    username: Mapped[str | None] = mapped_column(String(255), nullable=True)
-    password_enc: Mapped[str | None] = mapped_column(Text, nullable=True)       # encrypted
-    database_name: Mapped[str | None] = mapped_column(String(100), nullable=True)
-    extra_config_enc: Mapped[str | None] = mapped_column(Text, nullable=True)   # encrypted JSON for any extras
+    host: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    port: Mapped[Optional[int]] = mapped_column(nullable=True)
+    username: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    password_enc: Mapped[Optional[str]] = mapped_column(Text, nullable=True)       # encrypted
+    database_name: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
+    extra_config_enc: Mapped[Optional[str]] = mapped_column(Text, nullable=True)   # encrypted JSON for any extras
 
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
-    last_sync_at: Mapped[DateTime | None] = mapped_column(DateTime(timezone=True), nullable=True)
-    last_error: Mapped[str | None] = mapped_column(Text, nullable=True)
+    last_sync_at: Mapped[Optional[DateTime]] = mapped_column(DateTime(timezone=True), nullable=True)
+    last_error: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     created_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 

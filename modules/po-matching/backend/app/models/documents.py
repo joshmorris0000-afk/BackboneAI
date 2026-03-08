@@ -1,6 +1,7 @@
 """
 Core financial document models: Purchase Orders, Goods Receipts, Invoices.
 """
+from typing import Optional
 import uuid
 from decimal import Decimal
 from enum import Enum
@@ -49,15 +50,15 @@ class PurchaseOrder(Base):
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     client_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("clients.id"), nullable=False, index=True)
     po_number: Mapped[str] = mapped_column(String(100), nullable=False, index=True)
-    supplier_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), ForeignKey("suppliers.id"), nullable=True)
+    supplier_id: Mapped[Optional[uuid.UUID]] = mapped_column(UUID(as_uuid=True), ForeignKey("suppliers.id"), nullable=True)
     supplier_name: Mapped[str] = mapped_column(String(255), nullable=False)
     issued_date: Mapped[Date] = mapped_column(Date, nullable=False)
-    expected_delivery: Mapped[Date | None] = mapped_column(Date, nullable=True)
+    expected_delivery: Mapped[Optional[Date]] = mapped_column(Date, nullable=True)
     currency: Mapped[str] = mapped_column(String(3), default="GBP", nullable=False)
     status: Mapped[str] = mapped_column(String(30), default=POStatus.issued, nullable=False)
     source: Mapped[str] = mapped_column(String(20), nullable=False)
-    source_ref: Mapped[str | None] = mapped_column(String(100), nullable=True)  # ERP internal ID
-    notes: Mapped[str | None] = mapped_column(Text, nullable=True)
+    source_ref: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)  # ERP internal ID
+    notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     created_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
@@ -72,7 +73,7 @@ class PurchaseOrderLine(Base):
     purchase_order_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("purchase_orders.id"), nullable=False)
     line_number: Mapped[int] = mapped_column(nullable=False)
     description: Mapped[str] = mapped_column(Text, nullable=False)
-    part_number: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    part_number: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
     quantity: Mapped[Decimal] = mapped_column(Numeric(12, 4), nullable=False)
     unit_price: Mapped[Decimal] = mapped_column(Numeric(12, 4), nullable=False)
     vat_rate: Mapped[Decimal] = mapped_column(Numeric(5, 4), default=Decimal("0.20"), nullable=False)
@@ -92,13 +93,13 @@ class GoodsReceiptNote(Base):
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     client_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("clients.id"), nullable=False, index=True)
     grn_number: Mapped[str] = mapped_column(String(100), nullable=False, index=True)
-    po_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), ForeignKey("purchase_orders.id"), nullable=True)
-    supplier_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), ForeignKey("suppliers.id"), nullable=True)
+    po_id: Mapped[Optional[uuid.UUID]] = mapped_column(UUID(as_uuid=True), ForeignKey("purchase_orders.id"), nullable=True)
+    supplier_id: Mapped[Optional[uuid.UUID]] = mapped_column(UUID(as_uuid=True), ForeignKey("suppliers.id"), nullable=True)
     received_date: Mapped[Date] = mapped_column(Date, nullable=False)
-    received_by: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    received_by: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
     source: Mapped[str] = mapped_column(String(20), nullable=False)
-    source_ref: Mapped[str | None] = mapped_column(String(100), nullable=True)
-    notes: Mapped[str | None] = mapped_column(Text, nullable=True)
+    source_ref: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
+    notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     created_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
     lines: Mapped[list["GoodsReceiptLine"]] = relationship(back_populates="grn", cascade="all, delete-orphan")
@@ -110,17 +111,17 @@ class GoodsReceiptLine(Base):
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     grn_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("goods_receipt_notes.id"), nullable=False)
-    po_line_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), ForeignKey("purchase_order_lines.id"), nullable=True)
+    po_line_id: Mapped[Optional[uuid.UUID]] = mapped_column(UUID(as_uuid=True), ForeignKey("purchase_order_lines.id"), nullable=True)
     description: Mapped[str] = mapped_column(Text, nullable=False)
-    part_number: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    part_number: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
     quantity_ordered: Mapped[Decimal] = mapped_column(Numeric(12, 4), nullable=False)
     quantity_received: Mapped[Decimal] = mapped_column(Numeric(12, 4), nullable=False)
     quantity_rejected: Mapped[Decimal] = mapped_column(Numeric(12, 4), default=Decimal("0"), nullable=False)
-    rejection_reason: Mapped[str | None] = mapped_column(Text, nullable=True)
+    rejection_reason: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     uom: Mapped[str] = mapped_column(String(20), default="each", nullable=False)
 
     grn: Mapped["GoodsReceiptNote"] = relationship(back_populates="lines")
-    po_line: Mapped["PurchaseOrderLine | None"] = relationship(back_populates="grn_lines")
+    po_line: Mapped[Optional["PurchaseOrderLine"]] = relationship(back_populates="grn_lines")
     match_line_results: Mapped[list["MatchLineResult"]] = relationship(back_populates="grn_line")
 
 
@@ -132,23 +133,23 @@ class Invoice(Base):
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     client_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("clients.id"), nullable=False, index=True)
     invoice_number: Mapped[str] = mapped_column(String(100), nullable=False, index=True)
-    supplier_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), ForeignKey("suppliers.id"), nullable=True)
+    supplier_id: Mapped[Optional[uuid.UUID]] = mapped_column(UUID(as_uuid=True), ForeignKey("suppliers.id"), nullable=True)
     supplier_name_raw: Mapped[str] = mapped_column(String(255), nullable=False)
-    supplier_vat_number: Mapped[str | None] = mapped_column(String(20), nullable=True)
-    invoice_date: Mapped[Date | None] = mapped_column(Date, nullable=True)
-    due_date: Mapped[Date | None] = mapped_column(Date, nullable=True)
-    po_reference_raw: Mapped[str | None] = mapped_column(String(200), nullable=True)
+    supplier_vat_number: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
+    invoice_date: Mapped[Optional[Date]] = mapped_column(Date, nullable=True)
+    due_date: Mapped[Optional[Date]] = mapped_column(Date, nullable=True)
+    po_reference_raw: Mapped[Optional[str]] = mapped_column(String(200), nullable=True)
     currency: Mapped[str] = mapped_column(String(3), default="GBP", nullable=False)
     subtotal: Mapped[Decimal] = mapped_column(Numeric(12, 4), nullable=False)
     vat_total: Mapped[Decimal] = mapped_column(Numeric(12, 4), default=Decimal("0"), nullable=False)
     grand_total: Mapped[Decimal] = mapped_column(Numeric(12, 4), nullable=False)
-    payment_terms: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    payment_terms: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
     source: Mapped[str] = mapped_column(String(20), nullable=False)
-    raw_file_path: Mapped[str | None] = mapped_column(String(500), nullable=True)  # encrypted S3 key
-    extraction_confidence: Mapped[Decimal | None] = mapped_column(Numeric(5, 4), nullable=True)
-    extraction_model: Mapped[str | None] = mapped_column(String(50), nullable=True)
-    extraction_raw: Mapped[dict | None] = mapped_column(JSONB, nullable=True)  # full AI response
-    fraud_flags: Mapped[list | None] = mapped_column(JSONB, nullable=True)
+    raw_file_path: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)  # encrypted S3 key
+    extraction_confidence: Mapped[Optional[Decimal]] = mapped_column(Numeric(5, 4), nullable=True)
+    extraction_model: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
+    extraction_raw: Mapped[Optional[dict]] = mapped_column(JSONB, nullable=True)  # full AI response
+    fraud_flags: Mapped[Optional[list]] = mapped_column(JSONB, nullable=True)
     status: Mapped[str] = mapped_column(String(30), default=InvoiceStatus.pending_extraction, nullable=False, index=True)
     is_duplicate: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     created_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), server_default=func.now())
@@ -168,7 +169,7 @@ class InvoiceLine(Base):
     unit_price: Mapped[Decimal] = mapped_column(Numeric(12, 4), nullable=False)
     vat_rate: Mapped[Decimal] = mapped_column(Numeric(5, 4), default=Decimal("0.20"), nullable=False)
     line_total: Mapped[Decimal] = mapped_column(Numeric(12, 4), nullable=False)
-    po_line_ref: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    po_line_ref: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
 
     invoice: Mapped["Invoice"] = relationship(back_populates="lines")
     match_line_results: Mapped[list["MatchLineResult"]] = relationship(back_populates="invoice_line")

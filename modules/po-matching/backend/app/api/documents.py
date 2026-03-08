@@ -1,6 +1,8 @@
 """
 Document endpoints — upload invoices, list POs, list GRNs.
 """
+from __future__ import annotations
+
 import uuid
 from decimal import Decimal
 

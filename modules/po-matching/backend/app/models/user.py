@@ -1,3 +1,4 @@
+from typing import Optional
 import uuid
 from enum import Enum
 
@@ -30,11 +31,11 @@ class User(Base):
     approval_limit_gbp: Mapped[float] = mapped_column(default=2500.0, nullable=False)
 
     # Refresh token jti stored for single-use enforcement
-    refresh_token_jti: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    refresh_token_jti: Mapped[Optional[str]] = mapped_column(String(64), nullable=True)
 
     failed_login_attempts: Mapped[int] = mapped_column(default=0, nullable=False)
-    locked_until: Mapped[DateTime | None] = mapped_column(DateTime(timezone=True), nullable=True)
-    last_login_at: Mapped[DateTime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    locked_until: Mapped[Optional[DateTime]] = mapped_column(DateTime(timezone=True), nullable=True)
+    last_login_at: Mapped[Optional[DateTime]] = mapped_column(DateTime(timezone=True), nullable=True)
     created_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
     client: Mapped["Client"] = relationship(back_populates="users")

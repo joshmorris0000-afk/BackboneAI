@@ -1,3 +1,4 @@
+from typing import Optional
 import uuid
 
 from sqlalchemy import DateTime, String, Text, event, func
@@ -16,20 +17,20 @@ class AuditLog(Base):
     __tablename__ = "audit_logs"
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    client_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), nullable=True, index=True)
+    client_id: Mapped[Optional[uuid.UUID]] = mapped_column(UUID(as_uuid=True), nullable=True, index=True)
 
     entity_type: Mapped[str] = mapped_column(String(30), nullable=False)  # invoice | po | grn | match_result | user
-    entity_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), nullable=True, index=True)
+    entity_id: Mapped[Optional[uuid.UUID]] = mapped_column(UUID(as_uuid=True), nullable=True, index=True)
 
     action: Mapped[str] = mapped_column(String(50), nullable=False)  # created | matched | approved | exception_raised | etc.
 
     actor_type: Mapped[str] = mapped_column(String(10), nullable=False)  # system | user | api_key
-    actor_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), nullable=True)
-    actor_ip_hash: Mapped[str | None] = mapped_column(String(16), nullable=True)
+    actor_id: Mapped[Optional[uuid.UUID]] = mapped_column(UUID(as_uuid=True), nullable=True)
+    actor_ip_hash: Mapped[Optional[str]] = mapped_column(String(16), nullable=True)
 
-    before_state: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
-    after_state: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
-    notes: Mapped[str | None] = mapped_column(Text, nullable=True)
+    before_state: Mapped[Optional[dict]] = mapped_column(JSONB, nullable=True)
+    after_state: Mapped[Optional[dict]] = mapped_column(JSONB, nullable=True)
+    notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
     # Immutable — set at insert, never changed
     created_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)

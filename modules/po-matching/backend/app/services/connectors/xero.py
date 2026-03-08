@@ -8,6 +8,8 @@ No user is ever prompted to re-authenticate.
 Xero also supports webhooks for real-time PO updates. These supplement
 the polling sync to reduce latency for time-sensitive matches.
 """
+from __future__ import annotations
+
 from datetime import UTC, datetime
 from decimal import Decimal
 

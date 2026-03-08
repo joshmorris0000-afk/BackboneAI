@@ -13,6 +13,8 @@ Supports:
 All credentials are stored AES-256 encrypted. The connection is owned by
 Backbone AI's ingestion worker — the client never sees or manages it.
 """
+from __future__ import annotations
+
 import asyncio
 import email
 import logging

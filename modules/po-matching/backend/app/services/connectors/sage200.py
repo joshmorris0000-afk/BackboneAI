@@ -16,6 +16,8 @@ On-premise:
   - Connection pooled and always-on.
   - Credentials stored AES-256 encrypted in connector_credentials.
 """
+from __future__ import annotations
+
 import json
 from datetime import UTC, datetime
 from decimal import Decimal

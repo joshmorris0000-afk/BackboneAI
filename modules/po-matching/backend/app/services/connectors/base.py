@@ -7,6 +7,8 @@ All connectors extend this. The base class handles:
 - Standardised data models returned regardless of ERP source
 - Error logging and last_sync_at tracking
 """
+from __future__ import annotations
+
 import json
 from abc import ABC, abstractmethod
 from dataclasses import dataclass

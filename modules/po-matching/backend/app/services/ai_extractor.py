@@ -6,6 +6,8 @@ The extractor returns a validated InvoiceExtraction object with per-field
 confidence scores. Fields below the configured confidence threshold are flagged
 for human review but do not block processing.
 """
+from __future__ import annotations
+
 import json
 import re
 from dataclasses import dataclass, field

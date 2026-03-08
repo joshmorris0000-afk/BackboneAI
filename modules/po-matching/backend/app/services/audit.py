@@ -1,6 +1,8 @@
 """
 Audit logging service. Every state change in the system writes an immutable record.
 """
+from __future__ import annotations
+
 import uuid
 from datetime import UTC, datetime
 
