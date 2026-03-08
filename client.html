@@ -1041,20 +1041,35 @@
       </button>
 
       <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:12px 10px 4px;">Automations</div>
-      <button class="nav-item" onclick="showPage('invoices',this)">
-        <span class="nav-item-icon">🧾</span> Invoice Processing
+      <button class="nav-item" onclick="showPage('po_match',this)">
+        <span class="nav-item-icon">🧾</span> PO Matching
       </button>
-      <button class="nav-item" onclick="showPage('routes',this)">
-        <span class="nav-item-icon">🚚</span> Route Optimisation
+      <button class="nav-item" onclick="showPage('price_drift',this)">
+        <span class="nav-item-icon">📈</span> Price Drift
       </button>
-      <button class="nav-item" onclick="showPage('suppliers',this)">
-        <span class="nav-item-icon">📋</span> Supplier Intel
+      <button class="nav-item" onclick="showPage('stmt_recon',this)">
+        <span class="nav-item-icon">🔍</span> Statement Recon
+      </button>
+      <button class="nav-item" onclick="showPage('goods_in',this)">
+        <span class="nav-item-icon">📥</span> Goods-In Logger
+      </button>
+      <button class="nav-item" onclick="showPage('quotes',this)">
+        <span class="nav-item-icon">📊</span> Quote Normaliser
+      </button>
+      <button class="nav-item" onclick="showPage('profitability',this)">
+        <span class="nav-item-icon">💰</span> Profitability
+      </button>
+      <button class="nav-item" onclick="showPage('overtime',this)">
+        <span class="nav-item-icon">⏱️</span> Overtime Monitor
+      </button>
+      <button class="nav-item" onclick="showPage('slow_stock',this)">
+        <span class="nav-item-icon">📦</span> Slow Stock
+      </button>
+      <button class="nav-item" onclick="showPage('chaser',this)">
+        <span class="nav-item-icon">📧</span> Supplier Chaser
       </button>
       <button class="nav-item" onclick="showPage('compliance',this)">
         <span class="nav-item-icon">🛡️</span> Compliance Docs
-      </button>
-      <button class="nav-item" onclick="showPage('inventory',this)">
-        <span class="nav-item-icon">📦</span> Inventory Forecast
       </button>
 
       <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:12px 10px 4px;">Account</div>
@@ -1148,9 +1163,9 @@
         <div style="margin-bottom:14px;"><div style="font-size:15px;font-weight:800;margin-bottom:2px;">Active Automations</div><div style="font-size:12px;color:var(--muted);">Click any module to see full detail, history, and trend data.</div></div>
 
         <div class="module-grid">
-          <div class="mod-card" onclick="showPage('invoices',null)">
+          <div class="mod-card" onclick="showPage('po_match',null)">
             <div class="mod-top">
-              <div class="mod-icon-name"><div class="mod-icon" style="background:rgba(59,130,246,0.12)">🧾</div><div><div class="mod-name">Invoice Processing</div><div class="mod-sector">300 invoices/month</div></div></div>
+              <div class="mod-icon-name"><div class="mod-icon" style="background:rgba(59,130,246,0.12)">🧾</div><div><div class="mod-name">3-Way PO Matching</div><div class="mod-sector">300 invoices/month</div></div></div>
               <div class="mod-status status-live">Live</div>
             </div>
             <div class="mod-stats">
@@ -1162,32 +1177,116 @@
             <div class="mod-footer"><div class="mod-saving">£2,100 saved this month</div><div class="mod-cta">View detail →</div></div>
           </div>
 
-          <div class="mod-card" onclick="showPage('routes',null)">
+          <div class="mod-card" onclick="showPage('price_drift',null)">
             <div class="mod-top">
-              <div class="mod-icon-name"><div class="mod-icon" style="background:rgba(139,92,246,0.12)">🚚</div><div><div class="mod-name">Route Optimisation</div><div class="mod-sector">20 vehicles</div></div></div>
+              <div class="mod-icon-name"><div class="mod-icon" style="background:rgba(249,115,22,0.12)">📈</div><div><div class="mod-name">Supplier Price Drift</div><div class="mod-sector">14 suppliers monitored</div></div></div>
               <div class="mod-status status-live">Live</div>
             </div>
             <div class="mod-stats">
-              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--purple)">1,840</div><div class="mod-stat-label">Miles saved</div></div>
-              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--green)">60h</div><div class="mod-stat-label">Driver hrs saved</div></div>
-              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--blue)">94%</div><div class="mod-stat-label">On-time rate</div></div>
-              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--orange)">3</div><div class="mod-stat-label">Failed drops ↓</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--orange)">£840</div><div class="mod-stat-label">Overcharges caught</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--red)">8</div><div class="mod-stat-label">Suppliers drifting</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--blue)">14</div><div class="mod-stat-label">Suppliers monitored</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--orange)">3.2%</div><div class="mod-stat-label">Avg drift</div></div>
             </div>
-            <div class="mod-footer"><div class="mod-saving">£3,800 saved this month</div><div class="mod-cta">View detail →</div></div>
+            <div class="mod-footer"><div class="mod-saving">£840 saved this month</div><div class="mod-cta">View detail →</div></div>
           </div>
 
-          <div class="mod-card" onclick="showPage('suppliers',null)">
+          <div class="mod-card" onclick="showPage('stmt_recon',null)">
             <div class="mod-top">
-              <div class="mod-icon-name"><div class="mod-icon" style="background:rgba(249,115,22,0.12)">📋</div><div><div class="mod-name">Supplier Intelligence</div><div class="mod-sector">14 suppliers tracked</div></div></div>
+              <div class="mod-icon-name"><div class="mod-icon" style="background:rgba(20,184,166,0.12)">🔍</div><div><div class="mod-name">Statement Reconciliation</div><div class="mod-sector">Monthly statements</div></div></div>
               <div class="mod-status status-live">Live</div>
             </div>
             <div class="mod-stats">
-              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--orange)">14</div><div class="mod-stat-label">Suppliers</div></div>
-              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--red)">3</div><div class="mod-stat-label">Alerts raised</div></div>
-              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--green)">£840</div><div class="mod-stat-label">Disputes avoided</div></div>
-              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--blue)">88%</div><div class="mod-stat-label">Avg on-time</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:#14b8a6">14</div><div class="mod-stat-label">Statements reconciled</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--green)">£1,240</div><div class="mod-stat-label">Credits recovered</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--orange)">3</div><div class="mod-stat-label">Disputes filed</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--blue)">100%</div><div class="mod-stat-label">Coverage</div></div>
             </div>
-            <div class="mod-footer"><div class="mod-saving">£1,400 saved this month</div><div class="mod-cta">View detail →</div></div>
+            <div class="mod-footer"><div class="mod-saving">£1,240 saved this month</div><div class="mod-cta">View detail →</div></div>
+          </div>
+
+          <div class="mod-card" onclick="showPage('goods_in',null)">
+            <div class="mod-top">
+              <div class="mod-icon-name"><div class="mod-icon" style="background:rgba(245,158,11,0.12)">📥</div><div><div class="mod-name">Goods-In Logger</div><div class="mod-sector">All deliveries logged</div></div></div>
+              <div class="mod-status status-live">Live</div>
+            </div>
+            <div class="mod-stats">
+              <div class="mod-stat"><div class="mod-stat-val" style="color:#f59e0b">47</div><div class="mod-stat-label">Deliveries logged</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--red)">12</div><div class="mod-stat-label">Discrepancies found</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--green)">£680</div><div class="mod-stat-label">Claims raised</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--blue)">3 days</div><div class="mod-stat-label">Avg resolution</div></div>
+            </div>
+            <div class="mod-footer"><div class="mod-saving">£680 saved this month</div><div class="mod-cta">View detail →</div></div>
+          </div>
+
+          <div class="mod-card" onclick="showPage('quotes',null)">
+            <div class="mod-top">
+              <div class="mod-icon-name"><div class="mod-icon" style="background:rgba(139,92,246,0.12)">📊</div><div><div class="mod-name">Quote Normaliser</div><div class="mod-sector">All suppliers compared</div></div></div>
+              <div class="mod-status status-live">Live</div>
+            </div>
+            <div class="mod-stats">
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--purple)">18</div><div class="mod-stat-label">Quotes normalised</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--blue)">6</div><div class="mod-stat-label">Comparisons run</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--green)">12%</div><div class="mod-stat-label">Avg saving found</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--orange)">1 hr</div><div class="mod-stat-label">Avg analysis time</div></div>
+            </div>
+            <div class="mod-footer"><div class="mod-saving">£1,900 saved this month</div><div class="mod-cta">View detail →</div></div>
+          </div>
+
+          <div class="mod-card" onclick="showPage('profitability',null)">
+            <div class="mod-top">
+              <div class="mod-icon-name"><div class="mod-icon" style="background:rgba(34,197,94,0.12)">💰</div><div><div class="mod-name">Profitability Analyser</div><div class="mod-sector">8 customer accounts</div></div></div>
+              <div class="mod-status status-live">Live</div>
+            </div>
+            <div class="mod-stats">
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--green)">8</div><div class="mod-stat-label">Customers analysed</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--red)">3</div><div class="mod-stat-label">Loss-making jobs</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--green)">£6,200</div><div class="mod-stat-label">Best margin job</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--orange)">£420</div><div class="mod-stat-label">Lowest margin</div></div>
+            </div>
+            <div class="mod-footer"><div class="mod-saving">insight only</div><div class="mod-cta">View detail →</div></div>
+          </div>
+
+          <div class="mod-card" onclick="showPage('overtime',null)">
+            <div class="mod-top">
+              <div class="mod-icon-name"><div class="mod-icon" style="background:rgba(244,63,94,0.12)">⏱️</div><div><div class="mod-name">Overtime Monitor</div><div class="mod-sector">22 drivers tracked</div></div></div>
+              <div class="mod-status status-live">Live</div>
+            </div>
+            <div class="mod-stats">
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--red)">22</div><div class="mod-stat-label">Drivers tracked</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--orange)">£3,100</div><div class="mod-stat-label">Overtime this month</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--red)">14h</div><div class="mod-stat-label">Excess hrs flagged</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--orange)">4</div><div class="mod-stat-label">Alerts raised</div></div>
+            </div>
+            <div class="mod-footer"><div class="mod-saving">£1,100 saved this month</div><div class="mod-cta">View detail →</div></div>
+          </div>
+
+          <div class="mod-card" onclick="showPage('slow_stock',null)">
+            <div class="mod-top">
+              <div class="mod-icon-name"><div class="mod-icon" style="background:rgba(244,63,94,0.12)">📦</div><div><div class="mod-name">Slow Stock Warning</div><div class="mod-sector">12 SKUs monitored</div></div></div>
+              <div class="mod-status status-live">Live</div>
+            </div>
+            <div class="mod-stats">
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--green)">0</div><div class="mod-stat-label">Stockouts</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--green)">12%</div><div class="mod-stat-label">Overstock ↓</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--blue)">97%</div><div class="mod-stat-label">Forecast accuracy</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--orange)">£4,200</div><div class="mod-stat-label">Capital freed</div></div>
+            </div>
+            <div class="mod-footer"><div class="mod-saving">£4,200 saved this month</div><div class="mod-cta">View detail →</div></div>
+          </div>
+
+          <div class="mod-card" onclick="showPage('chaser',null)">
+            <div class="mod-top">
+              <div class="mod-icon-name"><div class="mod-icon" style="background:rgba(14,165,233,0.12)">📧</div><div><div class="mod-name">Supplier Chaser</div><div class="mod-sector">Auto-chase emails</div></div></div>
+              <div class="mod-status status-live">Live</div>
+            </div>
+            <div class="mod-stats">
+              <div class="mod-stat"><div class="mod-stat-val" style="color:#0ea5e9">34</div><div class="mod-stat-label">Emails sent</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--green)">28</div><div class="mod-stat-label">Responded</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--orange)">£920</div><div class="mod-stat-label">Credits chased</div></div>
+              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--blue)">2.1 days</div><div class="mod-stat-label">Avg response</div></div>
+            </div>
+            <div class="mod-footer"><div class="mod-saving">£920 saved this month</div><div class="mod-cta">View detail →</div></div>
           </div>
 
           <div class="mod-card" onclick="showPage('compliance',null)">
@@ -1202,20 +1301,6 @@
               <div class="mod-stat"><div class="mod-stat-val" style="color:var(--orange)">2 min</div><div class="mod-stat-label">Avg review</div></div>
             </div>
             <div class="mod-footer"><div class="mod-saving">£1,600 saved this month</div><div class="mod-cta">View detail →</div></div>
-          </div>
-
-          <div class="mod-card" onclick="showPage('inventory',null)">
-            <div class="mod-top">
-              <div class="mod-icon-name"><div class="mod-icon" style="background:rgba(244,63,94,0.12)">📦</div><div><div class="mod-name">Inventory Forecast</div><div class="mod-sector">Demand planning</div></div></div>
-              <div class="mod-status status-live">Live</div>
-            </div>
-            <div class="mod-stats">
-              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--red)">0</div><div class="mod-stat-label">Stockouts</div></div>
-              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--green)">12%</div><div class="mod-stat-label">Overstock ↓</div></div>
-              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--blue)">97%</div><div class="mod-stat-label">Forecast accuracy</div></div>
-              <div class="mod-stat"><div class="mod-stat-val" style="color:var(--orange)">£4.2k</div><div class="mod-stat-label">Capital freed</div></div>
-            </div>
-            <div class="mod-footer"><div class="mod-saving">£4,200 saved this month</div><div class="mod-cta">View detail →</div></div>
           </div>
 
           <div class="mod-card" style="opacity:0.5;cursor:default;">
@@ -2113,7 +2198,7 @@
   }
 
   /* ═══ PAGE NAVIGATION ═══ */
-  const AUTO_PAGES = ['invoices','routes','compliance','suppliers','inventory'];
+  const AUTO_PAGES = ['po_match','price_drift','stmt_recon','goods_in','quotes','profitability','overtime','slow_stock','chaser','compliance'];
   let autoPageChart;
 
   function showPage(id, btn) {
@@ -2138,17 +2223,22 @@
     }
 
     const titles = {
-      dashboard:  ['Operations Dashboard',       'Live view of your AI systems and savings'],
-      insights:   ['Operational Insights',        'AI-surfaced patterns from your data this month'],
-      reports:    ['Performance Reports',         'Monthly reports and downloadable summaries'],
-      services:   ['Services Available to You',  'Add-ons that activate within 48 hours'],
-      upload:     ['Data & System Access',        'Connect systems and upload files'],
-      tracker:    ['Project Tracker',             'Progress on all work completed and planned'],
-      invoices:   ['Invoice Processing',          'AI extraction, PO matching & anomaly detection'],
-      routes:     ['Route Optimisation',          'Dynamic daily replanning for 20 vehicles'],
-      suppliers:  ['Supplier Intelligence',       'Live scorecards and alerts across all suppliers'],
-      compliance: ['Compliance Documentation',    'Auto-drafted reports from your operational data'],
-      inventory:  ['Inventory & Demand Forecasting', 'AI demand planning from order history'],
+      dashboard:     ['Operations Dashboard',              'Live view of your AI systems and savings'],
+      insights:      ['Operational Insights',              'AI-surfaced patterns from your data this month'],
+      reports:       ['Performance Reports',               'Monthly reports and downloadable summaries'],
+      services:      ['Services Available to You',         'Add-ons that activate within 48 hours'],
+      upload:        ['Data & System Access',              'Connect systems and upload files'],
+      tracker:       ['Project Tracker',                   'Progress on all work completed and planned'],
+      po_match:      ['3-Way PO Matching',                 'AI cross-referencing of POs, delivery notes & invoices'],
+      price_drift:   ['Supplier Price Drift Detector',     'Price creep above contracted rates — caught automatically'],
+      stmt_recon:    ['Supplier Statement Reconciliation', 'Credits recovered, disputes filed, overpayments caught'],
+      goods_in:      ['Goods-In Discrepancy Auto-Logger',  'Short and damaged deliveries logged and claimed automatically'],
+      quotes:        ['Quote Normalisation Engine',        'All supplier quotes made comparable on a like-for-like basis'],
+      profitability: ['Job & Customer Profitability',      'Visibility on which jobs and customers make money'],
+      overtime:      ['Overtime & Agency Cost Monitor',    'Overtime creep flagged before payroll arrives'],
+      slow_stock:    ['Slow-Moving Stock Early Warning',   'Write-off risks surfaced before year-end'],
+      chaser:        ['Supplier Chaser Automation',        'Automatic chase-up emails for credits, PODs, and confirmations'],
+      compliance:    ['Compliance Documentation',          'Auto-drafted reports from your operational data'],
     };
     const t = titles[id] || titles.dashboard;
     document.getElementById('topbarTitle').textContent = t[0];
@@ -2335,35 +2425,35 @@
 
   /* ═══ MODULE MODAL DATA ═══ */
   const MODULES = {
-    invoices: {
-      title: 'Invoice Processing', sub: 'AI extraction, PO matching & anomaly detection · 312 invoices this month', color: '#3b82f6',
+    po_match: {
+      title: '3-Way PO Matching', sub: 'AI cross-referencing of POs, delivery notes & invoices · 312 invoices this month', color: '#3b82f6',
       kpis: [{ val:'312', label:'Invoices processed', color:'#3b82f6' },{ val:'47h', label:'Hours saved', color:'#22c55e' },{ val:'7', label:'Errors caught', color:'#f43f5e' },{ val:'£2,100', label:'Cost saved', color:'#22c55e' }],
       trend: [980,1200,1450,1700,1900,2100],
       log: [
-        { time:'09:42 today', text:'INV-4821 Hargreaves Transport — matched PO-3341, approved', save:'11 min saved', dot:'#22c55e' },
-        { time:'09:31 today', text:'INV-4820 City Haulage — £120 discrepancy vs PO, flagged', save:'Error caught', dot:'#f43f5e' },
-        { time:'08:55 today', text:'INV-4818 Northern Fuel — approved, payment queued', save:'12 min saved', dot:'#22c55e' },
-        { time:'Yesterday', text:'INV-4812 Evans Logistics — duplicate invoice blocked', save:'£340 saved', dot:'#f97316' },
-        { time:'Yesterday', text:'Overnight batch of 14 invoices — all matched & approved', save:'2.8h saved', dot:'#22c55e' },
+        { time:'09:42 today', text:'INV-4821 Hargreaves Transport — PO-3341 + DN-8821 matched, approved', save:'11 min saved', dot:'#22c55e' },
+        { time:'09:31 today', text:'INV-4820 City Haulage — £120 discrepancy vs PO-3340, flagged for review', save:'Error caught', dot:'#f43f5e' },
+        { time:'08:55 today', text:'INV-4818 Northern Fuel — PO-3338 + DN-8817 matched, payment queued', save:'12 min saved', dot:'#22c55e' },
+        { time:'Yesterday', text:'INV-4815 Evans Logistics — duplicate invoice blocked, £2,200 prevented', save:'£2,200 saved', dot:'#f97316' },
+        { time:'Yesterday', text:'Overnight batch of 14 invoices — all 3-way matched and approved', save:'2.8h saved', dot:'#22c55e' },
       ],
       autoDetail: `<div class="card auto-detail-section">
-        <div class="card-header"><div><div class="card-title">Recent Invoices</div><div class="card-sub">Last 10 invoices processed by the AI system</div></div></div>
+        <div class="card-header"><div><div class="card-title">Recent PO Matches</div><div class="card-sub">Last 10 invoices — cross-referenced against PO and delivery note</div></div></div>
         <div class="card-body" style="padding:0;">
           <table class="data-table">
             <thead><tr>
-              <th>Invoice #</th><th>Supplier</th><th>Amount</th><th>PO Match</th><th>Status</th><th>Time Saved</th>
+              <th>Invoice #</th><th>Supplier</th><th>Amount</th><th>PO</th><th>Delivery Note</th><th>Status</th><th>Time Saved</th>
             </tr></thead>
             <tbody>
-              <tr><td>INV-4821</td><td>Hargreaves Transport</td><td>£1,840</td><td>PO-3341 ✓</td><td><span class="dt-badge dt-approved">Approved</span></td><td>11 min</td></tr>
-              <tr><td>INV-4820</td><td>City Haulage Ltd</td><td>£3,120</td><td>£120 gap</td><td><span class="dt-badge dt-flagged">Flagged</span></td><td>Error caught</td></tr>
-              <tr><td>INV-4818</td><td>Northern Fuel Co</td><td>£940</td><td>PO-3338 ✓</td><td><span class="dt-badge dt-approved">Approved</span></td><td>12 min</td></tr>
-              <tr><td>INV-4815</td><td>Evans Logistics</td><td>£2,200</td><td>Duplicate</td><td><span class="dt-badge dt-flagged">Flagged</span></td><td>£2,200 blocked</td></tr>
-              <tr><td>INV-4814</td><td>Midlands Freight Co</td><td>£5,600</td><td>PO-3332 ✓</td><td><span class="dt-badge dt-approved">Approved</span></td><td>9 min</td></tr>
-              <tr><td>INV-4812</td><td>Evans Logistics</td><td>£1,480</td><td>PO-3329 ✓</td><td><span class="dt-badge dt-approved">Approved</span></td><td>11 min</td></tr>
-              <tr><td>INV-4810</td><td>Apex Packaging</td><td>£720</td><td>PO-3327 ✓</td><td><span class="dt-badge dt-approved">Approved</span></td><td>8 min</td></tr>
-              <tr><td>INV-4808</td><td>City Haulage Ltd</td><td>£2,870</td><td>Ref mismatch</td><td><span class="dt-badge dt-flagged">Flagged</span></td><td>Error caught</td></tr>
-              <tr><td>INV-4806</td><td>Hargreaves Transport</td><td>£1,620</td><td>PO-3322 ✓</td><td><span class="dt-badge dt-approved">Approved</span></td><td>10 min</td></tr>
-              <tr><td>INV-4804</td><td>Northern Fuel Co</td><td>£880</td><td>PO-3320 ✓</td><td><span class="dt-badge dt-pending">Pending</span></td><td>—</td></tr>
+              <tr><td>INV-4821</td><td>Hargreaves Transport</td><td>£1,840</td><td>PO-3341 ✓</td><td>DN-8821 ✓</td><td><span class="dt-badge dt-approved">Approved</span></td><td>11 min</td></tr>
+              <tr><td>INV-4820</td><td>City Haulage Ltd</td><td>£3,120</td><td>£120 gap</td><td>DN-8820 ✓</td><td><span class="dt-badge dt-flagged">Flagged</span></td><td>Error caught</td></tr>
+              <tr><td>INV-4818</td><td>Northern Fuel Co</td><td>£940</td><td>PO-3338 ✓</td><td>DN-8817 ✓</td><td><span class="dt-badge dt-approved">Approved</span></td><td>12 min</td></tr>
+              <tr><td>INV-4815</td><td>Evans Logistics</td><td>£2,200</td><td>Duplicate</td><td>No DN</td><td><span class="dt-badge dt-flagged">Flagged</span></td><td>£2,200 blocked</td></tr>
+              <tr><td>INV-4814</td><td>Midlands Freight Co</td><td>£5,600</td><td>PO-3332 ✓</td><td>DN-8810 ✓</td><td><span class="dt-badge dt-approved">Approved</span></td><td>9 min</td></tr>
+              <tr><td>INV-4812</td><td>Evans Logistics</td><td>£1,480</td><td>PO-3329 ✓</td><td>DN-8806 ✓</td><td><span class="dt-badge dt-approved">Approved</span></td><td>11 min</td></tr>
+              <tr><td>INV-4810</td><td>Apex Packaging</td><td>£720</td><td>PO-3327 ✓</td><td>DN-8804 ✓</td><td><span class="dt-badge dt-approved">Approved</span></td><td>8 min</td></tr>
+              <tr><td>INV-4808</td><td>City Haulage Ltd</td><td>£2,870</td><td>Ref mismatch</td><td>DN-8802 ✓</td><td><span class="dt-badge dt-flagged">Flagged</span></td><td>Error caught</td></tr>
+              <tr><td>INV-4806</td><td>Hargreaves Transport</td><td>£1,620</td><td>PO-3322 ✓</td><td>DN-8798 ✓</td><td><span class="dt-badge dt-approved">Approved</span></td><td>10 min</td></tr>
+              <tr><td>INV-4804</td><td>Northern Fuel Co</td><td>£880</td><td>PO-3320 ✓</td><td>DN-8794 ✓</td><td><span class="dt-badge dt-pending">Pending</span></td><td>—</td></tr>
             </tbody>
           </table>
         </div>
@@ -2376,86 +2466,328 @@
         </div>
       </div>`
     },
-    routes: {
-      title: 'Route Optimisation', sub: 'Dynamic daily replanning for 20 vehicles · 1,840 miles saved this month', color: '#8b5cf6',
-      kpis: [{ val:'1,840', label:'Miles saved', color:'#8b5cf6' },{ val:'60h', label:'Driver hours saved', color:'#22c55e' },{ val:'94%', label:'On-time delivery', color:'#3b82f6' },{ val:'£3,800', label:'Cost saved', color:'#22c55e' }],
-      trend: [1800,2200,2700,3100,3500,3800],
+    price_drift: {
+      title: 'Supplier Price Drift Detector', sub: 'Price creep above contracted rates — caught automatically · 14 suppliers monitored', color: '#f97316',
+      kpis: [{ val:'£840', label:'Overcharges caught', color:'#f97316' },{ val:'8', label:'Suppliers with drift', color:'#f43f5e' },{ val:'14', label:'Suppliers monitored', color:'#3b82f6' },{ val:'3.2%', label:'Avg drift above contract', color:'#f97316' }],
+      trend: [400,600,850,1000,1200,840],
       log: [
-        { time:'09:14 today', text:'Tuesday routes optimised — 3 merged, 47 miles reduced', save:'£38 saved', dot:'#8b5cf6' },
-        { time:'08:30 today', text:'Vehicle 7 re-routed around M6 incident — ETA maintained', save:'Delay avoided', dot:'#22c55e' },
-        { time:'Yesterday', text:'Monday routes — 12% fewer miles vs manual planning', save:'£94 saved', dot:'#22c55e' },
-        { time:'Yesterday', text:'Late order added to Vehicle 3 dynamically — no extra trip', save:'£62 saved', dot:'#22c55e' },
+        { time:'1 hour ago', text:'Midlands Freight Co — fuel surcharge 4.1% above contracted rate', save:'£210 flagged', dot:'#f43f5e' },
+        { time:'Yesterday', text:'City Haulage Ltd — palletised freight rate crept £0.08/km over contract', save:'£145 flagged', dot:'#f97316' },
+        { time:'1 week ago', text:'Northern Fuel Co — diesel price now £0.04/litre below contracted cap', save:'Positive variance', dot:'#22c55e' },
+        { time:'2 weeks ago', text:'Evans Logistics — admin charge added without contract amendment', save:'£180 disputed', dot:'#f43f5e' },
       ],
       autoDetail: `<div class="card auto-detail-section">
-        <div class="card-header"><div><div class="card-title">This Week's Routes</div><div class="card-sub">Optimised vs original planning — Mon to Fri</div></div></div>
+        <div class="card-header"><div><div class="card-title">Price Drift by Supplier</div><div class="card-sub">Contracted rate vs invoiced rate — current month</div></div></div>
         <div class="card-body" style="padding:0;">
           <table class="data-table">
             <thead><tr>
-              <th>Vehicle</th><th>Route</th><th>Original Miles</th><th>Optimised Miles</th><th>Saving £</th><th>Status</th>
+              <th>Supplier</th><th>Contracted Rate</th><th>Invoiced Rate</th><th>Drift</th><th>Value at Risk</th><th>Status</th>
             </tr></thead>
             <tbody>
-              <tr><td>Vehicle 1</td><td>Leeds Central → Wakefield → Castleford</td><td>84</td><td>71</td><td>£10.40</td><td><span class="dt-badge dt-completed">Completed</span></td></tr>
-              <tr><td>Vehicle 2</td><td>Leeds South → Morley → Batley → Dewsbury</td><td>97</td><td>81</td><td>£12.80</td><td><span class="dt-badge dt-completed">Completed</span></td></tr>
-              <tr><td>Vehicle 3</td><td>Bradford → Shipley → Keighley</td><td>62</td><td>55</td><td>£5.60</td><td><span class="dt-badge dt-completed">Completed</span></td></tr>
-              <tr><td>Vehicle 4</td><td>Huddersfield → Halifax → Brighouse</td><td>74</td><td>61</td><td>£10.40</td><td><span class="dt-badge dt-completed">Completed</span></td></tr>
-              <tr><td>Vehicle 5</td><td>Leeds North → Harrogate → Knaresborough</td><td>88</td><td>76</td><td>£9.60</td><td><span class="dt-badge dt-completed">Completed</span></td></tr>
-              <tr><td>Vehicle 6</td><td>Wakefield → Pontefract → Featherstone</td><td>58</td><td>51</td><td>£5.60</td><td><span class="dt-badge dt-completed">Completed</span></td></tr>
-              <tr><td>Vehicle 7</td><td>Leeds East → Garforth → Selby</td><td>91</td><td>73</td><td>£14.40</td><td><span class="dt-badge dt-inprog">In Progress</span></td></tr>
-              <tr><td>Vehicle 8</td><td>Barnsley → Wombwell → Goldthorpe</td><td>69</td><td>58</td><td>£8.80</td><td><span class="dt-badge dt-inprog">In Progress</span></td></tr>
-              <tr><td>Vehicle 12</td><td>Leeds West → Pudsey → Horsforth</td><td>77</td><td>66</td><td>£8.80</td><td><span class="dt-badge dt-inprog">In Progress</span></td></tr>
-              <tr><td>Vehicle 15</td><td>Doncaster → Rotherham → Sheffield</td><td>103</td><td>85</td><td>£14.40</td><td><span class="dt-badge dt-inprog">In Progress</span></td></tr>
+              <tr><td>Midlands Freight Co</td><td>£1.42/km</td><td>£1.48/km</td><td style="color:var(--red)">+4.1%</td><td>£210</td><td><span class="dt-badge dt-flagged">Flagged</span></td></tr>
+              <tr><td>City Haulage Ltd</td><td>£1.84/km</td><td>£1.92/km</td><td style="color:var(--red)">+4.3%</td><td>£145</td><td><span class="dt-badge dt-flagged">Flagged</span></td></tr>
+              <tr><td>Evans Logistics</td><td>No admin charge</td><td>£180 added</td><td style="color:var(--red)">+£180</td><td>£180</td><td><span class="dt-badge dt-flagged">Flagged</span></td></tr>
+              <tr><td>Allied Distribution</td><td>£0.94/pallet</td><td>£0.97/pallet</td><td style="color:var(--orange)">+3.2%</td><td>£82</td><td><span class="dt-badge dt-watch">Watch</span></td></tr>
+              <tr><td>Direct Logistics Co</td><td>£1.61/km</td><td>£1.65/km</td><td style="color:var(--orange)">+2.5%</td><td>£64</td><td><span class="dt-badge dt-watch">Watch</span></td></tr>
+              <tr><td>Pennine Carriers</td><td>£1.28/km</td><td>£1.31/km</td><td style="color:var(--orange)">+2.3%</td><td>£59</td><td><span class="dt-badge dt-watch">Watch</span></td></tr>
+              <tr><td>Eastern Freight Services</td><td>£1.54/km</td><td>£1.56/km</td><td style="color:var(--orange)">+1.3%</td><td>£38</td><td><span class="dt-badge dt-watch">Watch</span></td></tr>
+              <tr><td>Crown Freight Ltd</td><td>£1.38/km</td><td>£1.40/km</td><td style="color:var(--orange)">+1.4%</td><td>£31</td><td><span class="dt-badge dt-watch">Watch</span></td></tr>
+              <tr><td>Hargreaves Transport</td><td>£1.76/km</td><td>£1.76/km</td><td style="color:var(--green)">0%</td><td>—</td><td><span class="dt-badge dt-good">On contract</span></td></tr>
+              <tr><td>Apex Packaging</td><td>£0.82/unit</td><td>£0.82/unit</td><td style="color:var(--green)">0%</td><td>—</td><td><span class="dt-badge dt-good">On contract</span></td></tr>
+              <tr><td>National Pallets UK</td><td>£1.12/pallet</td><td>£1.12/pallet</td><td style="color:var(--green)">0%</td><td>—</td><td><span class="dt-badge dt-good">On contract</span></td></tr>
+              <tr><td>Premier Hauliers</td><td>£1.49/km</td><td>£1.49/km</td><td style="color:var(--green)">0%</td><td>—</td><td><span class="dt-badge dt-good">On contract</span></td></tr>
+              <tr><td>Westbrook Supplies</td><td>£0.68/unit</td><td>£0.68/unit</td><td style="color:var(--green)">0%</td><td>—</td><td><span class="dt-badge dt-good">On contract</span></td></tr>
+              <tr><td>Northern Fuel Co</td><td>£1.34/litre cap</td><td>£1.30/litre</td><td style="color:var(--green)">-3.0%</td><td>—</td><td><span class="dt-badge dt-good">Under cap</span></td></tr>
             </tbody>
           </table>
         </div>
         <div class="card-body" style="padding-top:0;">
           <div class="stat-cards-row">
-            <div class="stat-card-sm"><div class="stat-card-sm-val" style="color:var(--blue)">94%</div><div class="stat-card-sm-label">On-time this week</div></div>
-            <div class="stat-card-sm"><div class="stat-card-sm-val" style="color:var(--purple)">447 miles</div><div class="stat-card-sm-label">Miles saved this week</div></div>
-            <div class="stat-card-sm"><div class="stat-card-sm-val" style="color:var(--green)">20</div><div class="stat-card-sm-label">Vehicles actively optimised</div></div>
+            <div class="stat-card-sm"><div class="stat-card-sm-val" style="color:var(--red)">£840</div><div class="stat-card-sm-label">Total overcharges caught this month</div></div>
+            <div class="stat-card-sm"><div class="stat-card-sm-val" style="color:var(--orange)">8</div><div class="stat-card-sm-label">Suppliers with active drift</div></div>
+            <div class="stat-card-sm"><div class="stat-card-sm-val" style="color:var(--green)">6</div><div class="stat-card-sm-label">Suppliers on contract or under</div></div>
           </div>
         </div>
       </div>`
     },
-    suppliers: {
-      title: 'Supplier Intelligence', sub: 'Live scorecards for 14 suppliers · 3 alerts raised this month', color: '#f97316',
-      kpis: [{ val:'14', label:'Suppliers tracked', color:'#f97316' },{ val:'3', label:'Alerts raised', color:'#f43f5e' },{ val:'£840', label:'Disputes avoided', color:'#22c55e' },{ val:'£1,400', label:'Cost saved', color:'#22c55e' }],
-      trend: [400,600,850,1000,1200,1400],
+    stmt_recon: {
+      title: 'Supplier Statement Reconciliation', sub: 'Credits recovered, disputes filed, overpayments caught · 14 statements this month', color: '#14b8a6',
+      kpis: [{ val:'14', label:'Statements reconciled', color:'#14b8a6' },{ val:'£1,240', label:'Credits recovered', color:'#22c55e' },{ val:'3', label:'Disputes filed', color:'#f97316' },{ val:'100%', label:'Statement coverage', color:'#3b82f6' }],
+      trend: [420,580,740,880,1060,1240],
       log: [
-        { time:'1 hour ago', text:'Midlands Freight Co — 4th late delivery, reliability now 72%', save:'Alert raised', dot:'#f43f5e' },
-        { time:'Yesterday', text:'City Haulage invoice formatting — 6th instance, supplier notified', save:'Pattern flagged', dot:'#f97316' },
-        { time:'1 week ago', text:'Northern Fuel — on-time rate improved to 96%', save:'Positive', dot:'#22c55e' },
-        { time:'2 weeks ago', text:'Evans Logistics duplicate invoice blocked', save:'£340 saved', dot:'#22c55e' },
+        { time:'Today', text:'Crown Freight Ltd — £380 credit note confirmed, applied to ledger', save:'£380 recovered', dot:'#14b8a6' },
+        { time:'Yesterday', text:'Midlands Freight Co — statement variance of £210 raised as dispute', save:'Dispute filed', dot:'#f97316' },
+        { time:'3 days ago', text:'Evans Logistics — £290 overpayment from Feb identified, refund requested', save:'£290 recovered', dot:'#22c55e' },
+        { time:'1 week ago', text:'Northern Fuel Co — statement reconciled, zero variance', save:'Clean', dot:'#22c55e' },
+        { time:'1 week ago', text:'Hargreaves Transport — £370 credit note unclaimed from Dec, now filed', save:'£370 recovered', dot:'#14b8a6' },
       ],
       autoDetail: `<div class="card auto-detail-section">
-        <div class="card-header"><div><div class="card-title">Supplier Scorecards</div><div class="card-sub">All 14 suppliers — live performance data</div></div></div>
+        <div class="card-header"><div><div class="card-title">Statement Reconciliation — March 2026</div><div class="card-sub">All 14 supplier statements cross-checked against your purchase ledger</div></div></div>
         <div class="card-body" style="padding:0;">
           <table class="data-table">
             <thead><tr>
-              <th>Supplier</th><th>On-Time %</th><th>Invoice Accuracy</th><th>Reliability Trend</th><th>Status</th>
+              <th>Supplier</th><th>Statement Total</th><th>Our Ledger</th><th>Variance</th><th>Status</th><th>Action</th>
             </tr></thead>
             <tbody>
-              <tr><td>Northern Fuel Co</td><td>96%</td><td>100%</td><td style="color:var(--green)">↑ Improving</td><td><span class="dt-badge dt-good">Good</span></td></tr>
-              <tr><td>Hargreaves Transport</td><td>95%</td><td>98%</td><td style="color:var(--green)">↑ Improving</td><td><span class="dt-badge dt-good">Good</span></td></tr>
-              <tr><td>Apex Packaging</td><td>94%</td><td>100%</td><td>→ Stable</td><td><span class="dt-badge dt-good">Good</span></td></tr>
-              <tr><td>Evans Logistics</td><td>93%</td><td>94%</td><td>→ Stable</td><td><span class="dt-badge dt-good">Good</span></td></tr>
-              <tr><td>Crown Freight Ltd</td><td>92%</td><td>97%</td><td>→ Stable</td><td><span class="dt-badge dt-good">Good</span></td></tr>
-              <tr><td>Premier Hauliers</td><td>91%</td><td>99%</td><td>→ Stable</td><td><span class="dt-badge dt-good">Good</span></td></tr>
-              <tr><td>National Pallets UK</td><td>90%</td><td>96%</td><td>→ Stable</td><td><span class="dt-badge dt-good">Good</span></td></tr>
-              <tr><td>Westbrook Supplies</td><td>89%</td><td>95%</td><td>→ Stable</td><td><span class="dt-badge dt-good">Good</span></td></tr>
-              <tr><td>Direct Logistics Co</td><td>88%</td><td>93%</td><td style="color:var(--orange)">↓ Declining</td><td><span class="dt-badge dt-watch">Watch</span></td></tr>
-              <tr><td>Allied Distribution</td><td>87%</td><td>91%</td><td>→ Stable</td><td><span class="dt-badge dt-good">Good</span></td></tr>
-              <tr><td>Pennine Carriers</td><td>86%</td><td>97%</td><td>→ Stable</td><td><span class="dt-badge dt-good">Good</span></td></tr>
-              <tr><td>City Haulage Ltd</td><td>85%</td><td>82%</td><td style="color:var(--orange)">↓ Declining</td><td><span class="dt-badge dt-watch">Watch</span></td></tr>
-              <tr><td>Eastern Freight Services</td><td>83%</td><td>94%</td><td>→ Stable</td><td><span class="dt-badge dt-good">Good</span></td></tr>
-              <tr><td style="font-weight:700;color:var(--text)">Midlands Freight Co</td><td style="color:var(--red);font-weight:700">72%</td><td>88%</td><td style="color:var(--red)">↓ Declining</td><td><span class="dt-badge dt-atrisk">At Risk</span></td></tr>
+              <tr><td>Hargreaves Transport</td><td>£8,420</td><td>£8,050</td><td style="color:var(--red)">-£370</td><td><span class="dt-badge dt-flagged">Credit due</span></td><td>Credit note filed Mar 6</td></tr>
+              <tr><td>Crown Freight Ltd</td><td>£6,140</td><td>£5,760</td><td style="color:var(--red)">-£380</td><td><span class="dt-badge dt-approved">Resolved</span></td><td>Credit confirmed Mar 8</td></tr>
+              <tr><td>Midlands Freight Co</td><td>£12,800</td><td>£12,590</td><td style="color:var(--red)">-£210</td><td><span class="dt-badge dt-flagged">Disputed</span></td><td>Dispute filed Mar 7</td></tr>
+              <tr><td>Evans Logistics</td><td>£7,340</td><td>£7,630</td><td style="color:var(--orange)">+£290</td><td><span class="dt-badge dt-flagged">Overpaid</span></td><td>Refund requested Mar 5</td></tr>
+              <tr><td>City Haulage Ltd</td><td>£9,870</td><td>£9,760</td><td style="color:var(--red)">-£110</td><td><span class="dt-badge dt-flagged">Credit due</span></td><td>Chase email sent Mar 4</td></tr>
+              <tr><td>Allied Distribution</td><td>£4,220</td><td>£4,060</td><td style="color:var(--red)">-£160</td><td><span class="dt-badge dt-flagged">Credit due</span></td><td>Chase email sent Mar 4</td></tr>
+              <tr><td>Northern Fuel Co</td><td>£3,940</td><td>£3,940</td><td style="color:var(--green)">£0</td><td><span class="dt-badge dt-good">Reconciled</span></td><td>—</td></tr>
+              <tr><td>Apex Packaging</td><td>£2,860</td><td>£2,860</td><td style="color:var(--green)">£0</td><td><span class="dt-badge dt-good">Reconciled</span></td><td>—</td></tr>
+              <tr><td>Premier Hauliers</td><td>£5,110</td><td>£5,110</td><td style="color:var(--green)">£0</td><td><span class="dt-badge dt-good">Reconciled</span></td><td>—</td></tr>
+              <tr><td>National Pallets UK</td><td>£3,480</td><td>£3,480</td><td style="color:var(--green)">£0</td><td><span class="dt-badge dt-good">Reconciled</span></td><td>—</td></tr>
+              <tr><td>Westbrook Supplies</td><td>£1,920</td><td>£1,920</td><td style="color:var(--green)">£0</td><td><span class="dt-badge dt-good">Reconciled</span></td><td>—</td></tr>
+              <tr><td>Direct Logistics Co</td><td>£6,300</td><td>£6,300</td><td style="color:var(--green)">£0</td><td><span class="dt-badge dt-good">Reconciled</span></td><td>—</td></tr>
+              <tr><td>Pennine Carriers</td><td>£4,640</td><td>£4,640</td><td style="color:var(--green)">£0</td><td><span class="dt-badge dt-good">Reconciled</span></td><td>—</td></tr>
+              <tr><td>Eastern Freight Services</td><td>£5,080</td><td>£5,080</td><td style="color:var(--green)">£0</td><td><span class="dt-badge dt-good">Reconciled</span></td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-body" style="padding-top:0;">
+          <div class="stat-cards-row">
+            <div class="stat-card-sm"><div class="stat-card-sm-val" style="color:var(--green)">£1,240</div><div class="stat-card-sm-label">Credits recovered this month</div></div>
+            <div class="stat-card-sm"><div class="stat-card-sm-val" style="color:var(--orange)">3</div><div class="stat-card-sm-label">Active disputes in progress</div></div>
+            <div class="stat-card-sm"><div class="stat-card-sm-val" style="color:#14b8a6">100%</div><div class="stat-card-sm-label">Supplier statements reconciled</div></div>
+          </div>
+        </div>
+      </div>`
+    },
+    goods_in: {
+      title: 'Goods-In Discrepancy Auto-Logger', sub: 'Short and damaged deliveries logged and claimed automatically · 47 deliveries this month', color: '#f59e0b',
+      kpis: [{ val:'47', label:'Deliveries logged', color:'#f59e0b' },{ val:'12', label:'Discrepancies found', color:'#f43f5e' },{ val:'£680', label:'Claims raised', color:'#22c55e' },{ val:'3 days', label:'Avg resolution', color:'#3b82f6' }],
+      trend: [180,280,380,480,580,680],
+      log: [
+        { time:'10:14 today', text:'Delivery from Allied Distribution — 4 pallets short vs delivery note', save:'£260 claim raised', dot:'#f43f5e' },
+        { time:'09:47 today', text:'Delivery from National Pallets UK — stretch-wrapped, 2 units damaged', save:'£94 claim raised', dot:'#f59e0b' },
+        { time:'Yesterday', text:'Delivery from Apex Packaging — quantity matched, no discrepancy', save:'Clean', dot:'#22c55e' },
+        { time:'Yesterday', text:'Delivery from Pennine Carriers — 1 pallet missing, delivery note disputed', save:'£130 claim raised', dot:'#f43f5e' },
+        { time:'2 days ago', text:'Delivery from Westbrook Supplies — 3 items damaged on arrival, photographed', save:'£86 claim raised', dot:'#f59e0b' },
+      ],
+      autoDetail: `<div class="card auto-detail-section">
+        <div class="card-header"><div><div class="card-title">Delivery Discrepancy Log — March 2026</div><div class="card-sub">All flagged deliveries with claim status</div></div></div>
+        <div class="card-body" style="padding:0;">
+          <table class="data-table">
+            <thead><tr>
+              <th>Delivery Note #</th><th>Supplier</th><th>Expected</th><th>Received</th><th>Discrepancy</th><th>Claim Value</th><th>Status</th>
+            </tr></thead>
+            <tbody>
+              <tr><td>DN-8831</td><td>Allied Distribution</td><td>24 pallets</td><td>20 pallets</td><td>4 short</td><td>£260</td><td><span class="dt-badge dt-flagged">Claimed</span></td></tr>
+              <tr><td>DN-8829</td><td>National Pallets UK</td><td>36 units</td><td>36 units</td><td>2 damaged</td><td>£94</td><td><span class="dt-badge dt-flagged">Claimed</span></td></tr>
+              <tr><td>DN-8826</td><td>Pennine Carriers</td><td>18 pallets</td><td>17 pallets</td><td>1 short</td><td>£130</td><td><span class="dt-badge dt-flagged">Claimed</span></td></tr>
+              <tr><td>DN-8823</td><td>Westbrook Supplies</td><td>120 units</td><td>117 units</td><td>3 damaged</td><td>£86</td><td><span class="dt-badge dt-flagged">Claimed</span></td></tr>
+              <tr><td>DN-8819</td><td>Eastern Freight Services</td><td>8 pallets</td><td>8 pallets</td><td>Pallet damaged</td><td>£44</td><td><span class="dt-badge dt-approved">Resolved</span></td></tr>
+              <tr><td>DN-8814</td><td>Direct Logistics Co</td><td>15 pallets</td><td>13 pallets</td><td>2 short</td><td>£66</td><td><span class="dt-badge dt-approved">Resolved</span></td></tr>
+              <tr><td>DN-8811</td><td>Allied Distribution</td><td>30 pallets</td><td>28 pallets</td><td>2 short</td><td>—</td><td><span class="dt-badge dt-pending">Awaiting CN</span></td></tr>
+              <tr><td>DN-8808</td><td>Hargreaves Transport</td><td>200 units</td><td>200 units</td><td>None</td><td>—</td><td><span class="dt-badge dt-good">Clean</span></td></tr>
+              <tr><td>DN-8806</td><td>Evans Logistics</td><td>12 pallets</td><td>12 pallets</td><td>None</td><td>—</td><td><span class="dt-badge dt-good">Clean</span></td></tr>
+              <tr><td>DN-8804</td><td>Northern Fuel Co</td><td>Bulk delivery</td><td>Bulk delivery</td><td>None</td><td>—</td><td><span class="dt-badge dt-good">Clean</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-body" style="padding-top:0;">
+          <div class="stat-cards-row">
+            <div class="stat-card-sm"><div class="stat-card-sm-val" style="color:var(--green)">£680</div><div class="stat-card-sm-label">Total claims raised this month</div></div>
+            <div class="stat-card-sm"><div class="stat-card-sm-val" style="color:var(--blue)">3 days</div><div class="stat-card-sm-label">Average claim resolution time</div></div>
+            <div class="stat-card-sm"><div class="stat-card-sm-val" style="color:#f59e0b">12</div><div class="stat-card-sm-label">Discrepancies logged (vs 0 previously)</div></div>
+          </div>
+        </div>
+      </div>`
+    },
+    quotes: {
+      title: 'Quote Normalisation Engine', sub: 'All supplier quotes made comparable on a like-for-like basis · 18 quotes this month', color: '#8b5cf6',
+      kpis: [{ val:'18', label:'Quotes normalised', color:'#8b5cf6' },{ val:'6', label:'Comparisons run', color:'#3b82f6' },{ val:'12%', label:'Avg saving found', color:'#22c55e' },{ val:'1 hr', label:'Avg analysis time', color:'#f97316' }],
+      trend: [600,900,1100,1350,1600,1900],
+      log: [
+        { time:'Today', text:'Yorkshire distribution run — 4 quotes normalised to £/km, Pennine selected', save:'£420 saving identified', dot:'#8b5cf6' },
+        { time:'Yesterday', text:'Packaging supplies re-tender — 3 quotes normalised to £/unit, Apex retained', save:'£210 saving confirmed', dot:'#22c55e' },
+        { time:'3 days ago', text:'M62 corridor freight — 5 quotes, normalised delivery window included in comparison', save:'£380 saving identified', dot:'#8b5cf6' },
+        { time:'1 week ago', text:'Fuel card re-bid — 2 quotes normalised to pence/litre + card fee', save:'£290 annual saving', dot:'#22c55e' },
+      ],
+      autoDetail: `<div class="card auto-detail-section">
+        <div class="card-header"><div><div class="card-title">Quote Comparisons — March 2026</div><div class="card-sub">All supplier quotes normalised to a common unit for fair comparison</div></div></div>
+        <div class="card-body" style="padding:0;">
+          <table class="data-table">
+            <thead><tr>
+              <th>Job / Route</th><th>Supplier</th><th>Quoted Price</th><th>Normalised (£/km)</th><th>vs Contract</th><th>Recommendation</th>
+            </tr></thead>
+            <tbody>
+              <tr><td rowspan="4" style="font-weight:600;color:var(--text)">Yorkshire Distribution Run</td><td>Pennine Carriers</td><td>£2,840</td><td>£1.24/km</td><td style="color:var(--green)">-3.1%</td><td><span class="dt-badge dt-approved">Recommended</span></td></tr>
+              <tr><td>Allied Distribution</td><td>£2,990</td><td>£1.31/km</td><td style="color:var(--orange)">+2.3%</td><td><span class="dt-badge dt-watch">Higher</span></td></tr>
+              <tr><td>Direct Logistics Co</td><td>£3,120</td><td>£1.36/km</td><td style="color:var(--red)">+6.3%</td><td><span class="dt-badge dt-flagged">Decline</span></td></tr>
+              <tr><td>Midlands Freight Co</td><td>£3,240</td><td>£1.41/km</td><td style="color:var(--red)">+10.2%</td><td><span class="dt-badge dt-flagged">Decline</span></td></tr>
+              <tr><td style="border-top:1px solid var(--border)" rowspan="3" style="font-weight:600;color:var(--text)">M62 Corridor Freight</td><td>Crown Freight Ltd</td><td>£1,960</td><td>£1.18/km</td><td style="color:var(--green)">-4.5%</td><td><span class="dt-badge dt-approved">Recommended</span></td></tr>
+              <tr><td>Hargreaves Transport</td><td>£2,060</td><td>£1.24/km</td><td style="color:var(--green)">0%</td><td><span class="dt-badge dt-good">On contract</span></td></tr>
+              <tr><td>Eastern Freight Services</td><td>£2,180</td><td>£1.31/km</td><td style="color:var(--orange)">+5.6%</td><td><span class="dt-badge dt-watch">Higher</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-body" style="padding-top:0;">
+          <div class="stat-cards-row">
+            <div class="stat-card-sm"><div class="stat-card-sm-val" style="color:var(--green)">£1,900</div><div class="stat-card-sm-label">Savings identified this month</div></div>
+            <div class="stat-card-sm"><div class="stat-card-sm-val" style="color:var(--purple)">18</div><div class="stat-card-sm-label">Quotes normalised to common unit</div></div>
+            <div class="stat-card-sm"><div class="stat-card-sm-val" style="color:var(--blue)">1 hr</div><div class="stat-card-sm-label">Avg comparison time (was 6–8 hrs manual)</div></div>
+          </div>
+        </div>
+      </div>`
+    },
+    profitability: {
+      title: 'Job & Customer Profitability Analyser', sub: 'Visibility on which jobs and customers make money · 8 customers analysed', color: '#22c55e',
+      kpis: [{ val:'8', label:'Customers analysed', color:'#22c55e' },{ val:'3', label:'Loss-making jobs found', color:'#f43f5e' },{ val:'£6,200', label:'Best margin job', color:'#22c55e' },{ val:'£420', label:'Lowest margin job', color:'#f97316' }],
+      trend: [0,0,0,0,0,0],
+      log: [
+        { time:'Today', text:'March profitability run complete — 8 customers, 47 jobs analysed', save:'Insight generated', dot:'#22c55e' },
+        { time:'Yesterday', text:'Kirklees Council account — 3 jobs identified as below cost-to-serve', save:'Flag raised', dot:'#f43f5e' },
+        { time:'1 week ago', text:'Bradfield Foods — highest margin customer confirmed at 34%', save:'Positive', dot:'#22c55e' },
+        { time:'2 weeks ago', text:'West Yorkshire NHS — margin improving month-on-month since route change', save:'Trend positive', dot:'#22c55e' },
+      ],
+      autoDetail: `<div class="card auto-detail-section">
+        <div class="card-header"><div><div class="card-title">Customer Profitability — March 2026</div><div class="card-sub">Revenue, direct costs, and gross margin by customer account (illustrative — based on your data)</div></div></div>
+        <div class="card-body" style="padding:0;">
+          <table class="data-table">
+            <thead><tr>
+              <th>Customer</th><th>Revenue</th><th>Direct Costs</th><th>Gross Margin £</th><th>Margin %</th><th>Trend</th><th>Status</th>
+            </tr></thead>
+            <tbody>
+              <tr><td>Bradfield Foods</td><td>£18,200</td><td>£12,000</td><td>£6,200</td><td style="color:var(--green)">34%</td><td style="color:var(--green)">↑</td><td><span class="dt-badge dt-good">Strong</span></td></tr>
+              <tr><td>Leeds Building Supplies</td><td>£24,600</td><td>£17,400</td><td>£7,200</td><td style="color:var(--green)">29%</td><td>→</td><td><span class="dt-badge dt-good">Strong</span></td></tr>
+              <tr><td>Moorside Retail Ltd</td><td>£31,400</td><td>£23,200</td><td>£8,200</td><td style="color:var(--green)">26%</td><td>→</td><td><span class="dt-badge dt-good">Strong</span></td></tr>
+              <tr><td>Northern Steel Ltd</td><td>£14,800</td><td>£11,200</td><td>£3,600</td><td style="color:var(--green)">24%</td><td style="color:var(--green)">↑</td><td><span class="dt-badge dt-good">Good</span></td></tr>
+              <tr><td>West Yorkshire NHS</td><td>£9,600</td><td>£7,400</td><td>£2,200</td><td style="color:var(--green)">23%</td><td style="color:var(--green)">↑ Improving</td><td><span class="dt-badge dt-good">Good</span></td></tr>
+              <tr><td>Pennine Parts Ltd</td><td>£11,200</td><td>£8,900</td><td>£2,300</td><td style="color:var(--orange)">21%</td><td>→</td><td><span class="dt-badge dt-watch">Watch</span></td></tr>
+              <tr><td>Halifax Hardware Co</td><td>£8,400</td><td>£7,000</td><td>£1,400</td><td style="color:var(--orange)">17%</td><td style="color:var(--orange)">↓</td><td><span class="dt-badge dt-watch">Watch</span></td></tr>
+              <tr><td style="font-weight:700;color:var(--text)">Kirklees Council</td><td>£16,800</td><td>£16,380</td><td style="color:var(--red)">£420</td><td style="color:var(--red);font-weight:700">2.5%</td><td style="color:var(--red)">↓ Declining</td><td><span class="dt-badge dt-atrisk">At Risk</span></td></tr>
             </tbody>
           </table>
         </div>
         <div class="card-body" style="padding-top:0;">
           <div class="alert-cards-row">
-            <div class="alert-card"><div class="alert-card-icon">🔴</div><strong style="color:var(--text)">Midlands Freight Co — At Risk:</strong> 4 late deliveries in 30 days. On-time rate at 72%, down from 91% last quarter. Recommend formal performance review this week.</div>
-            <div class="alert-card"><div class="alert-card-icon">🟠</div><strong style="color:var(--text)">City Haulage Ltd — Watch:</strong> Invoice accuracy at 82% — 6 PO reference formatting issues this month. Supplier notified. Review in 2 weeks if no improvement.</div>
-            <div class="alert-card"><div class="alert-card-icon">🟠</div><strong style="color:var(--text)">Direct Logistics Co — Watch:</strong> On-time rate declined from 94% to 88% over the past 6 weeks. No alerts raised yet — monitoring pattern for a further 2 weeks before escalation.</div>
+            <div class="alert-card"><div class="alert-card-icon">🔴</div><strong style="color:var(--text)">Kirklees Council — Margin at Risk:</strong> 3 jobs this month returned below 3% gross margin after direct costs. Cost-to-serve has risen 8% since Jan due to out-of-hours delivery requirements. Review pricing or service terms before contract renewal in May.</div>
+            <div class="alert-card"><div class="alert-card-icon">💡</div><strong style="color:var(--text)">Bradfield Foods — Highest Margin Account:</strong> 34% gross margin consistently. Route efficiency and high volume make this your most profitable customer. Prioritise retention and explore capacity expansion on this account.</div>
+          </div>
+        </div>
+      </div>`
+    },
+    overtime: {
+      title: 'Overtime & Agency Cost Monitor', sub: 'Overtime creep flagged before payroll arrives · 22 drivers tracked', color: '#f43f5e',
+      kpis: [{ val:'22', label:'Drivers tracked', color:'#f43f5e' },{ val:'£3,100', label:'Overtime this month', color:'#f97316' },{ val:'14h', label:'Excess hours flagged', color:'#f43f5e' },{ val:'4', label:'Alerts raised', color:'#f97316' }],
+      trend: [800,1100,1400,1800,2400,3100],
+      log: [
+        { time:'Today', text:'D. Hargreaves — 6h overtime this week, WTD limit approaching', save:'Alert raised', dot:'#f43f5e' },
+        { time:'Yesterday', text:'M. Clarke — 4h overtime flagged, route reassignment recommended', save:'Alert raised', dot:'#f97316' },
+        { time:'3 days ago', text:'P. Singh — agency driver used instead of overtime, £180 saved vs rate', save:'£180 saved', dot:'#22c55e' },
+        { time:'1 week ago', text:'R. Thornton — consecutive overtime shifts flagged, driver fatigue risk', save:'Alert raised', dot:'#f43f5e' },
+        { time:'1 week ago', text:'Weekly payroll check — overtime creep detected 3 days before payroll run', save:'£1,100 reallocated', dot:'#22c55e' },
+      ],
+      autoDetail: `<div class="card auto-detail-section">
+        <div class="card-header"><div><div class="card-title">Overtime Breakdown — Week of 3 Mar 2026</div><div class="card-sub">Actual vs planned hours for all drivers — flagged where overtime exceeds threshold</div></div></div>
+        <div class="card-body" style="padding:0;">
+          <table class="data-table">
+            <thead><tr>
+              <th>Driver</th><th>Planned Hrs</th><th>Actual Hrs</th><th>Overtime Hrs</th><th>OT Rate</th><th>OT Cost</th><th>Alert</th>
+            </tr></thead>
+            <tbody>
+              <tr><td style="font-weight:600">D. Hargreaves</td><td>40h</td><td>46h</td><td style="color:var(--red)">6h</td><td>£18.00/hr</td><td style="color:var(--red)">£108</td><td><span class="dt-badge dt-atrisk">WTD warning</span></td></tr>
+              <tr><td style="font-weight:600">M. Clarke</td><td>40h</td><td>44h</td><td style="color:var(--red)">4h</td><td>£16.50/hr</td><td style="color:var(--red)">£66</td><td><span class="dt-badge dt-flagged">Review route</span></td></tr>
+              <tr><td style="font-weight:600">R. Thornton</td><td>40h</td><td>43h</td><td style="color:var(--orange)">3h</td><td>£17.00/hr</td><td style="color:var(--orange)">£51</td><td><span class="dt-badge dt-watch">2nd week OT</span></td></tr>
+              <tr><td>P. Singh</td><td>40h</td><td>40h</td><td style="color:var(--green)">0h</td><td>—</td><td>—</td><td><span class="dt-badge dt-good">On plan</span></td></tr>
+              <tr><td>J. Baxter</td><td>40h</td><td>41h</td><td style="color:var(--orange)">1h</td><td>£15.50/hr</td><td style="color:var(--orange)">£15.50</td><td><span class="dt-badge dt-watch">Monitor</span></td></tr>
+              <tr><td>S. Iqbal</td><td>40h</td><td>40h</td><td style="color:var(--green)">0h</td><td>—</td><td>—</td><td><span class="dt-badge dt-good">On plan</span></td></tr>
+              <tr><td>T. Walsh</td><td>40h</td><td>40h</td><td style="color:var(--green)">0h</td><td>—</td><td>—</td><td><span class="dt-badge dt-good">On plan</span></td></tr>
+              <tr><td>A. Patel</td><td>40h</td><td>40h</td><td style="color:var(--green)">0h</td><td>—</td><td>—</td><td><span class="dt-badge dt-good">On plan</span></td></tr>
+              <tr><td>C. Morris</td><td>40h</td><td>40h</td><td style="color:var(--green)">0h</td><td>—</td><td>—</td><td><span class="dt-badge dt-good">On plan</span></td></tr>
+              <tr><td>G. Fletcher</td><td>40h</td><td>40h</td><td style="color:var(--green)">0h</td><td>—</td><td>—</td><td><span class="dt-badge dt-good">On plan</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-body" style="padding-top:0;">
+          <div class="stat-cards-row">
+            <div class="stat-card-sm"><div class="stat-card-sm-val" style="color:var(--red)">£3,100</div><div class="stat-card-sm-label">Total overtime cost this month</div></div>
+            <div class="stat-card-sm"><div class="stat-card-sm-val" style="color:var(--orange)">4</div><div class="stat-card-sm-label">Alerts raised before payroll</div></div>
+            <div class="stat-card-sm"><div class="stat-card-sm-val" style="color:var(--green)">£1,100</div><div class="stat-card-sm-label">Reallocated from overtime to planned cover</div></div>
+          </div>
+        </div>
+      </div>`
+    },
+    slow_stock: {
+      title: 'Slow-Moving Stock Early Warning', sub: 'Write-off risks surfaced before year-end · 12 SKUs monitored', color: '#f43f5e',
+      kpis: [{ val:'0', label:'Stockouts this month', color:'#22c55e' },{ val:'12%', label:'Overstock reduced', color:'#22c55e' },{ val:'97%', label:'Forecast accuracy', color:'#3b82f6' },{ val:'£4,200', label:'Capital freed', color:'#22c55e' }],
+      trend: [1200,1800,2400,3000,3700,4200],
+      log: [
+        { time:'Today', text:'Forecast updated — 3-week projection revised from new orders', save:'Up to date', dot:'#3b82f6' },
+        { time:'3 days ago', text:'Low stock alert: Packing material — reorder auto-triggered', save:'Stockout prevented', dot:'#22c55e' },
+        { time:'1 week ago', text:'Overstock on Line 4 consumables — order paused, saving £320', save:'£320 saved', dot:'#22c55e' },
+        { time:'2 weeks ago', text:'SKU-0052 Anti-Static Bags — 42-day stock flagged as slow-moving', save:'Write-off risk flagged', dot:'#f97316' },
+      ],
+      autoDetail: `<div class="card auto-detail-section">
+        <div class="card-header"><div><div class="card-title">Stock Watch</div><div class="card-sub">Current stock levels vs daily usage — all SKUs monitored for slow-movement and write-off risk</div></div></div>
+        <div class="card-body" style="padding:0;">
+          <table class="data-table">
+            <thead><tr>
+              <th>SKU</th><th>Item</th><th>Current Stock</th><th>Daily Usage</th><th>Days Remaining</th><th>Action</th>
+            </tr></thead>
+            <tbody>
+              <tr><td>SKU-0041</td><td>Corrugated Inner Boxes (Med)</td><td>432 units</td><td>48/day</td><td class="dt-warn">9 days</td><td>Reorder recommended</td></tr>
+              <tr><td>SKU-0023</td><td>Stretch Wrap Film — 500mm</td><td>18 rolls</td><td>2/day</td><td class="dt-warn">9 days</td><td>Reorder recommended</td></tr>
+              <tr><td>SKU-0017</td><td>Thermal Labels — 100x150mm</td><td>4,200 units</td><td>380/day</td><td class="dt-warn">11 days</td><td>Monitor closely</td></tr>
+              <tr><td>SKU-0058</td><td>Packing Tape — 48mm Brown</td><td>96 rolls</td><td>6/day</td><td class="dt-ok">16 days</td><td>On track</td></tr>
+              <tr><td>SKU-0031</td><td>Foam Corner Protectors</td><td>1,120 units</td><td>60/day</td><td class="dt-ok">18 days</td><td>On track</td></tr>
+              <tr><td>SKU-0064</td><td>Bubble Wrap — 500mm x 100m</td><td>14 rolls</td><td>0.7/day</td><td class="dt-ok">20 days</td><td>On track</td></tr>
+              <tr><td>SKU-0012</td><td>Outer Cardboard Boxes (Large)</td><td>680 units</td><td>32/day</td><td class="dt-ok">21 days</td><td>On track</td></tr>
+              <tr><td>SKU-0075</td><td>Zip-Tie Cable Fasteners</td><td>3,400 units</td><td>140/day</td><td class="dt-ok">24 days</td><td>On track</td></tr>
+              <tr><td>SKU-0089</td><td>Address Label Pouches — A5</td><td>1,800 units</td><td>65/day</td><td class="dt-ok">27 days</td><td>On track</td></tr>
+              <tr><td>SKU-0033</td><td>Silica Gel Sachets — 10g</td><td>2,600 units</td><td>85/day</td><td class="dt-ok">30 days</td><td>On track</td></tr>
+              <tr><td>SKU-0047</td><td>Line 4 Consumables — Batch Pack</td><td>22 packs</td><td>0.6/day</td><td class="dt-ok">36 days</td><td>Overstock monitored</td></tr>
+              <tr><td style="font-weight:600;color:var(--text)">SKU-0052</td><td>Anti-Static Bags — Medium</td><td>940 units</td><td>22/day</td><td class="dt-ok" style="color:var(--orange);font-weight:600">42 days</td><td><span style="color:var(--orange);font-weight:600">Slow-moving — review</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-body" style="padding-top:0;">
+          <div class="stat-cards-row">
+            <div class="stat-card-sm"><div class="stat-card-sm-val" style="color:var(--green)">0</div><div class="stat-card-sm-label">Zero stockouts this month</div></div>
+            <div class="stat-card-sm"><div class="stat-card-sm-val" style="color:var(--blue)">97%</div><div class="stat-card-sm-label">Forecast accuracy</div></div>
+            <div class="stat-card-sm"><div class="stat-card-sm-val" style="color:var(--green)">£4,200</div><div class="stat-card-sm-label">Capital freed from overstock</div></div>
+          </div>
+        </div>
+      </div>`
+    },
+    chaser: {
+      title: 'Supplier Chaser Automation', sub: 'Automatic chase-up emails for credits, PODs, and confirmations · 34 emails this month', color: '#0ea5e9',
+      kpis: [{ val:'34', label:'Emails sent', color:'#0ea5e9' },{ val:'28', label:'Responded', color:'#22c55e' },{ val:'£920', label:'Credits chased', color:'#f97316' },{ val:'2.1 days', label:'Avg response time', color:'#3b82f6' }],
+      trend: [240,360,480,620,760,920],
+      log: [
+        { time:'10:02 today', text:'Chase #2 sent to Allied Distribution — credit note CN-0421 overdue by 12 days', save:'£260 credit chased', dot:'#0ea5e9' },
+        { time:'09:38 today', text:'Hargreaves Transport responded — credit note CN-0418 confirmed, £370 incoming', save:'£370 recovered', dot:'#22c55e' },
+        { time:'Yesterday', text:'Chase sent to City Haulage — POD for DN-8820 outstanding 8 days', save:'POD chased', dot:'#0ea5e9' },
+        { time:'2 days ago', text:'Evans Logistics responded — February overpayment refund confirmed', save:'£290 confirmed', dot:'#22c55e' },
+        { time:'3 days ago', text:'Initial chase sent to Pennine Carriers — credit note for DN-8826 not received', save:'£130 credit chased', dot:'#0ea5e9' },
+      ],
+      autoDetail: `<div class="card auto-detail-section">
+        <div class="card-header"><div><div class="card-title">Active Chasers — March 2026</div><div class="card-sub">All outstanding items being automatically chased — credit notes, PODs, and delivery confirmations</div></div></div>
+        <div class="card-body" style="padding:0;">
+          <table class="data-table">
+            <thead><tr>
+              <th>Supplier</th><th>Type</th><th>Amount</th><th>Sent</th><th>Last Chased</th><th>Chase #</th><th>Status</th>
+            </tr></thead>
+            <tbody>
+              <tr><td>Allied Distribution</td><td>Credit note CN-0421</td><td>£260</td><td>24 Feb</td><td>8 Mar</td><td>2</td><td><span class="dt-badge dt-flagged">Awaiting response</span></td></tr>
+              <tr><td>City Haulage Ltd</td><td>POD — DN-8820</td><td>—</td><td>28 Feb</td><td>7 Mar</td><td>2</td><td><span class="dt-badge dt-flagged">Awaiting POD</span></td></tr>
+              <tr><td>Pennine Carriers</td><td>Credit note DN-8826</td><td>£130</td><td>5 Mar</td><td>5 Mar</td><td>1</td><td><span class="dt-badge dt-pending">Initial sent</span></td></tr>
+              <tr><td>Midlands Freight Co</td><td>Dispute response</td><td>£210</td><td>7 Mar</td><td>7 Mar</td><td>1</td><td><span class="dt-badge dt-pending">Initial sent</span></td></tr>
+              <tr><td>Allied Distribution</td><td>Credit note CN-0417</td><td>£160</td><td>1 Mar</td><td>6 Mar</td><td>2</td><td><span class="dt-badge dt-pending">Escalating</span></td></tr>
+              <tr><td>Hargreaves Transport</td><td>Credit note CN-0418</td><td>£370</td><td>25 Feb</td><td>4 Mar</td><td>2</td><td><span class="dt-badge dt-approved">Confirmed</span></td></tr>
+              <tr><td>Evans Logistics</td><td>Overpayment refund</td><td>£290</td><td>3 Mar</td><td>6 Mar</td><td>2</td><td><span class="dt-badge dt-approved">Confirmed</span></td></tr>
+              <tr><td>Northern Fuel Co</td><td>Delivery confirmation</td><td>—</td><td>6 Mar</td><td>6 Mar</td><td>1</td><td><span class="dt-badge dt-approved">Responded</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-body" style="padding-top:0;">
+          <div class="stat-cards-row">
+            <div class="stat-card-sm"><div class="stat-card-sm-val" style="color:var(--green)">£920</div><div class="stat-card-sm-label">Credits and refunds chased this month</div></div>
+            <div class="stat-card-sm"><div class="stat-card-sm-val" style="color:#0ea5e9">34</div><div class="stat-card-sm-label">Chase emails sent automatically</div></div>
+            <div class="stat-card-sm"><div class="stat-card-sm-val" style="color:var(--blue)">2.1 days</div><div class="stat-card-sm-label">Average supplier response time</div></div>
           </div>
         </div>
       </div>`
@@ -2496,47 +2828,6 @@
               <div class="upcoming-item"><span>Driver Hours & WTD Report (March)</span><span style="color:var(--muted)">Scheduled: 5 Apr 2026</span></div>
               <div class="upcoming-item"><span>Vehicle Inspection Summary (March)</span><span style="color:var(--muted)">Scheduled: 2 Apr 2026</span></div>
             </div>
-          </div>
-        </div>
-      </div>`
-    },
-    inventory: {
-      title: 'Inventory & Demand Forecasting', sub: 'AI demand planning from order history · 97% forecast accuracy', color: '#f43f5e',
-      kpis: [{ val:'0', label:'Stockouts this month', color:'#22c55e' },{ val:'97%', label:'Forecast accuracy', color:'#3b82f6' },{ val:'12%', label:'Overstock reduced', color:'#22c55e' },{ val:'£4,200', label:'Capital freed', color:'#22c55e' }],
-      trend: [1200,1800,2400,3000,3700,4200],
-      log: [
-        { time:'Today', text:'Forecast updated — 3-week projection revised from new orders', save:'Up to date', dot:'#3b82f6' },
-        { time:'3 days ago', text:'Low stock alert: Packing material — reorder auto-triggered', save:'Stockout prevented', dot:'#22c55e' },
-        { time:'1 week ago', text:'Overstock on Line 4 consumables — order paused, saving £320', save:'£320 saved', dot:'#22c55e' },
-      ],
-      autoDetail: `<div class="card auto-detail-section">
-        <div class="card-header"><div><div class="card-title">Stock Watch</div><div class="card-sub">Current stock levels vs daily usage — all SKUs monitored</div></div></div>
-        <div class="card-body" style="padding:0;">
-          <table class="data-table">
-            <thead><tr>
-              <th>SKU</th><th>Item</th><th>Current Stock</th><th>Daily Usage</th><th>Days Remaining</th><th>Action</th>
-            </tr></thead>
-            <tbody>
-              <tr><td>SKU-0041</td><td>Corrugated Inner Boxes (Med)</td><td>432 units</td><td>48/day</td><td class="dt-warn">9 days</td><td>Reorder recommended</td></tr>
-              <tr><td>SKU-0023</td><td>Stretch Wrap Film — 500mm</td><td>18 rolls</td><td>2/day</td><td class="dt-warn">9 days</td><td>Reorder recommended</td></tr>
-              <tr><td>SKU-0017</td><td>Thermal Labels — 100x150mm</td><td>4,200 units</td><td>380/day</td><td class="dt-warn">11 days</td><td>Monitor closely</td></tr>
-              <tr><td>SKU-0058</td><td>Packing Tape — 48mm Brown</td><td>96 rolls</td><td>6/day</td><td class="dt-ok">16 days</td><td>On track</td></tr>
-              <tr><td>SKU-0031</td><td>Foam Corner Protectors</td><td>1,120 units</td><td>60/day</td><td class="dt-ok">18 days</td><td>On track</td></tr>
-              <tr><td>SKU-0064</td><td>Bubble Wrap — 500mm x 100m</td><td>14 rolls</td><td>0.7/day</td><td class="dt-ok">20 days</td><td>On track</td></tr>
-              <tr><td>SKU-0012</td><td>Outer Cardboard Boxes (Large)</td><td>680 units</td><td>32/day</td><td class="dt-ok">21 days</td><td>On track</td></tr>
-              <tr><td>SKU-0075</td><td>Zip-Tie Cable Fasteners</td><td>3,400 units</td><td>140/day</td><td class="dt-ok">24 days</td><td>On track</td></tr>
-              <tr><td>SKU-0089</td><td>Address Label Pouches — A5</td><td>1,800 units</td><td>65/day</td><td class="dt-ok">27 days</td><td>On track</td></tr>
-              <tr><td>SKU-0033</td><td>Silica Gel Sachets — 10g</td><td>2,600 units</td><td>85/day</td><td class="dt-ok">30 days</td><td>On track</td></tr>
-              <tr><td>SKU-0047</td><td>Line 4 Consumables — Batch Pack</td><td>22 packs</td><td>0.6/day</td><td class="dt-ok">36 days</td><td>Overstock monitored</td></tr>
-              <tr><td>SKU-0052</td><td>Anti-Static Bags — Medium</td><td>940 units</td><td>22/day</td><td class="dt-ok">42 days</td><td>Overstock monitored</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="card-body" style="padding-top:0;">
-          <div class="stat-cards-row">
-            <div class="stat-card-sm"><div class="stat-card-sm-val" style="color:var(--green)">0</div><div class="stat-card-sm-label">Zero stockouts this month</div></div>
-            <div class="stat-card-sm"><div class="stat-card-sm-val" style="color:var(--blue)">97%</div><div class="stat-card-sm-label">Forecast accuracy</div></div>
-            <div class="stat-card-sm"><div class="stat-card-sm-val" style="color:var(--green)">£4,200</div><div class="stat-card-sm-label">Capital freed from overstock</div></div>
           </div>
         </div>
       </div>`
