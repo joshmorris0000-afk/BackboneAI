@@ -778,6 +778,44 @@
     .sys-request-send:hover{background:rgba(139,92,246,0.25);}
     .sys-request-success{font-size:12px;color:#4ade80;margin-top:8px;display:none;}
 
+    /* ── Inline system browser ── */
+    .sys-lib-header{margin-bottom:14px;}
+    .sys-lib-title{font-size:16px;font-weight:800;letter-spacing:-0.3px;margin-bottom:4px;}
+    .sys-lib-sub{font-size:12px;color:var(--muted);line-height:1.5;max-width:580px;}
+    .sys-cat-tabs{display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap;}
+    .sys-cat-tab{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:5px 14px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;font-family:inherit;transition:all 0.15s;}
+    .sys-cat-tab:hover{color:var(--text);border-color:rgba(255,255,255,0.15);}
+    .sys-cat-tab.active{background:var(--blue-dim);border-color:rgba(59,130,246,0.3);color:var(--blue-bright);}
+    .sys-lib-cat-group{margin-bottom:22px;}
+    .sys-lib-cat-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+    .sys-lib-cat-label::after{content:'';flex:1;height:1px;background:var(--border);}
+    .sys-lib-cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+    .sys-lib-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:6px;transition:border-color 0.2s;}
+    .sys-lib-card:hover:not(.sslc-added):not(.sslc-requested){border-color:rgba(59,130,246,0.3);}
+    .sslc-requested{border-color:rgba(249,115,22,0.25);background:rgba(249,115,22,0.04);}
+    .sslc-pending{border-color:rgba(59,130,246,0.25);background:rgba(59,130,246,0.04);}
+    .sslc-added{border-color:rgba(34,197,94,0.2);background:rgba(34,197,94,0.03);}
+    .sys-lib-name{font-size:13px;font-weight:700;color:var(--text);}
+    .sys-lib-desc{font-size:11px;color:var(--muted2);line-height:1.5;}
+    .sys-lib-creds{font-size:10px;color:var(--muted);line-height:1.5;padding:8px 10px;background:rgba(255,255,255,0.03);border-radius:6px;border-left:2px solid var(--border);margin-top:2px;}
+    .sys-lib-creds-label{font-weight:700;color:var(--muted2);}
+    .sys-lib-status-note{font-size:10px;color:var(--muted);font-style:italic;margin-top:2px;}
+    .sys-lib-btn{margin-top:6px;width:100%;padding:8px 12px;background:var(--blue);border:none;border-radius:8px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:background 0.2s;}
+    .sys-lib-btn:hover:not(:disabled){background:#2563eb;}
+    .sys-lib-btn:disabled{cursor:default;}
+    .ssb-requested{background:rgba(249,115,22,0.12);border:1px solid rgba(249,115,22,0.3);color:#fb923c;}
+    .ssb-pending{background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.3);color:var(--blue-bright);}
+    .ssb-connected{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.25);color:#4ade80;}
+    .sys-custom-row{display:flex;align-items:center;justify-content:space-between;gap:16px;background:rgba(139,92,246,0.06);border:1px solid rgba(139,92,246,0.18);border-radius:12px;padding:16px 20px;margin-top:16px;flex-wrap:wrap;}
+    .req-sys-input-inline{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;padding:8px 13px;color:var(--text);font-size:13px;font-family:inherit;outline:none;transition:border-color 0.2s;width:230px;}
+    .req-sys-input-inline:focus{border-color:rgba(139,92,246,0.5);}
+    .req-sys-input-inline::placeholder{color:var(--muted);}
+    .req-sys-btn-inline{background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.3);color:#a78bfa;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:background 0.2s;white-space:nowrap;}
+    .req-sys-btn-inline:hover{background:rgba(139,92,246,0.25);}
+    /* Toast */
+    .sys-toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(16px);background:#1e293b;border:1px solid #334155;border-radius:10px;padding:12px 22px;font-size:13px;color:var(--text);z-index:999;opacity:0;pointer-events:none;transition:all 0.3s;max-width:440px;text-align:center;}
+    .sys-toast.visible{opacity:1;transform:translateX(-50%) translateY(0);}
+
     /* ═══════════════════════════════
        PAGE — INSIGHTS
     ═══════════════════════════════ */
@@ -1610,21 +1648,48 @@
           <div class="completeness-note">Connect additional systems or upload the remaining files below to improve AI accuracy and unlock full automation capability.</div>
         </div>
 
-        <!-- ── SYSTEM CONNECTIONS ── -->
+        <!-- ── CONNECTED SYSTEMS ── -->
         <div style="margin-bottom:28px;">
           <div class="sys-connections-header">
             <div>
-              <div class="sys-connections-title">System Connections</div>
-              <div class="sys-connections-sub">Live integrations pull data automatically — no exports needed. Add the systems you use, remove ones you don't.</div>
+              <div class="sys-connections-title">Connected Systems</div>
+              <div class="sys-connections-sub">Data is pulled from these systems automatically — no manual exports needed.</div>
             </div>
-            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-              <div id="sysPills" class="sys-score-pills"></div>
-              <button class="add-sys-btn" onclick="openSysModal()">+ Add a system</button>
-            </div>
+            <div id="sysPills" class="sys-score-pills"></div>
           </div>
           <div class="active-sys-grid" id="activeSysList"></div>
           <div class="sys-empty-state" id="sysEmptyState" style="display:none;">
-            No systems connected yet. Click <strong>+ Add a system</strong> to get started.
+            <div style="font-size:22px;margin-bottom:8px;">🔌</div>
+            <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px;">No systems connected yet</div>
+            <div style="font-size:12px;color:var(--muted);">Use the library below to request your first connection. Your account manager handles all the technical setup.</div>
+          </div>
+        </div>
+
+        <!-- ── SYSTEM LIBRARY (inline, no modal) ── -->
+        <div style="margin-bottom:28px;">
+          <div class="sys-lib-header">
+            <div class="sys-lib-title">Add a System Connection</div>
+            <div class="sys-lib-sub">Select any system below to request a connection. Once requested, your account manager contacts you within 24 hours to gather credentials and handle all the technical setup. Your dashboard will show <strong style="color:var(--green)">Live</strong> only when data is actively flowing.</div>
+          </div>
+          <div class="sys-cat-tabs" id="sysCatTabs">
+            <button class="sys-cat-tab active" onclick="filterSysCat('all',this)">All systems</button>
+            <button class="sys-cat-tab" onclick="filterSysCat('Accounting & Finance',this)">Accounting</button>
+            <button class="sys-cat-tab" onclick="filterSysCat('Fleet & Transport',this)">Fleet</button>
+            <button class="sys-cat-tab" onclick="filterSysCat('ERP & Manufacturing',this)">ERP</button>
+            <button class="sys-cat-tab" onclick="filterSysCat('Warehouse & Inventory',this)">Warehouse</button>
+            <button class="sys-cat-tab" onclick="filterSysCat('Spreadsheets & Productivity',this)">Spreadsheets</button>
+          </div>
+          <div id="sysLibraryGrid"></div>
+          <div class="sys-custom-row">
+            <div>
+              <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;">Don't see your system?</div>
+              <div style="font-size:12px;color:var(--muted);">We connect to hundreds of systems. Tell us what you use and we'll build the integration.</div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+              <input id="reqSysInput" class="req-sys-input-inline" type="text" placeholder="e.g. Sage 300, Mandata, Körber..." />
+              <button class="req-sys-btn-inline" onclick="sendSystemRequest()">Request →</button>
+            </div>
+            <div id="reqSysSuccess" style="display:none;font-size:12px;color:var(--green);width:100%;margin-top:-4px;"></div>
           </div>
         </div>
 
@@ -3028,25 +3093,68 @@
 
   /* ═══ SYSTEM CONNECTIONS ═══ */
   const SYSTEMS_LIBRARY = [
-    { id:'sage',    name:'Sage 50 / Sage 200',      cat:'Accounting & Finance',        desc:'Purchase orders, supplier invoices, nominal ledger. Auto-syncs nightly.' },
-    { id:'xero',    name:'Xero',                    cat:'Accounting & Finance',        desc:'Invoices, bills, bank reconciliation, supplier contacts.' },
-    { id:'qbooks',  name:'QuickBooks',              cat:'Accounting & Finance',        desc:'Expense data, purchase records, payroll summaries for cost analysis.' },
-    { id:'sap-fi',  name:'SAP (Finance modules)',   cat:'Accounting & Finance',        desc:'AP/AR ledger, cost centre data, procurement records via SAP export API.' },
-    { id:'hmrc',    name:'HMRC Making Tax Digital', cat:'Accounting & Finance',        desc:'VAT submissions, PAYE data, compliance deadlines automatically tracked.' },
-    { id:'webfleet',name:'Webfleet (TomTom)',       cat:'Fleet & Transport',           desc:'Live vehicle locations, trip history, driver behaviour, fuel data.' },
-    { id:'bigchange',name:'BigChange',              cat:'Fleet & Transport',           desc:'Job scheduling, mobile workforce data, job cards, POD.' },
-    { id:'samsara', name:'Samsara',                 cat:'Fleet & Transport',           desc:'GPS tracking, HOS compliance logs, vehicle diagnostics, safety events.' },
-    { id:'mandata', name:'Mandata TMS',             cat:'Fleet & Transport',           desc:'Load planning, driver allocations, POD records, customer delivery data.' },
-    { id:'navman',  name:'Teletrac Navman',         cat:'Fleet & Transport',           desc:'Fleet tracking, driver performance, fuel monitoring, compliance reports.' },
-    { id:'dynamics',name:'Microsoft Dynamics 365', cat:'ERP & Manufacturing',         desc:'Production orders, stock levels, BOM data, quality inspection records.' },
-    { id:'epicor',  name:'Epicor',                  cat:'ERP & Manufacturing',         desc:'Job costing, shop floor data, MRP, production scheduling.' },
-    { id:'syspro',  name:'SYSPRO',                  cat:'ERP & Manufacturing',         desc:'Inventory movements, WIP, supplier lead times, quality data.' },
-    { id:'infor',   name:'Infor (LN / M3)',         cat:'ERP & Manufacturing',         desc:'Production planning, warehouse, distribution, and financial modules.' },
-    { id:'jobBoss', name:'JobBOSS²',               cat:'ERP & Manufacturing',         desc:'Estimating, job tracking, scheduling, quality management for job shops.' },
-    { id:'mintsoft',name:'Mintsoft',                cat:'Warehouse & Inventory',       desc:'Order management, pick/pack, 3PL operations, stock movements.' },
-    { id:'pvox',    name:'Peoplevox',               cat:'Warehouse & Inventory',       desc:'Real-time inventory, warehouse workflows, fulfilment efficiency data.' },
-    { id:'gsheets', name:'Google Sheets',           cat:'Spreadsheets & Productivity', desc:'Operational logs, shift schedules, stock trackers. Live Sheets API sync.' },
-    { id:'excel',   name:'Microsoft Excel / OneDrive', cat:'Spreadsheets & Productivity', desc:'Shared workbooks synced automatically — no manual file exports needed.' },
+    // Accounting & Finance
+    { id:'sage',     name:'Sage 50 / Sage 200',       cat:'Accounting & Finance',
+      desc:'Pulls purchase orders, supplier invoices, and nominal ledger data. Syncs nightly via Sage\'s database API.',
+      creds:'We\'ll need your Sage company name, database login credentials, and read-only API access enabled by your IT contact or Sage partner. Setup typically takes 1–2 days.' },
+    { id:'xero',     name:'Xero',                     cat:'Accounting & Finance',
+      desc:'Pulls invoices, bills, bank reconciliation data, and supplier contacts in real time.',
+      creds:'You\'ll simply click "Connect to Xero" and log in with your Xero account — no technical setup needed. Takes 5 minutes.' },
+    { id:'qbooks',   name:'QuickBooks Online',         cat:'Accounting & Finance',
+      desc:'Pulls expense records, purchase orders, supplier bills, and payroll summaries.',
+      creds:'You\'ll click "Connect to QuickBooks" and log in with your Intuit account — standard one-click authorisation. Takes 5 minutes.' },
+    { id:'sap-fi',   name:'SAP (Finance modules)',     cat:'Accounting & Finance',
+      desc:'Pulls AP/AR ledger, cost centre data, and procurement records via SAP\'s OData REST API.',
+      creds:'Your SAP administrator needs to create a dedicated API user with read-only access and provide the system URL and client number. We handle the technical setup from there.' },
+    { id:'hmrc',     name:'HMRC Making Tax Digital',   cat:'Accounting & Finance',
+      desc:'Monitors VAT submission deadlines, PAYE data, and compliance status automatically.',
+      creds:'You\'ll authorise via your HMRC Government Gateway account — click "Connect to HMRC" and sign in. Standard government OAuth flow, no technical steps.' },
+    // Fleet & Transport
+    { id:'webfleet', name:'Webfleet (TomTom)',         cat:'Fleet & Transport',
+      desc:'Pulls live vehicle locations, trip history, driver behaviour scores, and fuel consumption data.',
+      creds:'You\'ll need your Webfleet account name and an API key, which you generate in your Webfleet account under Settings → API. Takes 10 minutes.' },
+    { id:'bigchange',name:'BigChange',                 cat:'Fleet & Transport',
+      desc:'Pulls job scheduling records, mobile workforce data, job cards, and proof of delivery.',
+      creds:'Your BigChange account manager provides an API key — email them to request one. Once you have it, send it to us and we handle the rest.' },
+    { id:'samsara',  name:'Samsara',                   cat:'Fleet & Transport',
+      desc:'Pulls GPS tracking data, HOS compliance logs, vehicle diagnostics, and safety event alerts.',
+      creds:'Generate an API token in your Samsara dashboard under Settings → API Tokens. Takes 5 minutes — we\'ll walk you through it.' },
+    { id:'mandata',  name:'Mandata TMS',               cat:'Fleet & Transport',
+      desc:'Pulls load planning data, driver allocations, POD records, and customer delivery information.',
+      creds:'Mandata\'s support team needs to enable API access on your account. Contact them, then share the credentials with us — typically a 2–3 day process.' },
+    { id:'navman',   name:'Teletrac Navman',           cat:'Fleet & Transport',
+      desc:'Pulls fleet tracking data, driver performance metrics, fuel monitoring, and compliance reports.',
+      creds:'Log in to your Navman portal and generate an API key under Account Settings. Share it with us and we handle the integration from there.' },
+    // ERP & Manufacturing
+    { id:'dynamics', name:'Microsoft Dynamics 365',    cat:'ERP & Manufacturing',
+      desc:'Pulls production orders, stock levels, BOM data, quality inspection records, and financial data.',
+      creds:'Your Microsoft 365 administrator creates an app registration in Azure Active Directory (we provide the exact steps). No technical knowledge needed from you — your IT admin does this in around 20 minutes.' },
+    { id:'epicor',   name:'Epicor',                    cat:'ERP & Manufacturing',
+      desc:'Pulls job costing data, shop floor records, MRP output, and production scheduling.',
+      creds:'Your Epicor administrator enables the REST API in your Epicor system and creates a service account. We provide the exact configuration steps — typically takes 1 day.' },
+    { id:'syspro',   name:'SYSPRO',                    cat:'ERP & Manufacturing',
+      desc:'Pulls inventory movements, WIP data, supplier lead times, and quality records.',
+      creds:'Your SYSPRO system administrator enables the e.net API and creates a read-only operator account. We guide you through what to ask them — takes 1–2 days.' },
+    { id:'infor',    name:'Infor (LN / M3)',            cat:'ERP & Manufacturing',
+      desc:'Pulls production planning, warehouse, distribution, and financial module data via Infor ION.',
+      creds:'Your Infor system administrator sets up an ION API connection point and provides an OAuth credential file. We work with your admin directly — typically 2–3 days to configure.' },
+    { id:'jobBoss',  name:'JobBOSS²',                  cat:'ERP & Manufacturing',
+      desc:'Pulls estimating data, job tracking, scheduling, and quality management records.',
+      creds:'Generate an API key in your JobBOSS² account under Admin → API Settings. Share it with us and we handle everything else. Takes 5 minutes.' },
+    // Warehouse & Inventory
+    { id:'mintsoft', name:'Mintsoft',                  cat:'Warehouse & Inventory',
+      desc:'Pulls order management, pick/pack records, 3PL operations data, and stock movements.',
+      creds:'Your Mintsoft account has an API key under Settings → Integrations. Share it with us — the technical setup takes us 1 day to complete.' },
+    { id:'pvox',     name:'Peoplevox',                 cat:'Warehouse & Inventory',
+      desc:'Pulls real-time inventory levels, warehouse workflow data, and fulfilment efficiency metrics.',
+      creds:'Your Peoplevox client ID and an API password are needed — found in your Peoplevox admin panel. We\'ll guide you exactly where to look.' },
+    // Spreadsheets
+    { id:'gsheets',  name:'Google Sheets',             cat:'Spreadsheets & Productivity',
+      desc:'Syncs operational logs, shift schedules, and stock trackers from your existing Google Sheets — live, no exports needed.',
+      creds:'You\'ll click "Connect to Google" and sign in with your Google account, then share the specific Sheets with us. Entirely self-serve — takes 5 minutes.' },
+    { id:'excel',    name:'Microsoft Excel / OneDrive',cat:'Spreadsheets & Productivity',
+      desc:'Syncs shared Excel workbooks stored in OneDrive or SharePoint automatically — no manual file exports.',
+      creds:'Sign in with your Microsoft 365 account and grant access to your OneDrive or SharePoint site. One-click authorisation — takes 5 minutes.' },
   ];
 
   // Active systems for this demo client (ids from SYSTEMS_LIBRARY)
@@ -3059,52 +3167,42 @@
 
   function getSystemById(id) { return SYSTEMS_LIBRARY.find(s => s.id === id); }
 
+  let _currentCatFilter = 'all';
+
+  const STATUS_LABELS = {
+    requested: { badge: 'Requested', badgeCls: 'sb-pending', cardCls: 'sc-pending',  note: 'Connection requested — your account manager will contact you within 24 hours to gather credentials and set this up.' },
+    pending:   { badge: 'Setting up', badgeCls: 'sb-pending', cardCls: 'sc-pending', note: 'Credentials received — integration is being built and tested. We\'ll notify you when data starts flowing.' },
+    connected: { badge: 'Live', badgeCls: 'sb-connected', cardCls: 'sc-connected',  note: null },
+  };
+
   function renderActiveSystems() {
-    const list = document.getElementById('activeSysList');
+    const list  = document.getElementById('activeSysList');
     const empty = document.getElementById('sysEmptyState');
     const pills = document.getElementById('sysPills');
     list.innerHTML = '';
-    const connected = activeSystems.filter(s => s.status === 'connected').length;
-    const pending   = activeSystems.filter(s => s.status === 'pending').length;
+    const connected  = activeSystems.filter(s => s.status === 'connected').length;
+    const inProgress = activeSystems.filter(s => s.status !== 'connected').length;
     pills.innerHTML = '';
-    if (connected) pills.innerHTML += `<div class="sys-score-pill ssp-connected">${connected} connected</div>`;
-    if (pending)   pills.innerHTML += `<div class="sys-score-pill ssp-pending">${pending} awaiting</div>`;
-    if (!activeSystems.length) { empty.style.display = 'block'; return; }
-    empty.style.display = 'none';
+    if (connected)  pills.innerHTML += `<div class="sys-score-pill ssp-connected">${connected} live</div>`;
+    if (inProgress) pills.innerHTML += `<div class="sys-score-pill ssp-pending">${inProgress} in progress</div>`;
+    if (!activeSystems.length) { empty.style.display = 'block'; list.style.display = 'none'; return; }
+    empty.style.display = 'none'; list.style.display = '';
     activeSystems.forEach(active => {
       const sys = getSystemById(active.id);
       if (!sys) return;
-      const cls = active.status === 'connected' ? 'sc-connected' : active.status === 'pending' ? 'sc-pending' : '';
-      const badge = active.status === 'connected'
-        ? '<div class="sys-badge sb-connected">Connected</div>'
-        : active.status === 'pending'
-        ? '<div class="sys-badge sb-pending">Awaiting setup</div>'
-        : '<div class="sys-badge sb-none">Not connected</div>';
-      const actionBtn = active.status === 'connected'
-        ? '<button class="sys-card-btn scb-manage">Manage →</button>'
-        : active.status === 'pending'
-        ? '<button class="sys-card-btn scb-pending">Complete setup →</button>'
-        : '';
+      const st = STATUS_LABELS[active.status] || STATUS_LABELS.requested;
       const card = document.createElement('div');
-      card.className = `active-sys-card ${cls}`;
+      card.className = `active-sys-card ${st.cardCls}`;
       card.innerHTML = `
-        <button class="sys-remove-btn" onclick="removeSystem('${active.id}')" title="Remove">✕</button>
-        <div class="sys-card-top" style="padding-right:22px;">${badge}</div>
+        <button class="sys-remove-btn" onclick="removeSystem('${active.id}')" title="Remove connection request">✕</button>
+        <div class="sys-card-top" style="padding-right:22px;"><div class="sys-badge ${st.badgeCls}">${st.badge}</div></div>
         <div class="sys-card-name">${sys.name}</div>
-        <div class="sys-card-desc">${active.note || sys.desc}</div>
-        ${actionBtn}
+        <div class="sys-card-desc">${st.note || active.note || sys.desc}</div>
+        ${active.status === 'connected' ? `<div style="font-size:10px;color:var(--muted);margin-top:4px;">Syncing: ${active.note || sys.desc}</div>` : ''}
       `;
       list.appendChild(card);
     });
-    // Refresh picker buttons
-    document.querySelectorAll('.sys-add-btn').forEach(btn => {
-      const id = btn.dataset.id;
-      if (activeSystems.find(s => s.id === id)) {
-        btn.textContent = 'Added ✓'; btn.classList.add('added');
-      } else {
-        btn.textContent = 'Add'; btn.classList.remove('added');
-      }
-    });
+    renderLibraryGrid(_currentCatFilter);
   }
 
   function removeSystem(id) {
@@ -3114,53 +3212,72 @@
 
   function addSystem(id) {
     if (activeSystems.find(s => s.id === id)) return;
-    activeSystems.push({ id, status: 'pending', note: 'Our team will be in touch within 24 hours to set up this connection.' });
+    const sys = getSystemById(id);
+    activeSystems.push({ id, status: 'requested', note: sys ? sys.desc : '' });
     renderActiveSystems();
+    showSysToast(`Connection requested for ${sys ? sys.name : id} — your account manager will be in touch within 24 hours.`);
   }
 
-  function openSysModal() {
-    const cats = [...new Set(SYSTEMS_LIBRARY.map(s => s.cat))];
-    const body = document.getElementById('sysModalBody');
-    body.innerHTML = '';
-    cats.forEach(cat => {
-      const items = SYSTEMS_LIBRARY.filter(s => s.cat === cat);
-      const group = document.createElement('div');
-      group.innerHTML = `<div class="sys-picker-group-label">${cat}</div><div class="sys-picker-grid">${
-        items.map(sys => {
-          const active = activeSystems.find(s => s.id === sys.id);
-          return `<div class="sys-picker-item${active ? ' spi-active' : ''}">
-            <div class="sys-picker-item-info">
-              <div class="sys-picker-name">${sys.name}</div>
-              <div class="sys-picker-desc">${sys.desc}</div>
-            </div>
-            <button class="sys-add-btn${active ? ' added' : ''}" data-id="${sys.id}" onclick="addSystem('${sys.id}');renderActiveSystems();">${active ? 'Added ✓' : 'Add'}</button>
-          </div>`;
-        }).join('')
-      }</div>`;
-      body.appendChild(group);
-    });
-    document.getElementById('sysModalOverlay').classList.add('open');
+  function renderLibraryGrid(catFilter) {
+    _currentCatFilter = catFilter;
+    const grid = document.getElementById('sysLibraryGrid');
+    if (!grid) return;
+    const filtered = catFilter === 'all' ? SYSTEMS_LIBRARY : SYSTEMS_LIBRARY.filter(s => s.cat === catFilter);
+    if (catFilter === 'all') {
+      const cats = [...new Set(SYSTEMS_LIBRARY.map(s => s.cat))];
+      grid.innerHTML = cats.map(cat => {
+        const items = SYSTEMS_LIBRARY.filter(s => s.cat === cat);
+        return `<div class="sys-lib-cat-group">
+          <div class="sys-lib-cat-label">${cat}</div>
+          <div class="sys-lib-cat-grid">${items.map(sysLibCardHtml).join('')}</div>
+        </div>`;
+      }).join('');
+    } else {
+      grid.innerHTML = `<div class="sys-lib-cat-grid">${filtered.map(sysLibCardHtml).join('')}</div>`;
+    }
   }
 
-  function closeSysModal() {
-    document.getElementById('sysModalOverlay').classList.remove('open');
+  function sysLibCardHtml(sys) {
+    const active = activeSystems.find(s => s.id === sys.id);
+    const status = active ? active.status : null;
+    let cardCls = '', btnCls = 'sys-lib-btn', btnText = 'Request connection', disabled = '';
+    if (status === 'connected')       { cardCls = 'sslc-added';      btnCls += ' ssb-connected'; btnText = '✓ Live — data flowing'; disabled = 'disabled'; }
+    else if (status === 'pending')    { cardCls = 'sslc-pending';    btnCls += ' ssb-pending';   btnText = '⚙ Setting up…';        disabled = 'disabled'; }
+    else if (status === 'requested')  { cardCls = 'sslc-requested';  btnCls += ' ssb-requested'; btnText = '⏳ Request sent';       disabled = 'disabled'; }
+    const credsHtml = sys.creds && !status ? `<div class="sys-lib-creds"><span class="sys-lib-creds-label">What you'll need: </span>${sys.creds}</div>` : '';
+    return `<div class="sys-lib-card ${cardCls}">
+      <div class="sys-lib-name">${sys.name}</div>
+      <div class="sys-lib-desc">${sys.desc}</div>
+      ${credsHtml}
+      <button class="${btnCls}" onclick="addSystem('${sys.id}')" ${disabled}>${btnText}</button>
+    </div>`;
+  }
+
+  function filterSysCat(cat, btn) {
+    document.querySelectorAll('.sys-cat-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    renderLibraryGrid(cat);
+  }
+
+  function showSysToast(msg) {
+    const t = document.getElementById('sysToast');
+    t.textContent = msg;
+    t.classList.add('visible');
+    setTimeout(() => t.classList.remove('visible'), 5000);
   }
 
   function sendSystemRequest() {
     const input = document.getElementById('reqSysInput');
     const success = document.getElementById('reqSysSuccess');
     if (!input.value.trim()) return;
-    success.textContent = `Request sent for "${input.value.trim()}" — our team will confirm within 24 hours.`;
+    success.textContent = `Request sent for "${input.value.trim()}" — your account manager will confirm within 24 hours.`;
     success.style.display = 'block';
     input.value = '';
     setTimeout(() => { success.style.display = 'none'; }, 5000);
   }
 
-  document.getElementById('sysModalOverlay').addEventListener('click', e => {
-    if (e.target === document.getElementById('sysModalOverlay')) closeSysModal();
-  });
-
   renderActiveSystems();
+  renderLibraryGrid('all');
 
   /* ═══ DEMO AUTO-LOGIN (?demo in URL skips login screen) ═══ */
   if (new URLSearchParams(location.search).has('demo')) {
@@ -3173,5 +3290,6 @@
     animateKPIs();
   }
 </script>
+<div id="sysToast" class="sys-toast"></div>
 </body>
 </html>
