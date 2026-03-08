@@ -98,7 +98,7 @@ Nav order matches scroll order: What We Do → How It Works → Services → Exa
 
 ### 2. Client Portal (`client.html`)
 
-The authenticated client-facing platform. Three internal pages:
+The authenticated client-facing platform. Seven internal pages (sidebar nav):
 
 #### Dashboard (default landing page)
 - Animated KPI counters: cost saved, hours saved, tasks automated, monthly ROI
@@ -107,22 +107,40 @@ The authenticated client-facing platform. Three internal pages:
 - Module grid: one card per active automation, showing key metrics
 - Click-through modals: each module expands to show full KPIs, a monthly bar chart, and timestamped activity log
 - Operational insights: AI-surfaced patterns the client couldn't previously see
-- **Services upsell section** — six add-on cards (Supplier Scorecard, Carbon Baseline, Cash Flow Visibility, Labour Productivity, Board Reporting, Process Audit) with one-click request-to-AM functionality
+- **Services upsell section** — six add-on cards with one-click request-to-AM functionality
+
+#### Insights
+- 8 AI-surfaced insight cards for Whitfield Logistics, covering supplier reliability, invoice patterns, route inefficiencies, stock alerts, and compliance
+- Filter bar with four options: All / Warnings / Opportunities / Positives — filters in place with no page reload
+- Severity system with colour-coded left borders (orange=warning, blue=opportunity, green=positive)
+- Mark-as-actioned button per card with visual fade and locked state
+
+#### Reports
+- 6 report cards: March ops (ready), March compliance (ready), Feb supplier scorecard (sent), Feb fleet efficiency (sent), Feb ops report (sent), March supplier scorecard (scheduled)
+- Status badges: Ready, Sent, Scheduled
+- Preview modal: opens for each report showing 6 key data points (no download required to see summary)
+- Download PDF: opens `sample-report.html?print` which triggers the browser's Save as PDF dialog
+
+#### Services
+- Six add-on cards: Supplier Scorecard, Carbon Baseline Report, Cash Flow Visibility, Labour Productivity Report, Board Reporting Pack, Process Efficiency Audit
+- One-click "Request this →" sends a request to the account manager with a 6-second confirmation
+
+#### Automation Detail Pages (Invoice Processing, Route Optimisation, Supplier Intel, Compliance Docs, Inventory Forecast)
+- Shared template (`page-automation`) loaded dynamically via `loadAutoPage(key)`
+- Each page shows: 4 KPI cards, 6-month savings bar chart, live activity log
+- Enriched detail table below the chart (specific to each module — see features 3–7)
 
 #### Data Upload
 - Data completeness score (percentage + progress bar)
 - Four categorised upload sections: Operational Data, Financial & Invoices, Process Documents, Compliance
-- Each section shows files already received with processing status
-- Flags items still required with explanations of why they're needed
+- Dynamic system connections with 19-system library, add/remove/request flow
 - Drag-and-drop upload zones with file type validation
 - Security information (AES-256 encryption, UK GDPR compliance, ICO framework)
-- Sidebar: outstanding items list, security details, post-upload process explanation
 
 #### Project Tracker
 - Five-phase project timeline from Onboarding through to Advanced Intelligence
 - Each phase contains individual tasks with: status, description, completion date or ETA, and progress bars for in-progress work
 - Sidebar: project overview stats, mini timeline of recent events, action-required callout
-- Dynamic link from "action required" block to Data Upload page
 
 ### 3. Dashboard Demo (`dashboard.html`)
 
@@ -389,4 +407,4 @@ This is a private commercial codebase. All contributions require prior approval 
 ---
 
 *Built by Backbone AI Ltd. Registered in England & Wales.*
-*Last updated: March 2026 — v0.2.1*
+*Last updated: March 2026 — v0.3.1*

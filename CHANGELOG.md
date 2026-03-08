@@ -9,6 +9,39 @@ This project follows [Semantic Versioning](https://semver.org/):
 
 ---
 
+## [0.3.1] — 2026-03-08
+
+### Added — Client Portal: Reports Page (`client.html`)
+
+- New `page-reports` with a 6-card grid of monthly reports for Whitfield Logistics
+- Report cards: March Operations Report (Ready), March Compliance Pack (Ready), February Supplier Scorecard (Sent), February Fleet Efficiency (Sent), February Operations Report (Sent), March Supplier Scorecard (Scheduled)
+- Each card shows report name, description, generation date, page count, and status badge (`rbadge-ready`, `rbadge-sent`, `rbadge-scheduled`)
+- Download PDF button opens `sample-report.html?print` in a new tab (triggers Save as PDF dialog)
+- Preview button opens an inline modal with per-report KPI summaries (6 data points per report)
+- Report preview overlay (`report-preview-overlay`, `report-preview-modal`) with click-outside and Escape key close
+- JS functions: `previewReport()`, `closeReportPreview()`, `closeReportPreviewDirect()`, `downloadReport()`
+- `REPORT_PREVIEWS` data object keyed by report title with label/value pairs
+- `reports` added to titles map: `['Performance Reports', 'Monthly reports and downloadable summaries']`
+
+---
+
+## [0.3.0] — 2026-03-08
+
+### Added — Client Portal: Insights Page (`client.html`)
+
+- New `page-insights` with 8 AI-surfaced insight cards specific to Whitfield Logistics Ltd
+- Cards cover: Midlands Freight reliability warning, invoice discrepancy pattern, Tuesday failed-drop opportunity, packing stock reorder opportunity, Vehicle 12 routing opportunity, Northern Fuel improvement, invoice accuracy record, and compliance pack completion
+- Filter bar with 4 buttons: All insights / Warnings / Opportunities / Positives — `filterInsights(type, btn)` hides/shows cards by `data-type` attribute
+- `markInsightDone(btn)` marks cards as actioned with visual fade and disabled state
+- Severity system: `.sev-warning` (orange left border), `.sev-opportunity` (blue left border), `.sev-positive` (green left border)
+- CSS: `.ifilter`, `.ifilter.active`, `.insight-card`, `.insight-severity`, `.insight-action-btn`, `.insight-action-btn.actioned`, `.insights-full-list`
+- Added "Overview" section label to sidebar nav above Dashboard
+- Added `💡 Insights` nav button (before Services), `📈 Reports` nav button
+- `insights` added to titles map: `['Operational Insights', 'AI-surfaced patterns from your data this month']`
+- Data-table shared CSS added: `.data-table`, `.dt-badge` variants, `.stat-cards-row`, `.stat-card-sm`, `.alert-cards-row`, `.alert-card`, `.upcoming-section` (used by features 3–7)
+
+---
+
 ## [0.2.1] — 2026-03-07
 
 ### Added — Sample Report (`sample-report.html`)
