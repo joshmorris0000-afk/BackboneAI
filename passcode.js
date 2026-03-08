@@ -4,7 +4,7 @@
  */
 (function () {
   var KEY = 'bb_access';
-  var CORRECT = 'DEVELOPMENT';
+  var CORRECT = '000000000';
 
   if (sessionStorage.getItem(KEY) === '1') return; // already unlocked this session
 
