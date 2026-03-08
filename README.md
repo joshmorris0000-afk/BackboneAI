@@ -98,7 +98,7 @@ Nav order matches scroll order: What We Do → How It Works → Services → Exa
 
 ### 2. Client Portal (`client.html`)
 
-The authenticated client-facing platform. Seven internal pages (sidebar nav):
+The authenticated client-facing platform. Seven internal pages (sidebar nav) with 10 active automation modules:
 
 #### Dashboard (default landing page)
 - Animated KPI counters: cost saved, hours saved, tasks automated, monthly ROI
@@ -125,15 +125,35 @@ The authenticated client-facing platform. Seven internal pages (sidebar nav):
 - Six add-on cards: Supplier Scorecard, Carbon Baseline Report, Cash Flow Visibility, Labour Productivity Report, Board Reporting Pack, Process Efficiency Audit
 - One-click "Request this →" sends a request to the account manager with a 6-second confirmation
 
-#### Automation Detail Pages (Invoice Processing, Route Optimisation, Supplier Intel, Compliance Docs, Inventory Forecast)
+#### Automation Detail Pages — All 10 Core Service Systems
 - Shared template (`page-automation`) loaded dynamically via `loadAutoPage(key)`
-- Each page shows: 4 KPI cards, 6-month savings bar chart, live activity log
-- Enriched detail section below the chart, specific to each module:
-  - **Invoice Processing** — 10-row recent invoices table (Invoice #, Supplier, Amount, PO Match, Status, Time Saved) + 3 stat cards (avg 2.3 min processing, 3 duplicates blocked, 100% error recovery)
-  - **Route Optimisation** — 10-row weekly routes table (Vehicle, Route, Original/Optimised Miles, Saving, Status) + 3 stat cards (94% on-time, 447 miles saved, 20 vehicles)
-  - **Supplier Intelligence** — 14-supplier scorecard table (On-Time %, Invoice Accuracy, Trend, Status) with Midlands Freight at 72% flagged At Risk + 3 active alert cards
-  - **Compliance Docs** — 8-document library table with download buttons and status badges + 3 upcoming auto-draft entries
-  - **Inventory Forecast** — 12-SKU Stock Watch table with colour-coded days remaining (red <7, orange 7–14, green 14+) + 3 stat cards
+- Each page shows: 4 KPI cards, 6-month savings bar chart, live activity log, enriched detail section
+- All 10 systems are live for the Whitfield Logistics demo account:
+
+| # | System | Key | Colour | Savings This Month |
+|---|---|---|---|---|
+| 1 | 3-Way PO Matching | `po_match` | Blue | £2,100 |
+| 2 | Supplier Price Drift Detector | `price_drift` | Orange | £840 |
+| 3 | Supplier Statement Reconciliation | `stmt_recon` | Teal | £1,240 |
+| 4 | Goods-In Discrepancy Auto-Logger | `goods_in` | Amber | £680 |
+| 5 | Quote Normalisation Engine | `quotes` | Violet | £1,900 |
+| 6 | Job & Customer Profitability Analyser | `profitability` | Green | insight only |
+| 7 | Overtime & Agency Cost Monitor | `overtime` | Red | £1,100 |
+| 8 | Slow-Moving Stock Early Warning | `slow_stock` | Red/Pink | £4,200 |
+| 9 | Supplier Chaser Automation | `chaser` | Sky | £920 |
+| 10 | Compliance Document Generator | `compliance` | Green | £1,600 |
+
+Detail sections per module:
+- **3-Way PO Matching** — 10-row invoices table with Invoice #, Supplier, Amount, PO, Delivery Note, Status, Time Saved + 3 stat cards
+- **Supplier Price Drift** — 14-supplier contracted vs invoiced rate table with drift % and value at risk + 3 stat cards
+- **Statement Reconciliation** — 14-supplier statement table with variance, action taken, and dispute/credit status + 3 stat cards
+- **Goods-In Logger** — 10-row delivery discrepancy log (DN #, Supplier, Expected, Received, Discrepancy, Claim Value, Status) + 3 stat cards
+- **Quote Normaliser** — quote comparison table normalised to £/km with recommendation badges for 2 live comparisons + 3 stat cards
+- **Profitability Analyser** — 8-customer profitability table (Revenue, Direct Costs, Gross Margin £/%, Trend, Status) + 2 alert cards for Kirklees Council (at risk) and Bradfield Foods (best account)
+- **Overtime Monitor** — 10-driver weekly hours table (Planned, Actual, Overtime Hrs, Rate, Cost, Alert) with WTD and fatigue flags + 3 stat cards
+- **Slow Stock Warning** — 12-SKU Stock Watch table with colour-coded days remaining + SKU-0052 flagged as slow-moving (42-day stock)
+- **Supplier Chaser** — 8-row active chasers table (Supplier, Type, Amount, Sent, Last Chased, Chase #, Status) covering credit notes, PODs, and refunds + 3 stat cards
+- **Compliance Docs** — 8-document library table with download buttons and status badges + 3 upcoming auto-draft entries
 
 #### Data Upload
 - Data completeness score (percentage + progress bar)
@@ -412,4 +432,4 @@ This is a private commercial codebase. All contributions require prior approval 
 ---
 
 *Built by Backbone AI Ltd. Registered in England & Wales.*
-*Last updated: March 2026 — v0.3.6*
+*Last updated: March 2026 — v0.4.5*

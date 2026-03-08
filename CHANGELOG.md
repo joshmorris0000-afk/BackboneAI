@@ -9,6 +9,102 @@ This project follows [Semantic Versioning](https://semver.org/):
 
 ---
 
+## [0.4.5] — 2026-03-08
+
+### Added — Client Portal: Supplier Chaser Automation (System 9)
+
+- `chaser` module added to MODULES object with full demo data for Whitfield Logistics
+- KPIs: 34 emails sent, 28 responded, £920 credits chased, 2.1 days avg response
+- Activity log: chase emails sent, supplier responses, credits confirmed
+- `autoDetail`: 8-row Active Chasers table — Supplier, Type, Amount, Sent, Last Chased, Chase #, Status
+- Items tracked: credit notes, PODs, overpayment refunds, delivery confirmations
+- Status badges: Awaiting response, Awaiting POD, Initial sent, Escalating, Confirmed, Responded
+- 3 stat cards: £920 credits chased, 34 emails sent automatically, 2.1 days avg response
+- Sidebar nav button: 📧 Supplier Chaser → `showPage('chaser')`
+- Dashboard mod-card with sky (#0ea5e9) colour scheme
+
+---
+
+## [0.4.4] — 2026-03-08
+
+### Added — Client Portal: Overtime & Agency Cost Monitor (System 7)
+
+- `overtime` module added to MODULES object with full demo data for Whitfield Logistics
+- KPIs: 22 drivers tracked, £3,100 overtime this month, 14h excess hours flagged, 4 alerts raised
+- Activity log: driver-specific alerts with names (D. Hargreaves, M. Clarke, P. Singh, R. Thornton)
+- `autoDetail`: 10-driver weekly overtime table — Driver, Planned Hrs, Actual Hrs, Overtime Hrs, Rate, Cost, Alert
+- Alert badges: WTD warning (red), Review route (orange), 2nd week OT (orange), Monitor (watch), On plan (green)
+- 3 stat cards: £3,100 total overtime, 4 alerts raised before payroll, £1,100 reallocated to planned cover
+- Sidebar nav button: ⏱️ Overtime Monitor → `showPage('overtime')`
+- Dashboard mod-card with red (#f43f5e) colour scheme
+
+---
+
+## [0.4.3] — 2026-03-08
+
+### Added — Client Portal: Job & Customer Profitability Analyser (System 6)
+
+- `profitability` module added to MODULES object with full demo data for Whitfield Logistics
+- KPIs: 8 customers analysed, 3 loss-making jobs found, £6,200 best margin job, £420 lowest margin
+- Activity log: profitability run completions, customer-specific flags
+- `autoDetail`: 8-customer profitability table — Customer, Revenue, Direct Costs, Gross Margin £, Margin %, Trend, Status
+- Customer accounts: Bradfield Foods, Leeds Building Supplies, Moorside Retail Ltd, Northern Steel Ltd, West Yorkshire NHS, Pennine Parts Ltd, Halifax Hardware Co, Kirklees Council
+- Kirklees Council flagged At Risk at 2.5% margin; Bradfield Foods confirmed as best account at 34%
+- 2 alert cards: Kirklees Council risk detail and Bradfield Foods positive note
+- Sidebar nav button: 💰 Profitability → `showPage('profitability')`
+- Dashboard mod-card with green (#22c55e) colour scheme; footer shows "insight only" (no direct £ saving)
+
+---
+
+## [0.4.2] — 2026-03-08
+
+### Added — Client Portal: Quote Normalisation Engine (System 5)
+
+- `quotes` module added to MODULES object with full demo data for Whitfield Logistics
+- KPIs: 18 quotes normalised, 6 comparisons run, 12% avg saving found, 1 hr avg analysis time
+- Activity log: comparison completions with specific routes and suppliers
+- `autoDetail`: Quote Comparisons table — Job/Route, Supplier, Quoted Price, Normalised (£/km), vs Contract, Recommendation
+- Two comparisons shown: Yorkshire Distribution Run (4 quotes) and M62 Corridor Freight (3 quotes)
+- Recommendation badges: Recommended, Higher, Decline, On contract
+- 3 stat cards: £1,900 savings identified, 18 quotes normalised, 1 hr avg vs 6–8 hrs manual
+- Sidebar nav button: 📊 Quote Normaliser → `showPage('quotes')`
+- Dashboard mod-card with violet (#8b5cf6) colour scheme
+
+---
+
+## [0.4.1] — 2026-03-08
+
+### Added — Client Portal: Goods-In Discrepancy Auto-Logger (System 4)
+
+- `goods_in` module added to MODULES object with full demo data for Whitfield Logistics
+- KPIs: 47 deliveries logged, 12 discrepancies found, £680 claims raised, 3 days avg resolution
+- Activity log: specific deliveries with named suppliers and claim values
+- `autoDetail`: 10-row Delivery Discrepancy Log table — Delivery Note #, Supplier, Expected, Received, Discrepancy, Claim Value, Status
+- Suppliers include: Allied Distribution, National Pallets UK, Pennine Carriers, Westbrook Supplies, Eastern Freight Services, Direct Logistics Co
+- Status badges: Claimed (orange), Resolved (green), Awaiting CN (pending), Clean (good)
+- 3 stat cards: £680 total claims raised, 3 days avg resolution, 12 discrepancies logged
+- Sidebar nav button: 📥 Goods-In Logger → `showPage('goods_in')`
+- Dashboard mod-card with amber (#f59e0b) colour scheme
+
+---
+
+## [0.4.0] — 2026-03-08
+
+### Changed — Client Portal: Remap 5 automation modules to core service names
+
+- Renamed MODULES keys: `invoices` → `po_match`, `routes` → `stmt_recon` (full content replacement), `suppliers` → `price_drift`, `inventory` → `slow_stock`; `compliance` key unchanged
+- `po_match`: title updated to "3-Way PO Matching"; autoDetail updated to include Delivery Note column for true 3-way cross-reference
+- `price_drift`: title updated to "Supplier Price Drift Detector"; new autoDetail with 14-supplier contracted vs invoiced rate table, drift % column, and value-at-risk column
+- `stmt_recon`: complete content replacement — new title "Supplier Statement Reconciliation", new KPIs (14 reconciled, £1,240 recovered, 3 disputes, 100% coverage), new activity log, new autoDetail with 14-supplier statement table showing variance and action taken
+- `slow_stock`: title updated to "Slow-Moving Stock Early Warning"; SKU-0052 explicitly flagged as slow-moving (42-day stock) in autoDetail; existing stock watch data preserved
+- `compliance`: key unchanged; content and autoDetail preserved
+- Sidebar nav: replaced 5 old buttons with 10 new buttons covering all core systems
+- Dashboard module grid: replaced 5 old mod-cards with 10 new cards showing correct KPIs for each system
+- AUTO_PAGES array updated to exactly 10 new keys
+- Titles map updated with full entries for all 10 keys
+
+---
+
 ## [0.3.6] — 2026-03-08
 
 ### Added — Client Portal: Inventory Forecast detail section (Feature 7)
