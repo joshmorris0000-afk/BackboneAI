@@ -277,6 +277,25 @@
     .act-text{font-size:12px;line-height:1.5;flex:1;}
     .act-time{font-size:10px;color:var(--muted);margin-top:2px;}
 
+    /* ── Onboarding empty-state ── */
+    .ob-setup-banner{background:linear-gradient(135deg,rgba(59,130,246,0.07),rgba(99,102,241,0.07));border:1px solid rgba(59,130,246,0.18);border-radius:14px;padding:24px;margin-bottom:24px;}
+    .ob-setup-banner h2{font-size:17px;font-weight:800;color:var(--text);margin:0 0 6px;}
+    .ob-setup-banner p{font-size:13px;color:var(--muted);margin:0 0 18px;}
+    .ob-setup-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+    .ob-step{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;}
+    .ob-step-num{font-size:10px;font-weight:700;color:var(--blue);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:6px;}
+    .ob-step-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px;}
+    .ob-step-sub{font-size:11px;color:var(--muted2);line-height:1.5;}
+    .ob-empty{text-align:center;padding:64px 20px;}
+    .ob-empty-icon{font-size:44px;margin-bottom:14px;}
+    .ob-empty-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px;}
+    .ob-empty-sub{font-size:12px;color:var(--muted2);max-width:380px;margin:0 auto 20px;line-height:1.6;}
+    .ob-empty-btn{display:inline-block;padding:10px 20px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;}
+    .ob-pending .mod-status{background:rgba(100,116,139,0.1)!important;color:#64748b!important;}
+    .ob-pending .mod-stat-val{color:var(--muted)!important;}
+    .ob-pending .mod-saving{color:var(--muted)!important;}
+    .ob-pending{opacity:0.5;pointer-events:none;}
+
     .module-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px;}
     .mod-card{
       background:var(--surface);border:1px solid var(--border);
@@ -2113,7 +2132,10 @@
     '123456789': { name: 'Whitfield Logistics Ltd', sector: 'Logistics & Distribution', plan: 'Scale' },
     '987654321': { name: 'Thornton Manufacturing Co', sector: 'Manufacturing', plan: 'Backbone' },
     '456123789': { name: 'Northern Freight Solutions', sector: 'Logistics & Distribution', plan: 'Pilot' },
+    '111111111': { name: 'Your Business', sector: '—', plan: 'Scale', status: 'onboarding' },
   };
+
+  let _onboarding = false;
 
   /* ═══ CODE INPUT ═══ */
   const digits = document.querySelectorAll('.code-digit');
@@ -2152,6 +2174,7 @@
     setTimeout(() => {
       const client = CLIENTS[code];
       if (client) {
+        _onboarding = client.status === 'onboarding';
         document.getElementById('loginScreen').style.opacity = '0';
         document.getElementById('loginScreen').style.transition = 'opacity 0.4s';
         setTimeout(() => {
@@ -2159,8 +2182,12 @@
           document.getElementById('sidebarClientName').textContent = client.name;
           document.getElementById('sidebarPlan').textContent = client.plan;
           document.getElementById('appShell').classList.add('show');
-          initCharts();
-          animateKPIs();
+          if (_onboarding) {
+            enterOnboardingMode();
+          } else {
+            initCharts();
+            animateKPIs();
+          }
         }, 400);
       } else {
         document.getElementById('loginVerifying').classList.remove('show');
@@ -2189,6 +2216,73 @@
     digits[0].focus();
   }
 
+  /* ═══ ONBOARDING MODE ═══ */
+  function enterOnboardingMode() {
+    // KPIs → dashes (no data yet)
+    ['k1','k2','k3','k4'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = '—';
+    });
+
+    // Inject welcome/setup banner at top of dashboard page
+    const dashPage = document.getElementById('page-dashboard');
+    const banner = document.createElement('div');
+    banner.className = 'ob-setup-banner';
+    banner.innerHTML = `
+      <h2>Welcome to Backbone AI 👋</h2>
+      <p>Your portal is ready. Here's what happens next to get your automations live within 6 weeks.</p>
+      <div class="ob-setup-steps">
+        <div class="ob-step">
+          <div class="ob-step-num">Week 1</div>
+          <div class="ob-step-title">Data Audit</div>
+          <div class="ob-step-sub">Your account manager reviews your current data sources, systems, and manual processes.</div>
+        </div>
+        <div class="ob-step">
+          <div class="ob-step-num">Weeks 2–5</div>
+          <div class="ob-step-title">Build &amp; Connect</div>
+          <div class="ob-step-sub">We connect your ERP, finance system, and other sources. Automations are built and tested.</div>
+        </div>
+        <div class="ob-step">
+          <div class="ob-step-num">Week 6</div>
+          <div class="ob-step-title">Go Live</div>
+          <div class="ob-step-sub">Systems activate, data starts flowing, and your dashboard populates with live results.</div>
+        </div>
+      </div>`;
+    dashPage.insertBefore(banner, dashPage.firstChild);
+
+    // Grey out all live module cards (pending setup)
+    document.querySelectorAll('#page-dashboard .mod-card').forEach(card => {
+      if (card.style.opacity === '0.5') return; // skip the placeholder card
+      card.classList.add('ob-pending');
+      const statusEl = card.querySelector('.mod-status');
+      if (statusEl) { statusEl.textContent = 'Pending Setup'; }
+      const savingEl = card.querySelector('.mod-saving');
+      if (savingEl) { savingEl.textContent = 'Awaiting activation'; }
+    });
+
+    // Replace activity log with empty state
+    const actList = document.querySelector('.activity-list');
+    if (actList) {
+      actList.innerHTML = '<div style="text-align:center;padding:28px 16px;color:var(--muted2);font-size:12px;line-height:1.6;">Activity will appear here once your<br>systems are connected and live.</div>';
+    }
+
+    // Chart: flat zero line
+    initChartsOnboarding();
+  }
+
+  function initChartsOnboarding() {
+    if (trendChart) return;
+    const ctx = document.getElementById('trendChart').getContext('2d');
+    trendChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Oct','Nov','Dec','Jan','Feb','Mar'],
+        datasets: [{ label: 'Total savings', data: [0,0,0,0,0,0], borderColor: 'rgba(59,130,246,0.25)', backgroundColor: 'rgba(59,130,246,0.04)', tension: 0.4, fill: true, pointRadius: 0 }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color:'#64748b', font:{size:10} }, grid: { color:'rgba(255,255,255,0.03)' } }, y: { ticks: { color:'#64748b', font:{size:10}, callback: v => '£'+v }, grid: { color:'rgba(255,255,255,0.03)' }, min: 0, max: 15000 } } }
+    });
+  }
+
   /* ═══ UPSELL / ADD-ONS ═══ */
   function requestAddon(name) {
     const msg = document.getElementById('addonRequestMsg');
@@ -2209,6 +2303,25 @@
       loadAutoPage(id);
     } else {
       document.getElementById('page-' + id).classList.add('active');
+      // Onboarding: replace insights and reports with empty states
+      if (_onboarding && id === 'insights') {
+        document.getElementById('page-insights').innerHTML = `
+          <div class="ob-empty" style="margin-top:40px">
+            <div class="ob-empty-icon">💡</div>
+            <div class="ob-empty-title">No insights yet</div>
+            <div class="ob-empty-sub">Once your systems are connected, AI-surfaced patterns from your operational data will appear here automatically — cost leaks, supplier issues, demand signals, and more.</div>
+            <button class="ob-empty-btn" onclick="showPage('upload',null)">Connect your systems →</button>
+          </div>`;
+      }
+      if (_onboarding && id === 'reports') {
+        document.getElementById('page-reports').innerHTML = `
+          <div class="ob-empty" style="margin-top:40px">
+            <div class="ob-empty-icon">📈</div>
+            <div class="ob-empty-title">Reports will appear here from Month 1</div>
+            <div class="ob-empty-sub">Monthly performance reports are generated automatically once your systems are live. You'll receive a full breakdown of savings, errors caught, and hours freed every month.</div>
+            <button class="ob-empty-btn" onclick="showPage('upload',null)">Connect your systems →</button>
+          </div>`;
+      }
     }
 
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -2247,6 +2360,27 @@
 
   function loadAutoPage(key) {
     const m = MODULES[key]; if (!m) return;
+
+    if (_onboarding) {
+      document.getElementById('autoPageTitle').textContent = m.title;
+      document.getElementById('autoPageSub').textContent = 'This system will be activated during your onboarding setup.';
+      document.getElementById('autoKpiRow').innerHTML = ['—','—','—','—'].map(() =>
+        `<div class="kpi-card"><div class="kpi-label">Awaiting data</div><div class="kpi-value" style="color:var(--muted)">—</div></div>`
+      ).join('');
+      if (autoPageChart) { autoPageChart.destroy(); autoPageChart = null; }
+      const canvas = document.getElementById('autoPageChart');
+      canvas.parentElement.style.display = 'none';
+      document.getElementById('autoActivityLog').innerHTML = '';
+      document.getElementById('autoDetailSection').innerHTML = `
+        <div class="ob-empty">
+          <div class="ob-empty-icon">⚙️</div>
+          <div class="ob-empty-title">System not yet activated</div>
+          <div class="ob-empty-sub">This automation will go live once your data sources are connected. Your account manager will walk you through the setup process.</div>
+          <button class="ob-empty-btn" onclick="showPage('upload',null)">Connect your systems →</button>
+        </div>`;
+      return;
+    }
+
     document.getElementById('autoPageTitle').textContent = m.title;
     document.getElementById('autoPageSub').textContent = m.sub;
     document.getElementById('autoChartTag').textContent = m.title;
