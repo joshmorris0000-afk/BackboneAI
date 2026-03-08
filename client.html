@@ -1998,6 +1998,7 @@
             <div class="card-body" style="padding:6px 16px;" id="autoActivityLog"></div>
           </div>
         </div>
+        <div id="autoDetailSection"></div>
       </div><!-- /page-automation -->
 
     </div><!-- /page-content -->
@@ -2186,6 +2187,8 @@
         <div class="act-dot" style="background:${l.dot}"></div>
         <div><div class="act-text">${l.text}</div><div class="act-time">${l.time} · ${l.save}</div></div>
       </div>`).join('');
+
+    document.getElementById('autoDetailSection').innerHTML = m.autoDetail || '';
   }
 
   /* ═══ KPI ANIMATION ═══ */
@@ -2342,7 +2345,36 @@
         { time:'08:55 today', text:'INV-4818 Northern Fuel — approved, payment queued', save:'12 min saved', dot:'#22c55e' },
         { time:'Yesterday', text:'INV-4812 Evans Logistics — duplicate invoice blocked', save:'£340 saved', dot:'#f97316' },
         { time:'Yesterday', text:'Overnight batch of 14 invoices — all matched & approved', save:'2.8h saved', dot:'#22c55e' },
-      ]
+      ],
+      autoDetail: `<div class="card auto-detail-section">
+        <div class="card-header"><div><div class="card-title">Recent Invoices</div><div class="card-sub">Last 10 invoices processed by the AI system</div></div></div>
+        <div class="card-body" style="padding:0;">
+          <table class="data-table">
+            <thead><tr>
+              <th>Invoice #</th><th>Supplier</th><th>Amount</th><th>PO Match</th><th>Status</th><th>Time Saved</th>
+            </tr></thead>
+            <tbody>
+              <tr><td>INV-4821</td><td>Hargreaves Transport</td><td>£1,840</td><td>PO-3341 ✓</td><td><span class="dt-badge dt-approved">Approved</span></td><td>11 min</td></tr>
+              <tr><td>INV-4820</td><td>City Haulage Ltd</td><td>£3,120</td><td>£120 gap</td><td><span class="dt-badge dt-flagged">Flagged</span></td><td>Error caught</td></tr>
+              <tr><td>INV-4818</td><td>Northern Fuel Co</td><td>£940</td><td>PO-3338 ✓</td><td><span class="dt-badge dt-approved">Approved</span></td><td>12 min</td></tr>
+              <tr><td>INV-4815</td><td>Evans Logistics</td><td>£2,200</td><td>Duplicate</td><td><span class="dt-badge dt-flagged">Flagged</span></td><td>£2,200 blocked</td></tr>
+              <tr><td>INV-4814</td><td>Midlands Freight Co</td><td>£5,600</td><td>PO-3332 ✓</td><td><span class="dt-badge dt-approved">Approved</span></td><td>9 min</td></tr>
+              <tr><td>INV-4812</td><td>Evans Logistics</td><td>£1,480</td><td>PO-3329 ✓</td><td><span class="dt-badge dt-approved">Approved</span></td><td>11 min</td></tr>
+              <tr><td>INV-4810</td><td>Apex Packaging</td><td>£720</td><td>PO-3327 ✓</td><td><span class="dt-badge dt-approved">Approved</span></td><td>8 min</td></tr>
+              <tr><td>INV-4808</td><td>City Haulage Ltd</td><td>£2,870</td><td>Ref mismatch</td><td><span class="dt-badge dt-flagged">Flagged</span></td><td>Error caught</td></tr>
+              <tr><td>INV-4806</td><td>Hargreaves Transport</td><td>£1,620</td><td>PO-3322 ✓</td><td><span class="dt-badge dt-approved">Approved</span></td><td>10 min</td></tr>
+              <tr><td>INV-4804</td><td>Northern Fuel Co</td><td>£880</td><td>PO-3320 ✓</td><td><span class="dt-badge dt-pending">Pending</span></td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-body" style="padding-top:0;">
+          <div class="stat-cards-row">
+            <div class="stat-card-sm"><div class="stat-card-sm-val" style="color:var(--blue)">2.3 min</div><div class="stat-card-sm-label">Avg processing time</div></div>
+            <div class="stat-card-sm"><div class="stat-card-sm-val" style="color:var(--orange)">3</div><div class="stat-card-sm-label">Duplicate invoices blocked</div></div>
+            <div class="stat-card-sm"><div class="stat-card-sm-val" style="color:var(--green)">100%</div><div class="stat-card-sm-label">Error recovery rate</div></div>
+          </div>
+        </div>
+      </div>`
     },
     routes: {
       title: 'Route Optimisation', sub: 'Dynamic daily replanning for 20 vehicles · 1,840 miles saved this month', color: '#8b5cf6',
@@ -2353,7 +2385,36 @@
         { time:'08:30 today', text:'Vehicle 7 re-routed around M6 incident — ETA maintained', save:'Delay avoided', dot:'#22c55e' },
         { time:'Yesterday', text:'Monday routes — 12% fewer miles vs manual planning', save:'£94 saved', dot:'#22c55e' },
         { time:'Yesterday', text:'Late order added to Vehicle 3 dynamically — no extra trip', save:'£62 saved', dot:'#22c55e' },
-      ]
+      ],
+      autoDetail: `<div class="card auto-detail-section">
+        <div class="card-header"><div><div class="card-title">This Week's Routes</div><div class="card-sub">Optimised vs original planning — Mon to Fri</div></div></div>
+        <div class="card-body" style="padding:0;">
+          <table class="data-table">
+            <thead><tr>
+              <th>Vehicle</th><th>Route</th><th>Original Miles</th><th>Optimised Miles</th><th>Saving £</th><th>Status</th>
+            </tr></thead>
+            <tbody>
+              <tr><td>Vehicle 1</td><td>Leeds Central → Wakefield → Castleford</td><td>84</td><td>71</td><td>£10.40</td><td><span class="dt-badge dt-completed">Completed</span></td></tr>
+              <tr><td>Vehicle 2</td><td>Leeds South → Morley → Batley → Dewsbury</td><td>97</td><td>81</td><td>£12.80</td><td><span class="dt-badge dt-completed">Completed</span></td></tr>
+              <tr><td>Vehicle 3</td><td>Bradford → Shipley → Keighley</td><td>62</td><td>55</td><td>£5.60</td><td><span class="dt-badge dt-completed">Completed</span></td></tr>
+              <tr><td>Vehicle 4</td><td>Huddersfield → Halifax → Brighouse</td><td>74</td><td>61</td><td>£10.40</td><td><span class="dt-badge dt-completed">Completed</span></td></tr>
+              <tr><td>Vehicle 5</td><td>Leeds North → Harrogate → Knaresborough</td><td>88</td><td>76</td><td>£9.60</td><td><span class="dt-badge dt-completed">Completed</span></td></tr>
+              <tr><td>Vehicle 6</td><td>Wakefield → Pontefract → Featherstone</td><td>58</td><td>51</td><td>£5.60</td><td><span class="dt-badge dt-completed">Completed</span></td></tr>
+              <tr><td>Vehicle 7</td><td>Leeds East → Garforth → Selby</td><td>91</td><td>73</td><td>£14.40</td><td><span class="dt-badge dt-inprog">In Progress</span></td></tr>
+              <tr><td>Vehicle 8</td><td>Barnsley → Wombwell → Goldthorpe</td><td>69</td><td>58</td><td>£8.80</td><td><span class="dt-badge dt-inprog">In Progress</span></td></tr>
+              <tr><td>Vehicle 12</td><td>Leeds West → Pudsey → Horsforth</td><td>77</td><td>66</td><td>£8.80</td><td><span class="dt-badge dt-inprog">In Progress</span></td></tr>
+              <tr><td>Vehicle 15</td><td>Doncaster → Rotherham → Sheffield</td><td>103</td><td>85</td><td>£14.40</td><td><span class="dt-badge dt-inprog">In Progress</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-body" style="padding-top:0;">
+          <div class="stat-cards-row">
+            <div class="stat-card-sm"><div class="stat-card-sm-val" style="color:var(--blue)">94%</div><div class="stat-card-sm-label">On-time this week</div></div>
+            <div class="stat-card-sm"><div class="stat-card-sm-val" style="color:var(--purple)">447 miles</div><div class="stat-card-sm-label">Miles saved this week</div></div>
+            <div class="stat-card-sm"><div class="stat-card-sm-val" style="color:var(--green)">20</div><div class="stat-card-sm-label">Vehicles actively optimised</div></div>
+          </div>
+        </div>
+      </div>`
     },
     suppliers: {
       title: 'Supplier Intelligence', sub: 'Live scorecards for 14 suppliers · 3 alerts raised this month', color: '#f97316',
@@ -2364,7 +2425,40 @@
         { time:'Yesterday', text:'City Haulage invoice formatting — 6th instance, supplier notified', save:'Pattern flagged', dot:'#f97316' },
         { time:'1 week ago', text:'Northern Fuel — on-time rate improved to 96%', save:'Positive', dot:'#22c55e' },
         { time:'2 weeks ago', text:'Evans Logistics duplicate invoice blocked', save:'£340 saved', dot:'#22c55e' },
-      ]
+      ],
+      autoDetail: `<div class="card auto-detail-section">
+        <div class="card-header"><div><div class="card-title">Supplier Scorecards</div><div class="card-sub">All 14 suppliers — live performance data</div></div></div>
+        <div class="card-body" style="padding:0;">
+          <table class="data-table">
+            <thead><tr>
+              <th>Supplier</th><th>On-Time %</th><th>Invoice Accuracy</th><th>Reliability Trend</th><th>Status</th>
+            </tr></thead>
+            <tbody>
+              <tr><td>Northern Fuel Co</td><td>96%</td><td>100%</td><td style="color:var(--green)">↑ Improving</td><td><span class="dt-badge dt-good">Good</span></td></tr>
+              <tr><td>Hargreaves Transport</td><td>95%</td><td>98%</td><td style="color:var(--green)">↑ Improving</td><td><span class="dt-badge dt-good">Good</span></td></tr>
+              <tr><td>Apex Packaging</td><td>94%</td><td>100%</td><td>→ Stable</td><td><span class="dt-badge dt-good">Good</span></td></tr>
+              <tr><td>Evans Logistics</td><td>93%</td><td>94%</td><td>→ Stable</td><td><span class="dt-badge dt-good">Good</span></td></tr>
+              <tr><td>Crown Freight Ltd</td><td>92%</td><td>97%</td><td>→ Stable</td><td><span class="dt-badge dt-good">Good</span></td></tr>
+              <tr><td>Premier Hauliers</td><td>91%</td><td>99%</td><td>→ Stable</td><td><span class="dt-badge dt-good">Good</span></td></tr>
+              <tr><td>National Pallets UK</td><td>90%</td><td>96%</td><td>→ Stable</td><td><span class="dt-badge dt-good">Good</span></td></tr>
+              <tr><td>Westbrook Supplies</td><td>89%</td><td>95%</td><td>→ Stable</td><td><span class="dt-badge dt-good">Good</span></td></tr>
+              <tr><td>Direct Logistics Co</td><td>88%</td><td>93%</td><td style="color:var(--orange)">↓ Declining</td><td><span class="dt-badge dt-watch">Watch</span></td></tr>
+              <tr><td>Allied Distribution</td><td>87%</td><td>91%</td><td>→ Stable</td><td><span class="dt-badge dt-good">Good</span></td></tr>
+              <tr><td>Pennine Carriers</td><td>86%</td><td>97%</td><td>→ Stable</td><td><span class="dt-badge dt-good">Good</span></td></tr>
+              <tr><td>City Haulage Ltd</td><td>85%</td><td>82%</td><td style="color:var(--orange)">↓ Declining</td><td><span class="dt-badge dt-watch">Watch</span></td></tr>
+              <tr><td>Eastern Freight Services</td><td>83%</td><td>94%</td><td>→ Stable</td><td><span class="dt-badge dt-good">Good</span></td></tr>
+              <tr><td style="font-weight:700;color:var(--text)">Midlands Freight Co</td><td style="color:var(--red);font-weight:700">72%</td><td>88%</td><td style="color:var(--red)">↓ Declining</td><td><span class="dt-badge dt-atrisk">At Risk</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-body" style="padding-top:0;">
+          <div class="alert-cards-row">
+            <div class="alert-card"><div class="alert-card-icon">🔴</div><strong style="color:var(--text)">Midlands Freight Co — At Risk:</strong> 4 late deliveries in 30 days. On-time rate at 72%, down from 91% last quarter. Recommend formal performance review this week.</div>
+            <div class="alert-card"><div class="alert-card-icon">🟠</div><strong style="color:var(--text)">City Haulage Ltd — Watch:</strong> Invoice accuracy at 82% — 6 PO reference formatting issues this month. Supplier notified. Review in 2 weeks if no improvement.</div>
+            <div class="alert-card"><div class="alert-card-icon">🟠</div><strong style="color:var(--text)">Direct Logistics Co — Watch:</strong> On-time rate declined from 94% to 88% over the past 6 weeks. No alerts raised yet — monitoring pattern for a further 2 weeks before escalation.</div>
+          </div>
+        </div>
+      </div>`
     },
     compliance: {
       title: 'Compliance Documentation', sub: 'Auto-drafted from operational data · 4 reports generated this month', color: '#22c55e',
@@ -2374,7 +2468,37 @@
         { time:'This morning', text:'Monthly operations compliance report drafted — ready for review', save:'6h saved', dot:'#22c55e' },
         { time:'2 weeks ago', text:'Driver hours & working time report auto-generated', save:'4h saved', dot:'#22c55e' },
         { time:'Last month', text:'Annual audit preparation pack generated automatically', save:'25h saved', dot:'#22c55e' },
-      ]
+      ],
+      autoDetail: `<div class="card auto-detail-section">
+        <div class="card-header"><div><div class="card-title">Document Library</div><div class="card-sub">All compliance documents generated this period</div></div></div>
+        <div class="card-body" style="padding:0;">
+          <table class="data-table">
+            <thead><tr>
+              <th>Document Name</th><th>Type</th><th>Period</th><th>Generated</th><th>Review Time</th><th>Status</th><th></th>
+            </tr></thead>
+            <tbody>
+              <tr><td>March Operations Compliance Report</td><td>Ops Report</td><td>Mar 2026</td><td>8 Mar 2026</td><td>2 min</td><td><span class="dt-badge dt-ready">Ready</span></td><td><button class="dt-download-btn" onclick="downloadReport(this)">Download</button></td></tr>
+              <tr><td>March Compliance Pack</td><td>Compliance</td><td>Mar 2026</td><td>1 Mar 2026</td><td>2 min</td><td><span class="dt-badge dt-ready">Ready</span></td><td><button class="dt-download-btn" onclick="downloadReport(this)">Download</button></td></tr>
+              <tr><td>Driver Hours & WTD Report</td><td>Regulatory</td><td>Feb 2026</td><td>2 Mar 2026</td><td>3 min</td><td><span class="dt-badge dt-reviewed">Reviewed</span></td><td><button class="dt-download-btn" onclick="downloadReport(this)">Download</button></td></tr>
+              <tr><td>February Operations Report</td><td>Ops Report</td><td>Feb 2026</td><td>3 Mar 2026</td><td>2 min</td><td><span class="dt-badge dt-reviewed">Reviewed</span></td><td><button class="dt-download-btn" onclick="downloadReport(this)">Download</button></td></tr>
+              <tr><td>Vehicle Inspection Summary</td><td>Fleet</td><td>Feb 2026</td><td>28 Feb 2026</td><td>1 min</td><td><span class="dt-badge dt-reviewed">Reviewed</span></td><td><button class="dt-download-btn" onclick="downloadReport(this)">Download</button></td></tr>
+              <tr><td>Operator Licence Compliance Check</td><td>Regulatory</td><td>Q1 2026</td><td>14 Feb 2026</td><td>4 min</td><td><span class="dt-badge dt-reviewed">Reviewed</span></td><td><button class="dt-download-btn" onclick="downloadReport(this)">Download</button></td></tr>
+              <tr><td>Annual Audit Preparation Pack</td><td>Audit Prep</td><td>2025/26</td><td>31 Jan 2026</td><td>8 min</td><td><span class="dt-badge dt-reviewed">Reviewed</span></td><td><button class="dt-download-btn" onclick="downloadReport(this)">Download</button></td></tr>
+              <tr><td>HSE Risk Assessment Summary</td><td>Health & Safety</td><td>Jan 2026</td><td>20 Jan 2026</td><td>3 min</td><td><span class="dt-badge dt-reviewed">Reviewed</span></td><td><button class="dt-download-btn" onclick="downloadReport(this)">Download</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-body" style="padding-top:0;">
+          <div class="upcoming-section">
+            <div class="upcoming-title">Upcoming Auto-Drafts</div>
+            <div class="upcoming-list">
+              <div class="upcoming-item"><span>April Operations Report</span><span style="color:var(--muted)">Scheduled: 3 Apr 2026</span></div>
+              <div class="upcoming-item"><span>Driver Hours & WTD Report (March)</span><span style="color:var(--muted)">Scheduled: 5 Apr 2026</span></div>
+              <div class="upcoming-item"><span>Vehicle Inspection Summary (March)</span><span style="color:var(--muted)">Scheduled: 2 Apr 2026</span></div>
+            </div>
+          </div>
+        </div>
+      </div>`
     },
     inventory: {
       title: 'Inventory & Demand Forecasting', sub: 'AI demand planning from order history · 97% forecast accuracy', color: '#f43f5e',
@@ -2384,7 +2508,38 @@
         { time:'Today', text:'Forecast updated — 3-week projection revised from new orders', save:'Up to date', dot:'#3b82f6' },
         { time:'3 days ago', text:'Low stock alert: Packing material — reorder auto-triggered', save:'Stockout prevented', dot:'#22c55e' },
         { time:'1 week ago', text:'Overstock on Line 4 consumables — order paused, saving £320', save:'£320 saved', dot:'#22c55e' },
-      ]
+      ],
+      autoDetail: `<div class="card auto-detail-section">
+        <div class="card-header"><div><div class="card-title">Stock Watch</div><div class="card-sub">Current stock levels vs daily usage — all SKUs monitored</div></div></div>
+        <div class="card-body" style="padding:0;">
+          <table class="data-table">
+            <thead><tr>
+              <th>SKU</th><th>Item</th><th>Current Stock</th><th>Daily Usage</th><th>Days Remaining</th><th>Action</th>
+            </tr></thead>
+            <tbody>
+              <tr><td>SKU-0041</td><td>Corrugated Inner Boxes (Med)</td><td>432 units</td><td>48/day</td><td class="dt-warn">9 days</td><td>Reorder recommended</td></tr>
+              <tr><td>SKU-0023</td><td>Stretch Wrap Film — 500mm</td><td>18 rolls</td><td>2/day</td><td class="dt-warn">9 days</td><td>Reorder recommended</td></tr>
+              <tr><td>SKU-0017</td><td>Thermal Labels — 100x150mm</td><td>4,200 units</td><td>380/day</td><td class="dt-warn">11 days</td><td>Monitor closely</td></tr>
+              <tr><td>SKU-0058</td><td>Packing Tape — 48mm Brown</td><td>96 rolls</td><td>6/day</td><td class="dt-ok">16 days</td><td>On track</td></tr>
+              <tr><td>SKU-0031</td><td>Foam Corner Protectors</td><td>1,120 units</td><td>60/day</td><td class="dt-ok">18 days</td><td>On track</td></tr>
+              <tr><td>SKU-0064</td><td>Bubble Wrap — 500mm x 100m</td><td>14 rolls</td><td>0.7/day</td><td class="dt-ok">20 days</td><td>On track</td></tr>
+              <tr><td>SKU-0012</td><td>Outer Cardboard Boxes (Large)</td><td>680 units</td><td>32/day</td><td class="dt-ok">21 days</td><td>On track</td></tr>
+              <tr><td>SKU-0075</td><td>Zip-Tie Cable Fasteners</td><td>3,400 units</td><td>140/day</td><td class="dt-ok">24 days</td><td>On track</td></tr>
+              <tr><td>SKU-0089</td><td>Address Label Pouches — A5</td><td>1,800 units</td><td>65/day</td><td class="dt-ok">27 days</td><td>On track</td></tr>
+              <tr><td>SKU-0033</td><td>Silica Gel Sachets — 10g</td><td>2,600 units</td><td>85/day</td><td class="dt-ok">30 days</td><td>On track</td></tr>
+              <tr><td>SKU-0047</td><td>Line 4 Consumables — Batch Pack</td><td>22 packs</td><td>0.6/day</td><td class="dt-ok">36 days</td><td>Overstock monitored</td></tr>
+              <tr><td>SKU-0052</td><td>Anti-Static Bags — Medium</td><td>940 units</td><td>22/day</td><td class="dt-ok">42 days</td><td>Overstock monitored</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-body" style="padding-top:0;">
+          <div class="stat-cards-row">
+            <div class="stat-card-sm"><div class="stat-card-sm-val" style="color:var(--green)">0</div><div class="stat-card-sm-label">Zero stockouts this month</div></div>
+            <div class="stat-card-sm"><div class="stat-card-sm-val" style="color:var(--blue)">97%</div><div class="stat-card-sm-label">Forecast accuracy</div></div>
+            <div class="stat-card-sm"><div class="stat-card-sm-val" style="color:var(--green)">£4,200</div><div class="stat-card-sm-label">Capital freed from overstock</div></div>
+          </div>
+        </div>
+      </div>`
     }
   };
 
