@@ -1,0 +1,38 @@
+# Core
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+python-multipart==0.0.9
+
+# Database
+sqlalchemy==2.0.36
+alembic==1.13.3
+asyncpg==0.30.0
+psycopg2-binary==2.9.10
+
+# Redis (rate limiting)
+redis==5.2.0
+
+# Authentication
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+cryptography==43.0.3
+
+# AI / Document processing
+anthropic==0.40.0
+pymupdf==1.24.14
+
+# Validation & settings
+pydantic==2.9.2
+pydantic-settings==2.6.1
+email-validator==2.2.0
+
+# Fuzzy matching (reference number matching)
+rapidfuzz==3.10.0
+
+# Observability
+sentry-sdk[fastapi]==2.18.0
+
+# Testing
+pytest==8.3.3
+pytest-asyncio==0.24.0
+httpx==0.27.2
