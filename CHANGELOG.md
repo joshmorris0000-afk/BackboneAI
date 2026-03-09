@@ -9,6 +9,25 @@ This project follows [Semantic Versioning](https://semver.org/):
 
 ---
 
+## [0.4.7] — 2026-03-09
+
+### Changed — Direct API connection drawer replaces account-manager flow
+
+**System Connections page (`client.html`):**
+- Each system card's Connect button now opens a slide-in connection drawer instead of a flat inline "Added ✓" confirmation
+- Connection drawer shows a form tailored to the system's integration type:
+  - **OAuth** — "Connect with [Provider]" button that simulates the OAuth authorisation flow (Xero, Google Sheets, Google Analytics)
+  - **API key** — single password field for pasting the API key, with inline hints on where to obtain it and any expiry caveats (e.g. Mintsoft 24 h expiry warning)
+  - **Credentials** — username + password fields with system-specific guidance (e.g. Sage 50 ODBC connection string format)
+  - **Request** — vendor-managed systems (Mandata, Teletrac Navman) show an explanatory note and a "Send connection request" button that submits via Backbone AI
+- Status progression: `verifying` (after form submit) → `connected` (after simulated verification); "Connected" and "Live" labels only appear when data would actually be flowing
+- Removed all `requested` and `pending` status states — replaced by `verifying` and `error`
+- SYSTEMS_LIBRARY entries now each carry a `conn` object defining `type`, `fields`, `note`, and for OAuth a `provider` field
+- `addSystem()` function removed; `sysLibCardHtml()` now calls `openConnectionPanel(id)`
+- Corrected stale copy on Systems page: removed "your account manager contacts you within 24 hours" from the library header; updated empty-state and onboarding automation placeholder to direct users to connect systems themselves
+
+---
+
 ## [0.4.6] — 2026-03-08
 
 ### Fixed — Full project QA audit
